@@ -1,0 +1,43 @@
+version: '3.7'
+
+services:
+  db:
+    image: postgres:14.1-alpine
+    container_name: db
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      - app-network
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    image: lhr-recruiting_server
+    container_name: server
+    volumes:
+      - ./server:/usr/src/app
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+volumes:
+  data-volume:
+  node_modules:
+  web-root:
+    driver: local
+  appdata:
+    driver: local
+  db:
+    driver: local
