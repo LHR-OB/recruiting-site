@@ -7,7 +7,8 @@ from database.schemas import users as schemas
 from utils import users as utils
 
 router = APIRouter(
-    prefix="/users"
+    prefix="/users",
+    tags=['users']
 )
 
 
@@ -27,3 +28,8 @@ async def get_users(limit: int = 100, db: Session = Depends(get_db)):
 @router.get('/{id}', response_model=schemas.User)
 async def get_user_by_id(id: int, db: Session = Depends(get_db)):
     return utils.get_user_by_id(db=db, user_id=id)
+
+
+@router.delete('/{id}')
+async def delete_user(id: int, db: Session = Depends(get_db)):
+    return utils.delete_user(db=db, user_id=id)
