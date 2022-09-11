@@ -22,3 +22,8 @@ async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 @router.get('/', response_model=List[schemas.User])
 async def get_users(limit: int = 100, db: Session = Depends(get_db)):
     return utils.get_users(db=db, limit=limit)
+
+
+@router.get('/{id}', response_model=schemas.User)
+async def get_user_by_id(id: int, db: Session = Depends(get_db)):
+    return utils.get_user_by_id(db=db, user_id=id)

@@ -1,12 +1,22 @@
 from sqlalchemy.orm import Session
+import bcrypt
 
 from database.models import users as models
 from database.schemas import users as schemas
 
 
+def hash_password(password: str):
+    salt = bcrypt.gensalt()
+    return bcrypt.hashpw(password.encode('utf8'), salt)
+
+
+def verify_password(password: str, hashed_password: str):
+    return bcrypt.checkpw(password.encode('utf8'), hashed_password)
+
+
 ### CRUD ###
 def create_user(db: Session, user: schemas.UserCreate):
-    hashed_password = user.password     # TODO: Hash properly
+    hashed_password = hash_password(user.password)
     user_dict = user.dict()
     del user_dict['password']
     db_user = models.User(**user_dict, hashed_password=hashed_password)
