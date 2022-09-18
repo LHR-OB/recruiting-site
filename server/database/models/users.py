@@ -14,5 +14,7 @@ class User(Base):
     hashed_password = Column(String)
     type = Column(Enum("ADMIN", "TEAM_MANAGEMENT",
                   "SYSTEM_LEAD", "INTERVIEWER", "APPLICANT", name='type_enum'), index=True)
+    team = Column(String, index=True)
+    systems = Column(String)
 
     applications = relationship("Application", back_populates="user")

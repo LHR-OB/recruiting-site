@@ -12,6 +12,15 @@ class UserCreate(UserBase):
     password: str
 
 
+class ApplicantCreate(UserCreate):
+    pass
+
+
+class MemberCreate(UserCreate):
+    team: str
+    systems: str
+
+
 class User(UserBase):
     id: int
 
