@@ -4,10 +4,13 @@ from sqlalchemy.orm import Session
 from jose import JWTError, jwt
 
 from database.database import SessionLocal
+from database.models.users import User
 from utils.users import ALGORITHM, SECRET_KEY, get_user_by_id
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
+USER_ROLES = ["ADMIN", "TEAM_MANAGEMENT",
+              "SYSTEM_LEAD", "INTERVIEWER", "APPLICANT"]
 
 
 def get_db():
@@ -33,3 +36,30 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         raise credentials_exception
     user = get_user_by_id(db=db, user_id=user_id)
     return user
+
+
+def required_role(role: str, user: User):
+    if USER_ROLES.index(user.type) <= USER_ROLES.index(role):
+        return user
+    raise HTTPException(status_code=401,
+                        detail='User not authorized for this operation')
+
+
+def required_admin(user: User = Depends(get_current_user)):
+    return required_role("ADMIN", user)
+
+
+def required_team_management(user: User = Depends(get_current_user)):
+    return required_role("TEAM_MANAGEMENT", user)
+
+
+def required_system_lead(user: User = Depends(get_current_user)):
+    return required_role("SYSTEM_LEAD", user)
+
+
+def required_interviewer(user: User = Depends(get_current_user)):
+    return required_role("INTERVIEWER", user)
+
+
+def required_applicant(user: User = Depends(get_current_user)):
+    return required_role("APPLICANT", user)

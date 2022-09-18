@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from routes import users
 from database.database import Base, engine
 from utils.users import authenticate_user, create_access_token
-from dependencies import get_current_user, get_db
+from dependencies import get_db, required_admin, required_applicant, required_interviewer
 
 # Main app configuration
 Base.metadata.create_all(bind=engine)
@@ -31,5 +31,5 @@ async def token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
 
 # TODO: Remove this route after dev
 @app.get('/protected')
-async def protected(user=Depends(get_current_user)):
+async def protected(user=Depends(required_interviewer)):
     return user

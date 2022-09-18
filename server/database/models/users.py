@@ -11,5 +11,5 @@ class User(Base):
     last_name = Column(String, index=True)
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
-    type = Column(Enum("APPLICANT", "SYSTEM_LEAD",
-                  "INTERVIEWER", "ADMIN", name='type_enum'), index=True)
+    type = Column(Enum("ADMIN", "TEAM_MANAGEMENT",
+                  "SYSTEM_LEAD", "INTERVIEWER", "APPLICANT", name='type_enum'), index=True)
