@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, Enum
+from sqlalchemy.orm import relationship
 
 from ..database import Base
 
@@ -13,3 +14,5 @@ class User(Base):
     hashed_password = Column(String)
     type = Column(Enum("ADMIN", "TEAM_MANAGEMENT",
                   "SYSTEM_LEAD", "INTERVIEWER", "APPLICANT", name='type_enum'), index=True)
+
+    applications = relationship("Application", back_populates="user")

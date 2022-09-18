@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
-from routes import users
+from routes import users, applications
 from database.database import Base, engine
 from utils.users import authenticate_user, create_access_token
 from dependencies import get_db, required_admin, required_applicant, required_interviewer
@@ -13,6 +13,8 @@ app = FastAPI()
 
 # Routers
 app.include_router(users.router)
+app.include_router(applications.application_cycle_router)
+app.include_router(applications.application_router)
 
 
 @app.post('/token')

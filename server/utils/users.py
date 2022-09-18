@@ -1,9 +1,8 @@
-from fastapi import Depends, HTTPException
 from datetime import datetime, timedelta
 import os
 from typing import List, Union
 from sqlalchemy.orm import Session
-from jose import JWTError, jwt
+from jose import jwt
 import bcrypt
 
 from database.models import users as models
@@ -68,7 +67,7 @@ def get_user_by_email(db: Session, email: str) -> models.User:
     return db.query(models.User).filter(models.User.email == email).first()
 
 
-def delete_user(db: Session, user_id: int):
+def delete_user(db: Session, user_id: int) -> bool:
     db_user = get_user_by_id(db=db, user_id=user_id)
     if db_user is None:
         return False

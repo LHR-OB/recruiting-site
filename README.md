@@ -14,7 +14,7 @@ This portal was designed to make recruiting seamless and efficient for Longhorn 
 
 ## Recruiting Phases (LHR Perspective)
 
-### Create/Release Application
+### Open Application
 
 ### Provide Interview Availability/Schedule Interviews
 
