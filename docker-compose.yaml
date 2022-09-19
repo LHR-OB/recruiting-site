@@ -29,6 +29,24 @@ services:
       - JWT_SECRET_KEY=e49ee075c0c754507cb9c9ab1b93ffd780e7e325e3914733ee342b35aa18bb5c
     networks:
       - app-network
+    depends_on:
+      - db
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    image: lhr-recruiting_client
+    container_name: client
+    volumes:
+      - ./client:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_DEV=true
+    networks:
+      - app-network
 
 networks:
   app-network:
