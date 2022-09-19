@@ -16,5 +16,6 @@ class User(Base):
                   "SYSTEM_LEAD", "INTERVIEWER", "APPLICANT", name='type_enum'), index=True)
     team = Column(String, index=True)
     systems = Column(String)
+    status = Column(Enum("UNVERIFIED", "UNAPPROVED", "APPROVED", name='status_enum'), index=True)
 
     applications = relationship("Application", back_populates="user")

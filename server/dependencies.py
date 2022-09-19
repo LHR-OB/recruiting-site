@@ -5,12 +5,10 @@ from jose import JWTError, jwt
 
 from database.database import SessionLocal
 from database.models.users import User
-from utils.users import ALGORITHM, SECRET_KEY, get_user_by_id
+from utils.users import ALGORITHM, SECRET_KEY, get_user_by_id, user_is_at_least
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
-USER_ROLES = ["ADMIN", "TEAM_MANAGEMENT",
-              "SYSTEM_LEAD", "INTERVIEWER", "APPLICANT"]
 
 
 def get_db():
@@ -39,7 +37,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
 
 
 def required_role(role: str, user: User):
-    if USER_ROLES.index(user.type) <= USER_ROLES.index(role):
+    if user_is_at_least(user, role):
         return user
     raise HTTPException(status_code=401,
                         detail='User not authorized for this operation')

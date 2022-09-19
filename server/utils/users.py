@@ -10,6 +10,8 @@ from database.schemas import users as schemas
 
 ALGORITHM = 'HS256'
 SECRET_KEY = os.environ['JWT_SECRET_KEY']
+USER_ROLES = ["ADMIN", "TEAM_MANAGEMENT",
+              "SYSTEM_LEAD", "INTERVIEWER", "APPLICANT"]
 
 
 def hash_password(password: str) -> str:
@@ -40,15 +42,41 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
+
+def verify_user(db: Session, user_id: int, verify_code: str) -> models.User:
+    # TODO: Actually have some sort of verification
+    db_user = db.query(models.User).filter(models.User.id == user_id)
+    if db_user is None:
+        return None
+    setattr(db_user, "status", "UNAPPROVED")
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+def approve_user(db: Session, user_id: int) -> models.User:
+    db_user = db.query(models.User).filter(models.User.id == user_id)
+    if db_user is None:
+        return None
+    setattr(db_user, "status", "APPROVED")
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+def user_is_at_least(user: models.User, type: str) -> bool:
+    return USER_ROLES.index(user.type) <= USER_ROLES.index(type)
+
 ### CRUD ###
 
 
 def create_user(db: Session, user: schemas.UserCreate) -> models.User:
     hashed_password = hash_password(user.password)
-    user_dict = user.dict()
-    del user_dict['password']
+    user_data = user.dict()
+    del user_data['password']
+    user_data['status'] = "UNVERIFIED"
     db_user = models.User(
-        **user_dict, hashed_password=hashed_password.decode('utf8'))
+        **user_data, hashed_password=hashed_password.decode('utf8'))
     db.add(db_user)
     db.commit()
     db.refresh(db_user)

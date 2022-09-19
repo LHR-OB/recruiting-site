@@ -2,7 +2,7 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from dependencies import get_db
+from dependencies import get_db, required_system_lead, required_team_management
 from database.schemas import users as schemas
 from utils import users as utils
 
@@ -37,6 +37,23 @@ async def get_users(limit: int = 100, db: Session = Depends(get_db)):
 async def get_user_by_id(id: int, db: Session = Depends(get_db)):
     return utils.get_user_by_id(db=db, user_id=id)
 
+
+@router.put('/verify/{id}')
+async def verify_user(id: int, verify_code: str, db: Session = Depends(get_db)):
+    return utils.verify_user(db=db, user_id=id, verify_code=verify_code)
+
+
+@router.put('/approve/{id}')
+async def approve_user(id: int, curr_user=Depends(required_team_management), db: Session = Depends(get_db)):
+    db_user = utils.get_user_by_id(db=db, user_id=id)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    unauthorized_exception = HTTPException(status_code=401, detail="User not authorized to perform this action")
+    if utils.user_is_at_least(user=curr_user, type="TEAM_MANAGEMENT"):
+        # Team Management can authorize <= Team Management on their own team
+        if utils.user_is_at_least(user=db_user, type="ADMIN") or db_user.team != curr_user.team:
+            raise unauthorized_exception
+    return utils.approve_user(db=db, user_id=id)
 
 @router.delete('/{id}')
 async def delete_user(id: int, db: Session = Depends(get_db)):
