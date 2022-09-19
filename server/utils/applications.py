@@ -58,7 +58,7 @@ def create_application(db: Session, user, application: schemas.Application) -> m
     return db_application
 
 
-def get_applications(db: Session, application_cycle_id: int = None, team: str = None, system: str = None) -> List[models.Application]:
+def get_applications(db: Session, application_cycle_id: int = None, team: str = None, system: str = None, user_id: int = None) -> List[models.Application]:
     query = db.query(models.Application)
     if application_cycle_id:
         query = query.filter(
@@ -67,6 +67,8 @@ def get_applications(db: Session, application_cycle_id: int = None, team: str = 
         query = query.filter(models.Application.team == team)
     if system:
         query = query.filter(models.Application.systems.contains(system))
+    if user_id:
+        query = query.filter(models.Application.user_id == user_id)
     return query.all()
 
 
