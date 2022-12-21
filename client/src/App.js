@@ -18,6 +18,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import MemberSignup from './pages/MemberSignup';
 import ApplicantSignup from './pages/ApplicantSignup';
 import Dashboard from './pages/Dashboard';
+import Calendar from './pages/Calendar';
 import Login from './pages/Login';
 import usersApi from './api/endpoints/users';
 
@@ -53,6 +54,10 @@ export default function App() {
     {
       path: "/member-signup",
       element: <MemberSignup user={user} />
+    },
+    {
+      path: "/calendar",
+      element: <Calendar user={user} />
     }
   ]);
 
@@ -100,7 +105,6 @@ export default function App() {
         break;
     }
   }
-
 
   return (
     <div>

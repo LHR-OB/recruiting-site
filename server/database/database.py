@@ -9,3 +9,9 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
+
+# Import all models
+from .models.users import User
+from .models.scheduling import Event
+from .models.applications import Application, ApplicationCycle
+from .models.links import EventUserLink

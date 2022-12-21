@@ -18,4 +18,6 @@ class User(Base):
     systems = Column(String)
     status = Column(Enum("UNVERIFIED", "UNAPPROVED", "APPROVED", name='status_enum'), index=True)
 
+    # Relationships
     applications = relationship("Application", back_populates="user")
+    events = relationship("Event", secondary="event_user_links", back_populates="users")

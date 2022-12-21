@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
-from routes import users, applications
+from routes import users, applications, scheduling
 from database.database import Base, engine
 from utils.users import authenticate_user, create_access_token
 from dependencies import get_db, required_admin, required_applicant, required_interviewer
@@ -25,6 +25,7 @@ app.add_middleware(
 app.include_router(users.router)
 app.include_router(applications.application_cycle_router)
 app.include_router(applications.application_router)
+app.include_router(scheduling.router)
 
 
 @app.post('/token')
