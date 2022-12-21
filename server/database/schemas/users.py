@@ -18,7 +18,6 @@ class ApplicantCreate(UserCreate):
 
 class MemberCreate(UserCreate):
     team: str
-    systems: str
 
 
 class User(UserBase):

@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
 from routes import users, applications
@@ -10,6 +11,15 @@ from dependencies import get_db, required_admin, required_applicant, required_in
 # Main app configuration
 Base.metadata.create_all(bind=engine)
 app = FastAPI()
+
+# Middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*'],
+)
 
 # Routers
 app.include_router(users.router)

@@ -45,7 +45,7 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
 
 def verify_user(db: Session, user_id: int, verify_code: str) -> models.User:
     # TODO: Actually have some sort of verification
-    db_user = db.query(models.User).filter(models.User.id == user_id)
+    db_user = db.query(models.User).filter(models.User.id == user_id).first()
     if db_user is None:
         return None
     setattr(db_user, "status", "UNAPPROVED")
@@ -55,7 +55,7 @@ def verify_user(db: Session, user_id: int, verify_code: str) -> models.User:
     return db_user
 
 def approve_user(db: Session, user_id: int) -> models.User:
-    db_user = db.query(models.User).filter(models.User.id == user_id)
+    db_user = db.query(models.User).filter(models.User.id == user_id).first()
     if db_user is None:
         return None
     setattr(db_user, "status", "APPROVED")

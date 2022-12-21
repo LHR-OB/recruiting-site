@@ -1,4 +1,4 @@
-import React from 'react';
+import { React, useState } from 'react';
 import {
   Box,
   Button,
@@ -7,8 +7,26 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import usersApi from '../api/endpoints/users';
 
 export default function Login() {
+  // States
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const getToken = () => {
+    usersApi.getToken({
+      username: email,
+      password: password,
+    }).then((res) => {
+      console.log(res);
+      if (res.status === 200) {
+        window.location.href = '/';
+        localStorage.setItem('token', res.data.access_token);
+      }
+    });
+  }
+
   return (
     <Container component="form" maxWidth="xs">
       <Box
@@ -29,6 +47,7 @@ export default function Login() {
           id="email"
           label="Email"
           variant="standard"
+          onChange={(e) => setEmail(e.target.value)}
         />
         <TextField
           required
@@ -36,11 +55,14 @@ export default function Login() {
           id="password"
           label="Password"
           variant="standard"
+          type="password"
+          onChange={(e) => setPassword(e.target.value)}
         />
         <Button
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
+          onClick={getToken}
         >
           Login
         </Button>

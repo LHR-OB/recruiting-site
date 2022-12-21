@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 import Login from './pages/Login';
 import {
   createBrowserRouter,
@@ -10,11 +9,12 @@ import {
 import Navbar from './components/Navbar';
 import ApplicantSignup from './pages/ApplicantSignup';
 import MemberSignup from './pages/MemberSignup';
+import Dashboard from './pages/Dashboard';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />
+    element: <Dashboard />
   },
   {
     path: "/login",

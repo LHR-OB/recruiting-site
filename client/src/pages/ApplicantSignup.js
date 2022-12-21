@@ -1,4 +1,4 @@
-import React from 'react';
+import { React, useState } from 'react';
 import {
   Box,
   Button,
@@ -7,8 +7,32 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import usersApi from '../api/endpoints/users';
+
 
 export default function ApplicantSignup() {
+  // States
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const createApplicant = () => {
+    const type = 'APPLICANT';
+    usersApi.createApplicant({
+      first_name: firstName,
+      last_name: lastName,
+      email: email,
+      type: type,
+      password: password,
+    }).then((res) => {
+      console.log(res);
+      if (res.status === 200) {
+        window.location.href = '/login';
+      }
+    });
+  }
+
   return (
     <Container component="form" maxWidth="xs">
       <Box
@@ -29,6 +53,7 @@ export default function ApplicantSignup() {
           id="firstName"
           label="First Name"
           variant="standard"
+          onChange={(e) => setFirstName(e.target.value)}
         />
         <TextField
           required
@@ -36,6 +61,7 @@ export default function ApplicantSignup() {
           id="lastName"
           label="Last Name"
           variant="standard"
+          onChange={(e) => setLastName(e.target.value)}
         />
         <TextField
           required
@@ -43,6 +69,7 @@ export default function ApplicantSignup() {
           id="email"
           label="Email"
           variant="standard"
+          onChange={(e) => setEmail(e.target.value)}
         />
         <TextField
           required
@@ -50,13 +77,16 @@ export default function ApplicantSignup() {
           id="password"
           label="Password"
           variant="standard"
+          type="password"
+          onChange={(e) => setPassword(e.target.value)}
         />
         <Button
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
+          onClick={createApplicant}
         >
-          Login
+          Sign Up
         </Button>
         <Link href="/login" variant="body2">
           Already have an account? Log In

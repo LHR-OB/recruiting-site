@@ -1,4 +1,4 @@
-import React from 'react';
+import { React, useState } from 'react';
 import {
   Box,
   Button,
@@ -11,6 +11,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import usersApi from '../api/endpoints/users';
 
 // Constants
 const USER_ROLES = [
@@ -28,16 +29,27 @@ const TEAMS = [
 
 export default function MemberSignup() {
   // States
-  const [role, setRole] = React.useState("");
-  const [team, setTeam] = React.useState("");
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [role, setRole] = useState('');
+  const [team, setTeam] = useState('');
 
-  // Change Handlers
-  const handleRoleChange = (e) => {
-    setRole(e.target.value);
-  }
-
-  const handleTeamChange = (e) => {
-    setTeam(e.target.value);
+  const createMember = () => {
+    usersApi.createMember({
+      first_name: firstName,
+      last_name: lastName,
+      email: email,
+      type: role.toUpperCase(),
+      password: password,
+      team: team,
+    }).then((res) => {
+      console.log(res);
+      if (res.status === 200) {
+        window.location.href = '/login';
+      }
+    });
   }
 
   return (
@@ -60,6 +72,7 @@ export default function MemberSignup() {
           id="firstName"
           label="First Name"
           variant="standard"
+          onChange={(e) => setFirstName(e.target.value)}
         />
         <TextField
           required
@@ -67,6 +80,7 @@ export default function MemberSignup() {
           id="lastName"
           label="Last Name"
           variant="standard"
+          onChange={(e) => setLastName(e.target.value)}
         />
         <TextField
           required
@@ -74,6 +88,7 @@ export default function MemberSignup() {
           id="email"
           label="Email"
           variant="standard"
+          onChange={(e) => setEmail(e.target.value)}
         />
         <TextField
           required
@@ -81,6 +96,8 @@ export default function MemberSignup() {
           id="password"
           label="Password"
           variant="standard"
+          type="password"
+          onChange={(e) => setPassword(e.target.value)}
         />
         <FormControl variant="standard" fullWidth required>
           <InputLabel>Role</InputLabel>
@@ -89,10 +106,15 @@ export default function MemberSignup() {
             id="role"
             label="Role"
             value={role}
-            onChange={handleRoleChange}
+            onChange={(e) => setRole(e.target.value)}
           >
-            {USER_ROLES.map((r) => (
-              <MenuItem value={r}>{r}</MenuItem>
+            {USER_ROLES.map((r, i) => (
+              <MenuItem
+                value={r}
+                key={i}
+              >
+                {r}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -103,10 +125,15 @@ export default function MemberSignup() {
             id="team"
             label="Team"
             value={team}
-            onChange={handleTeamChange}
+            onChange={(e) => setTeam(e.target.value)}
           >
-            {TEAMS.map((t) => (
-              <MenuItem value={t}>{t}</MenuItem>
+            {TEAMS.map((t, i) => (
+              <MenuItem
+                value={t}
+                key={i}
+              >
+                {t}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -114,8 +141,9 @@ export default function MemberSignup() {
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
+          onClick={createMember}
         >
-          Login
+          Sign Up
         </Button>
         <Link href="/login" variant="body2">
           Already have an account? Log In
