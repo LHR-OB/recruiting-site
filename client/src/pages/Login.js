@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import usersApi from '../api/endpoints/users';
 
-export default function Login() {
+export default function Login({ setUser }) {
   // States
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,8 +21,8 @@ export default function Login() {
     }).then((res) => {
       console.log(res);
       if (res.status === 200) {
-        window.location.href = '/';
         localStorage.setItem('token', res.data.access_token);
+        window.location.href = '/';
       }
     });
   }

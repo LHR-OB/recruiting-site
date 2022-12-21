@@ -9,7 +9,15 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
-export default function Navbar() {
+export default function Navbar({ user }) {
+  const handleLoginLogout = (e) => {
+    e.preventDefault();
+    if (user) {
+      localStorage.removeItem('token');
+    }
+    window.location.href = '/login';
+  }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -28,12 +36,9 @@ export default function Navbar() {
           </Typography>
           <Button
             color="inherit"
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href = "/login";
-            }}
+            onClick={handleLoginLogout}
           >
-            Login
+            {user ? "Logout" : "Login"}
           </Button>
         </Toolbar>
       </AppBar>

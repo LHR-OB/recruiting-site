@@ -21,6 +21,10 @@ const usersApi = {
       }
     });
   },
+  getUser: () => {
+    const url = "/users/current";
+    return axiosClient.get(url);
+  },
   protected: () => {
     const url = "/protected";
     return axiosClient.get(url);

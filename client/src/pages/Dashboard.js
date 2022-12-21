@@ -1,11 +1,6 @@
-import { React, useEffect } from 'react';
-import usersApi from '../api/endpoints/users';
+import { React } from 'react';
 
-export default function Dashboard() {
-  useEffect(() => {
-    console.log(usersApi.protected());
-  }, []);
-
+export default function Dashboard({ user }) {
   return (
     <div>
       <h1>Dashboard</h1>
