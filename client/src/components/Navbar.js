@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
-export default function Navbar({ user }) {
+export default function Navbar({ user, setOpen }) {
   const handleLoginLogout = (e) => {
     e.preventDefault();
     if (user) {
@@ -22,15 +22,16 @@ export default function Navbar({ user }) {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
+          {user ? <IconButton
             size="large"
             edge="start"
             color="inherit"
             aria-label="menu"
             sx={{ mr: 2 }}
+            onClick={() => setOpen(true)}
           >
             <MenuIcon />
-          </IconButton>
+          </IconButton> : null}
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Longhorn Racing Recruiting Portal
           </Typography>

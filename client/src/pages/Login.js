@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import usersApi from '../api/endpoints/users';
 
-export default function Login({ setUser }) {
+export default function Login() {
   // States
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

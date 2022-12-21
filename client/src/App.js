@@ -4,8 +4,19 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import Navbar from './components/Navbar';
-import ApplicantSignup from './pages/ApplicantSignup';
+import {
+  Box,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import DescriptionIcon from '@mui/icons-material/Description';
 import MemberSignup from './pages/MemberSignup';
+import ApplicantSignup from './pages/ApplicantSignup';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import usersApi from './api/endpoints/users';
@@ -13,6 +24,7 @@ import usersApi from './api/endpoints/users';
 export default function App() {
   // States
   const [user, setUser] = useState(null);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -44,9 +56,78 @@ export default function App() {
     }
   ]);
 
+  const interviewerDrawerItems = [
+    {
+      name: "Calendar",
+      path: "/calendar",
+      icon: <CalendarMonthIcon />
+    }
+  ]
+
+  const leadDrawerItems = [
+    ...interviewerDrawerItems,
+    {
+      name: "Applications",
+      path: "/applications",
+      icon: <DescriptionIcon />
+    },
+  ]
+
+  const applicantDrawerItems = [
+    {
+      name: "Application",
+      path: "/application",
+      icon: <DescriptionIcon />
+    },
+    {
+      name: "Calendar",
+      path: "/calendar",
+      icon: <CalendarMonthIcon />
+    },
+  ]
+
+  let drawerItems = [];
+  if (user) {
+    switch (user.type) {
+      case "APPLICANT":
+        drawerItems = applicantDrawerItems;
+        break;
+      case "INTERVIEWER":
+        drawerItems = interviewerDrawerItems;
+        break;
+      default:
+        drawerItems = leadDrawerItems;
+        break;
+    }
+  }
+
+
   return (
     <div>
-      <Navbar user={user} />
+      <Navbar user={user} setOpen={setOpen} />
+      <Drawer
+        anchor={'left'}
+        open={open}
+        onClose={() => setOpen(false)}
+      >
+        <Box
+        >
+          <List>
+            {drawerItems.map((item, index) => (
+              <ListItem key={index} disablePadding>
+                <ListItemButton
+                  onClick={() => {window.location.href = item.path;}}
+                >
+                  <ListItemIcon>
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText primary={item.name} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Drawer>
       <RouterProvider
         router={router}
       />
