@@ -14,10 +14,13 @@ class User(Base):
     hashed_password = Column(String)
     type = Column(Enum("ADMIN", "TEAM_MANAGEMENT",
                   "SYSTEM_LEAD", "INTERVIEWER", "APPLICANT", name='type_enum'), index=True)
-    team = Column(Integer, ForeignKey("teams.id"), index=True)
-    systems = Column(String)
     status = Column(Enum("UNVERIFIED", "UNAPPROVED", "APPROVED", name='user_status_enum'), index=True)
 
     # Relationships
+    team_id = Column(Integer, ForeignKey("teams.id"), index=True)
+
     applications = relationship("Application", back_populates="user")
+    team = relationship("Team", back_populates="users")
+    
     events = relationship("Event", secondary="event_user_links", back_populates="users")
+    systems = relationship("System", secondary="user_system_links", back_populates="users")

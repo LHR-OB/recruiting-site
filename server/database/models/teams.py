@@ -21,4 +21,10 @@ class System(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
-    team = Column(Integer, ForeignKey("teams.id"), index=True)
+
+    # Relationships
+    team_id = Column(Integer, ForeignKey("teams.id"), index=True)
+    team = relationship("Team", back_populates="systems")
+
+    users = relationship("User", secondary="user_system_links", back_populates="systems")
+    applications = relationship("Application", secondary="application_system_links", back_populates="systems")

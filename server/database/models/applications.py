@@ -29,8 +29,6 @@ class Application(Base):
     phone_number = Column(String)
     major = Column(String, index=True)
     year_entering = Column(String, index=True)
-    team = Column(String, index=True)
-    systems = Column(String, index=True)
     subsystems = Column(String)
     short_answer = Column(String)
     resume_link = Column(String)
@@ -39,7 +37,10 @@ class Application(Base):
     # Relationships
     application_cycle_id = Column(Integer, ForeignKey("application_cycles.id"))
     user_id = Column(Integer, ForeignKey("users.id"))
+    team_id = Column(Integer, ForeignKey("teams.id"))
 
     application_cycle = relationship(
         "ApplicationCycle", back_populates="applications")
     user = relationship("User", back_populates="applications")
+
+    systems = relationship("System", secondary="application_system_links", back_populates="applications")

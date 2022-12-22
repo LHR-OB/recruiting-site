@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -12,6 +12,7 @@ import {
   Typography,
 } from '@mui/material';
 import usersApi from '../api/endpoints/users';
+import teamsApi from '../api/endpoints/teams';
 
 // Constants
 const USER_ROLES = [
@@ -21,20 +22,23 @@ const USER_ROLES = [
   "Interviewer",
 ];
 
-const TEAMS = [
-  "Combustion",
-  "Electric",
-  "Solar",
-];
-
 export default function MemberSignup() {
   // States
+  const [teams, setTeams] = useState([]);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('');
-  const [team, setTeam] = useState('');
+  const [team, setTeam] = useState(null);
+
+  useEffect(() => {
+    teamsApi.getTeams().then((res) => {
+      if (res.status === 200) {
+        setTeams(res.data);
+      }
+    });
+  }, []);
 
   const createMember = () => {
     usersApi.createMember({
@@ -43,7 +47,7 @@ export default function MemberSignup() {
       email: email,
       type: role.toUpperCase(),
       password: password,
-      team: team,
+      team_id: team.id,
     }).then((res) => {
       console.log(res);
       if (res.status === 200) {
@@ -127,12 +131,12 @@ export default function MemberSignup() {
             value={team}
             onChange={(e) => setTeam(e.target.value)}
           >
-            {TEAMS.map((t, i) => (
+            {teams.map((t, i) => (
               <MenuItem
                 value={t}
                 key={i}
               >
-                {t}
+                {t.name}
               </MenuItem>
             ))}
           </Select>

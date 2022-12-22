@@ -15,12 +15,16 @@ import {
 } from '@mui/material';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import DescriptionIcon from '@mui/icons-material/Description';
+import GroupIcon from '@mui/icons-material/Group';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import MemberSignup from './pages/MemberSignup';
 import ApplicantSignup from './pages/ApplicantSignup';
 import Dashboard from './pages/Dashboard';
 import Calendar from './pages/Calendar';
 import Applications from './pages/Applications';
 import Login from './pages/Login';
+import Admin from './pages/Admin';
+import TeamManagement from './pages/TeamManagement';
 import usersApi from './api/endpoints/users';
 
 export default function App() {
@@ -63,6 +67,14 @@ export default function App() {
     {
       path: "/applications",
       element: <Applications user={user} />
+    },
+    {
+      path: "/admin",
+      element: <Admin user={user} />
+    },
+    {
+      path: "/team-management",
+      element: <TeamManagement user={user} />
     }
   ]);
 
@@ -75,12 +87,30 @@ export default function App() {
   ]
 
   const leadDrawerItems = [
-    ...interviewerDrawerItems,
     {
       name: "Applications",
       path: "/applications",
       icon: <DescriptionIcon />
     },
+    ...interviewerDrawerItems,
+  ]
+
+  const teamManagmentDrawerItems = [
+    {
+      name: "Team Management",
+      path: "/team-management",
+      icon: <GroupIcon />
+    },
+    ...leadDrawerItems,
+  ]
+
+  const adminDrawerItems = [
+    {
+      name: "Admin",
+      path: "/admin",
+      icon: <AdminPanelSettingsIcon />
+    },
+    ...teamManagmentDrawerItems,
   ]
 
   const applicantDrawerItems = [
@@ -105,8 +135,16 @@ export default function App() {
       case "INTERVIEWER":
         drawerItems = interviewerDrawerItems;
         break;
-      default:
+      case "SYSTEM_LEAD":
         drawerItems = leadDrawerItems;
+        break;
+      case "TEAM_MANAGEMENT":
+        drawerItems = teamManagmentDrawerItems;
+        break;
+      case "ADMIN":
+        drawerItems = adminDrawerItems;
+        break;
+      default:
         break;
     }
   }

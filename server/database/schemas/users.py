@@ -17,7 +17,7 @@ class ApplicantCreate(UserCreate):
 
 
 class MemberCreate(UserCreate):
-    team: str
+    team_id: int
 
 
 class User(UserBase):

@@ -32,7 +32,6 @@ class ApplicationBase(BaseModel):
     major: str
     year_entering: str
     team: str
-    systems: str
     subsystems: str
     short_answer: str
     resume_link: str
@@ -51,7 +50,6 @@ class ApplicationUpdate(BaseModel):
     major: Optional[str] = None
     year_entering: Optional[str] = None
     team: Optional[str] = None
-    systems: Optional[str] = None
     subsystems: Optional[str] = None
     short_answer: Optional[str] = None
     resume_link: Optional[str] = None
