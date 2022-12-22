@@ -4,6 +4,7 @@ from typing import Optional, List
 
 
 class EventBase(BaseModel):
+    title: str
     start_time: datetime
     end_time: datetime
     location: str

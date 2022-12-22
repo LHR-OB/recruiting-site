@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import {
   Box,
   Container,
@@ -9,10 +9,31 @@ import {
 } from '@mui/material';
 import { Calendar as ReactCalendar } from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import eventsApi from '../api/endpoints/events';
 
 export default function Calendar() {
   // States
   const [value, onChange] = useState(new Date());
+  const [events, setEvents] = useState([]);
+  const [dayEvents, setDayEvents] = useState([]);
+
+  useEffect(() => {
+    eventsApi.getEventsCurrentUser().then((res) => {
+      setEvents(res.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    const dayEvents = events.filter((event) => {
+      const eventDate = new Date(event.start_time);
+      return (
+        eventDate.getDate() === value.getDate() &&
+        eventDate.getMonth() === value.getMonth() &&
+        eventDate.getFullYear() === value.getFullYear()
+      );
+    });
+    setDayEvents(dayEvents);
+  }, [value, events]);
 
   return (
     <Container>
@@ -36,9 +57,14 @@ export default function Calendar() {
           {value.toDateString()}
         </Typography>
         <List>
-          <ListItem>
-            <ListItemText primary="Breakfast" secondary="9:00 AM" />
-          </ListItem>
+          {dayEvents.map((event, index) => (
+            <ListItem key={index}>
+              <ListItemText
+                primary={event.title}
+                secondary={new Date(event.start_time).toLocaleTimeString() + ' - ' + new Date(event.end_time).toLocaleTimeString()}
+              />
+            </ListItem>
+          ))}
         </List>
       </Box>
     </Container>

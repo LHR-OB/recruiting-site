@@ -9,6 +9,7 @@ class Event(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     # Event Details
+    title = Column(String)
     start_time = Column(DateTime)
     end_time = Column(DateTime)
     location = Column(String)

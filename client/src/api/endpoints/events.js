@@ -10,7 +10,15 @@ const schedulingApi = {
     return axiosClient.get(url);
   },
   getEvent: (id) => {
-    const url = `/events/${id}`;
+    const url = `/events/id/${id}`;
+    return axiosClient.get(url);
+  },
+  getEventsByUser: (id) => {
+    const url = `/events/user/${id}`;
+    return axiosClient.get(url);
+  },
+  getEventsCurrentUser: () => {
+    const url = `/events/user`;
     return axiosClient.get(url);
   },
   updateEvent: (id, data) => {
