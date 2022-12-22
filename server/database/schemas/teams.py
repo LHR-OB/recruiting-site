@@ -1,0 +1,40 @@
+from pydantic import BaseModel
+from typing import List, Optional
+from datetime import datetime
+
+
+class TeamBase(BaseModel):
+    name: str
+
+
+class TeamCreate(TeamBase):
+    pass
+
+
+class Team(TeamBase):
+    id: int
+    users: List[int] = []
+    systems: List[int] = []
+
+
+class TeamUpdate(BaseModel):
+    name: Optional[str] = None
+    interview_time_duration: Optional[datetime] = None
+
+
+class SystemBase(BaseModel):
+    name: str
+    team: int
+
+
+class SystemCreate(SystemBase):
+    pass
+
+
+class System(SystemBase):
+    id: int
+
+
+class SystemUpdate(BaseModel):
+    name: Optional[str] = None
+    team: Optional[int] = None

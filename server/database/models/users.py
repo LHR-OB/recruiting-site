@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Enum
+from sqlalchemy import Column, Integer, String, Enum, ForeignKey
 from sqlalchemy.orm import relationship
 
 from ..database import Base
@@ -14,7 +14,7 @@ class User(Base):
     hashed_password = Column(String)
     type = Column(Enum("ADMIN", "TEAM_MANAGEMENT",
                   "SYSTEM_LEAD", "INTERVIEWER", "APPLICANT", name='type_enum'), index=True)
-    team = Column(String, index=True)
+    team = Column(Integer, ForeignKey("teams.id"), index=True)
     systems = Column(String)
     status = Column(Enum("UNVERIFIED", "UNAPPROVED", "APPROVED", name='user_status_enum'), index=True)
 

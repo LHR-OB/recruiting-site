@@ -1,10 +1,15 @@
 from typing import Optional
+from datetime import datetime
 from pydantic import BaseModel
 
 
 class ApplicationCycleBase(BaseModel):
     year: int
     semester: str
+    application_open_date: datetime
+    application_close_date: datetime
+    interview_start_date: datetime
+    interview_end_date: datetime
     is_active: bool
 
 

@@ -14,4 +14,5 @@ Base = declarative_base()
 from .models.users import User
 from .models.events import Event
 from .models.applications import Application, ApplicationCycle
+from .models.teams import Team, System
 from .models.links import EventUserLink

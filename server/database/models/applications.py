@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, Enum, ForeignKey
+from sqlalchemy import Column, DateTime, Integer, String, Boolean, Enum, ForeignKey
 from sqlalchemy.orm import relationship
 
 from ..database import Base
@@ -10,7 +10,12 @@ class ApplicationCycle(Base):
     id = Column(Integer, primary_key=True, index=True)
     year = Column(Integer, index=True)
     semester = Column(String, index=True)
+    application_open_date = Column(DateTime, index=True)
+    application_close_date = Column(DateTime, index=True)
+    interview_start_date = Column(DateTime, index=True)
+    interview_end_date = Column(DateTime, index=True)
     is_active = Column(Boolean, index=True)
+    stage = Column(Enum("APPLICATION", "INTERVIEW", "TRIAL", "OFFER", "COMPLETE", name="application_cycle_stage_enum"), index=True)
 
     applications = relationship(
         "Application", back_populates="application_cycle")

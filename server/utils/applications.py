@@ -7,7 +7,7 @@ from database.schemas import applications as schemas
 
 ### CRUD ###
 def create_application_cycle(db: Session, application_cycle: schemas.ApplicationCycleCreate) -> models.ApplicationCycle:
-    db_application_cycle = models.ApplicationCycle(**application_cycle.dict())
+    db_application_cycle = models.ApplicationCycle(**application_cycle.dict(), stage="APPLICATION")
     db.add(db_application_cycle)
     db.commit()
     db.refresh(db_application_cycle)
