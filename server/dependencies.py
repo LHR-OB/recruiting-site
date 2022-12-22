@@ -37,8 +37,9 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
 
 
 def required_role(role: str, user: User):
-    if user_is_at_least(user, role) and user.status == "APPROVED":
-        return user
+    if user_is_at_least(user, role):
+        if user.status == "APPROVED" or (role == "APPLICANT" and user.status == "UNAPPROVED"):
+            return user
     raise HTTPException(status_code=401,
                         detail='User not authorized for this operation')
 

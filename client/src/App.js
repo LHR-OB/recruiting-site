@@ -19,6 +19,7 @@ import MemberSignup from './pages/MemberSignup';
 import ApplicantSignup from './pages/ApplicantSignup';
 import Dashboard from './pages/Dashboard';
 import Calendar from './pages/Calendar';
+import Applications from './pages/Applications';
 import Login from './pages/Login';
 import usersApi from './api/endpoints/users';
 
@@ -58,6 +59,10 @@ export default function App() {
     {
       path: "/calendar",
       element: <Calendar user={user} />
+    },
+    {
+      path: "/applications",
+      element: <Applications user={user} />
     }
   ]);
 

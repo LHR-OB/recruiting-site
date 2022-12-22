@@ -51,6 +51,7 @@ def create_application(db: Session, user, application: schemas.Application) -> m
     application_data['user_id'] = user.id
     application_data['application_cycle_id'] = get_application_cycle_active(
         db=db).id
+    application_data['status'] = 'DRAFT'
     db_application = models.Application(**application_data)
     db.add(db_application)
     db.commit()

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, Enum, ForeignKey
 from sqlalchemy.orm import relationship
 
 from ..database import Base
@@ -29,6 +29,7 @@ class Application(Base):
     subsystems = Column(String)
     short_answer = Column(String)
     resume_link = Column(String)
+    status = Column(Enum("DRAFT", "SUBMITTED", "ACCEPTED", "REJECTED", name="application_status_enum"), index=True)
 
     # Relationships
     application_cycle_id = Column(Integer, ForeignKey("application_cycles.id"))

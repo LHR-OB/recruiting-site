@@ -7,7 +7,7 @@ from utils import applications as utils
 
 
 application_cycle_router = APIRouter(
-    prefix='/application_cycles',
+    prefix='/application-cycles',
     tags=['application_cycles']
 )
 

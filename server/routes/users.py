@@ -56,7 +56,7 @@ async def approve_user(id: int, curr_user=Depends(required_team_management), db:
     unauthorized_exception = HTTPException(status_code=401, detail="User not authorized to perform this action")
     if utils.user_is_at_least(user=curr_user, type="TEAM_MANAGEMENT"):
         # Team Management can authorize <= Team Management on their own team
-        if utils.user_is_at_least(user=db_user, type="ADMIN") or db_user.team != curr_user.team:
+        if utils.user_is_at_least(user=db_user, type="ADMIN") or (db_user.team != curr_user.team and curr_user.type != "ADMIN"):
             raise unauthorized_exception
     return utils.approve_user(db=db, user_id=id)
 
