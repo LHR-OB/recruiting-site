@@ -25,6 +25,7 @@ const usersApi = {
     const url = "/users/current";
     return axiosClient.get(url);
   },
+  // TODO: Remove after dev
   protected: () => {
     const url = "/protected";
     return axiosClient.get(url);

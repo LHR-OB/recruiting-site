@@ -1,8 +1,9 @@
 from sqlalchemy.orm import Session
 from typing import List
 
-from database.models import scheduling as models
-from database.schemas import scheduling as schemas
+from database.models import events as models
+from database.models.users import User
+from database.schemas import events as schemas
 
 
 ### CRUD ###
@@ -20,6 +21,10 @@ def get_events(db: Session, limit: int = 100) -> List[models.Event]:
 
 def get_event(db: Session, event_id: int) -> models.Event:
     return db.query(models.Event).filter(models.Event.id == event_id).first()
+
+
+def get_events_by_user(db: Session, user_id: int) -> List[models.Event]:
+    return db.query(User).filter(User.id == user_id).first().events
 
 
 def update_event(db: Session, event_id: int, event: schemas.EventUpdate) -> models.Event:

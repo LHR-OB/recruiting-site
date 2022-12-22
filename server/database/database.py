@@ -12,6 +12,6 @@ Base = declarative_base()
 
 # Import all models
 from .models.users import User
-from .models.scheduling import Event
+from .models.events import Event
 from .models.applications import Application, ApplicationCycle
 from .models.links import EventUserLink
