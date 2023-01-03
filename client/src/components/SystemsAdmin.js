@@ -2,6 +2,9 @@ import { React, useState } from 'react';
 import {
   Button,
   Container,
+  List,
+  ListItem,
+  ListItemText,
   Typography,
 } from '@mui/material';
 import NewSystemForm from './NewSystemForm';
@@ -21,21 +24,25 @@ export default function SystemsAdmin({ team, systems }) {
 
   return (
     <Container>
+      <Typography variant="h6" mt={2}>
+        Systems
+      </Typography>
+      <List>
+        {systems.map((system) => (
+          <ListItem key={system.id}>
+            <ListItemText primary={system.name} />
+          </ListItem>
+        ))}
+      </List>
       <Button
         variant="outlined"
         onClick={handleOpen}
-        >
+        sx={{
+          marginTop: 2,
+        }}
+      >
         New System
       </Button>
-        {systems.map((system) => (
-          <Typography
-            key={system.id}
-            variant="h6"
-            mt={2}
-          >
-            {system.name}
-          </Typography>
-        ))}
       <ModalForm
         open={open}
         handleClose={handleClose}

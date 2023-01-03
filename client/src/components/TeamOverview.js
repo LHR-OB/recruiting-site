@@ -7,6 +7,8 @@ import {
 } from '@mui/material';
 import SystemsAdmin from './SystemsAdmin';
 import { systemsApi } from '../api/endpoints/teams';
+import PeopleList from './PeopleList';
+import ApplicationInfo from './ApplicationInfo';
 
 export default function TeamOverview({ team }) {
   // States
@@ -36,43 +38,21 @@ export default function TeamOverview({ team }) {
         </Typography>
           {/* Three columns (Systems, People, Application Info) */}
           {team ?
-          <Grid
-            container
-            direction="column"
-          >
-            <Grid 
-              container
-              direction="row"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Grid item xs>
-                <Typography variant="h6" mt={2}>
-                  Systems
-                </Typography>
-              </Grid>
-              <Grid item xs>
-                <Typography variant="h6" mt={2}>
-                  People
-                </Typography>
-              </Grid>
-              <Grid item xs>
-                <Typography variant="h6" mt={2}>
-                  Application Info
-                </Typography>
-              </Grid>
-            </Grid>
             <Grid
               container
               direction="row"
               justifyContent="center"
-              alignItems="center"
             >
               <Grid item xs>
                 <SystemsAdmin team={team} systems={systems} />
               </Grid>
+              <Grid item xs>
+                <PeopleList team={team} />
+              </Grid>
+              <Grid item xs>
+                <ApplicationInfo />
+              </Grid>
             </Grid>
-          </Grid>
           : null}
       </Box>
     </Container>
