@@ -47,6 +47,7 @@ def delete_team(db: Session, team_id: int) -> bool:
 
 
 def create_system(db: Session, system: schemas.SystemCreate) -> models.System:
+    print(system.dict())
     db_system = models.System(**system.dict())
     db.add(db_system)
     db.commit()
@@ -59,7 +60,7 @@ def get_systems(db: Session, limit: int = 100) -> List[models.System]:
 
 
 def get_systems_by_team(db: Session, team_id: int) -> List[models.System]:
-    return db.query(models.System).filter(models.System.team == team_id).all()
+    return db.query(models.System).filter(models.System.team_id == team_id).all()
 
 
 def get_system(db: Session, system_id: int) -> models.System:

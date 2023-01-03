@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@mui/material';
 import usersApi from '../api/endpoints/users';
-import teamsApi from '../api/endpoints/teams';
+import { teamsApi } from '../api/endpoints/teams';
 
 // Constants
 const USER_ROLES = [

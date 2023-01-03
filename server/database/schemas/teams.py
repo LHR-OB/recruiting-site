@@ -24,7 +24,7 @@ class TeamUpdate(BaseModel):
 
 class SystemBase(BaseModel):
     name: str
-    team: int
+    team_id: int
 
 
 class SystemCreate(SystemBase):
@@ -37,4 +37,4 @@ class System(SystemBase):
 
 class SystemUpdate(BaseModel):
     name: Optional[str] = None
-    team: Optional[int] = None
+    team_id: Optional[int] = None

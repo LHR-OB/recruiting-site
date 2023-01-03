@@ -23,4 +23,31 @@ const teamsApi = {
   }
 };
 
-export default teamsApi;
+const systemsApi = {
+  createSystem: (data) => {
+    const url = "/systems";
+    return axiosClient.post(url, data);
+  },
+  getSystems: () => {
+    const url = "/systems";
+    return axiosClient.get(url);
+  },
+  getSystemsByTeam: (id) => {
+    const url = `/systems/team/${id}`;
+    return axiosClient.get(url);
+  },
+  getSystem: (id) => {
+    const url = `/systems/id/${id}`;
+    return axiosClient.get(url);
+  },
+  updateSystem: (id, data) => {
+    const url = `/systems/${id}`;
+    return axiosClient.put(url, data);
+  },
+  deleteSystem: (id) => {
+    const url = `/systems/${id}`;
+    return axiosClient.delete(url);
+  }
+};
+
+export { teamsApi, systemsApi };
