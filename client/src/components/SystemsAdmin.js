@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import NewSystemForm from './NewSystemForm';
 import EditSystemForm from './EditSystemForm';
-import ModalForm from './ModalForm';
+import CenterModal from './CenterModal';
 
 export default function SystemsAdmin({ team, systems }) {
   // States
@@ -28,10 +28,6 @@ export default function SystemsAdmin({ team, systems }) {
     setModalMode('EDIT');
     setEditSystem(system);
   }
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   return (
     <Container>
@@ -58,12 +54,12 @@ export default function SystemsAdmin({ team, systems }) {
       >
         New System
       </Button>
-      <ModalForm
+      <CenterModal
         open={open}
-        handleClose={handleClose}
+        handleClose={() => setOpen(false)}
       >
         {modalMode === 'NEW' ? <NewSystemForm team={team} /> : <EditSystemForm team={team} system={editSystem} />}
-      </ModalForm>
+      </CenterModal>
     </Container>
   );
 }

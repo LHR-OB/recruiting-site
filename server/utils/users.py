@@ -42,18 +42,6 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-
-def verify_user(db: Session, user_id: int, verify_code: str) -> models.User:
-    # TODO: Actually have some sort of verification
-    db_user = db.query(models.User).filter(models.User.id == user_id).first()
-    if db_user is None:
-        return None
-    setattr(db_user, "status", "UNAPPROVED")
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
-    return db_user
-
 def approve_user(db: Session, user_id: int) -> models.User:
     db_user = db.query(models.User).filter(models.User.id == user_id).first()
     if db_user is None:
@@ -74,7 +62,7 @@ def create_user(db: Session, user: schemas.UserCreate) -> models.User:
     hashed_password = hash_password(user.password)
     user_data = user.dict()
     del user_data['password']
-    user_data['status'] = "UNVERIFIED"
+    user_data['status'] = "UNAPPROVED"
     db_user = models.User(
         **user_data, hashed_password=hashed_password.decode('utf8'))
     db.add(db_user)

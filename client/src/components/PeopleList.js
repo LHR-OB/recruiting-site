@@ -3,14 +3,19 @@ import {
   Container,
   List,
   ListItem,
+  ListItemButton,
   ListItemText,
   Typography,
 } from '@mui/material';
 import usersApi from '../api/endpoints/users';
+import CenterModal from './CenterModal';
+import PersonSummary from './PersonSummary';
 
 export default function PeopleList({ team }) {
   // States
   const [people, setPeople] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [selectedPerson, setSelectedPerson] = useState(null);
 
   useEffect(() => {
     if (team) {
@@ -22,6 +27,11 @@ export default function PeopleList({ team }) {
     }
   }, [team]);
 
+  const handleClickPerson = (person) => {
+    setOpen(true);
+    setSelectedPerson(person);
+  }
+
   return (
     <Container>
       <Typography variant="h6" mt={2}>
@@ -30,10 +40,23 @@ export default function PeopleList({ team }) {
       <List>
         {people.map((person) => (
           <ListItem key={person.id}>
-            <ListItemText primary={person.first_name + ' ' + person.last_name} />
+            <ListItemButton
+              onClick={() => {handleClickPerson(person)}}
+            >
+              <ListItemText
+                primary={person.first_name + ' ' + person.last_name}
+                secondary={person.status === "UNAPPROVED" ? "UNAPPROVED" : null}
+              />
+            </ListItemButton>
           </ListItem>
         ))}
       </List>
+      <CenterModal
+        open={open}
+        handleClose={() => setOpen(false)}
+      >
+        <PersonSummary person={selectedPerson} team={team} />
+      </CenterModal>
     </Container>
   );
 }

@@ -14,7 +14,7 @@ class User(Base):
     hashed_password = Column(String)
     type = Column(Enum("ADMIN", "TEAM_MANAGEMENT",
                   "SYSTEM_LEAD", "INTERVIEWER", "APPLICANT", name='type_enum'), index=True)
-    status = Column(Enum("UNVERIFIED", "UNAPPROVED", "APPROVED", name='user_status_enum'), index=True)
+    status = Column(Enum("UNAPPROVED", "APPROVED", name='user_status_enum'), index=True)
 
     # Relationships
     team_id = Column(Integer, ForeignKey("teams.id"), index=True)

@@ -29,6 +29,10 @@ const usersApi = {
     const url = `/users/team/${teamId}`;
     return axiosClient.get(url);
   },
+  approveUser: (id) => {
+    const url = `/users/approve/${id}`;
+    return axiosClient.put(url);
+  },
   // TODO: Remove after dev
   protected: () => {
     const url = "/protected";
