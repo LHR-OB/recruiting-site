@@ -4,19 +4,30 @@ import {
   Container,
   List,
   ListItem,
+  ListItemButton,
   ListItemText,
   Typography,
 } from '@mui/material';
 import NewSystemForm from './NewSystemForm';
+import EditSystemForm from './EditSystemForm';
 import ModalForm from './ModalForm';
 
 export default function SystemsAdmin({ team, systems }) {
   // States
   const [open, setOpen] = useState(false);
+  const [modalMode, setModalMode] = useState('');
+  const [editSystem, setEditSystem] = useState(null);
 
-  const handleOpen = () => {
+  const handleNewSystemButton = () => {
     setOpen(true);
+    setModalMode('NEW');
   };
+
+  const handleClickSystem = (system) => {
+    setOpen(true);
+    setModalMode('EDIT');
+    setEditSystem(system);
+  }
 
   const handleClose = () => {
     setOpen(false);
@@ -30,13 +41,17 @@ export default function SystemsAdmin({ team, systems }) {
       <List>
         {systems.map((system) => (
           <ListItem key={system.id}>
-            <ListItemText primary={system.name} />
+            <ListItemButton
+              onClick={() => {handleClickSystem(system)}}
+            >
+              <ListItemText primary={system.name} />
+            </ListItemButton>
           </ListItem>
         ))}
       </List>
       <Button
         variant="outlined"
-        onClick={handleOpen}
+        onClick={handleNewSystemButton}
         sx={{
           marginTop: 2,
         }}
@@ -47,7 +62,7 @@ export default function SystemsAdmin({ team, systems }) {
         open={open}
         handleClose={handleClose}
       >
-        <NewSystemForm team={team} />
+        {modalMode === 'NEW' ? <NewSystemForm team={team} /> : <EditSystemForm team={team} system={editSystem} />}
       </ModalForm>
     </Container>
   );

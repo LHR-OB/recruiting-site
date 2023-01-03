@@ -8,18 +8,26 @@ import {
 } from '@mui/material';
 import { systemsApi } from '../api/endpoints/teams';
 
-export default function NewSystemForm({ team }) {
+export default function NewSystemForm({ team, system }) {
   // States
-  const [name, setName] = useState('');
+  const [name, setName] = useState(system?.name);
 
-  const handleAddSystem = () => {
-    systemsApi.createSystem({
+  const handleUpdateSystem = () => {
+    systemsApi.updateSystem(system.id, {
       name,
       team_id: team.id,
     }).then((res) => {
       if (res.status === 200) {
         // TODO: Give success notification
-        console.log('System created successfully');
+        console.log('System edited successfully');
+      }
+    });
+  };
+
+  const handleDeleteSystem = () => {
+    systemsApi.deleteSystem(system.id).then((res) => {
+      if (res.status === 200) {
+        console.log('System deleted successfully');
       }
     });
   };
@@ -34,7 +42,7 @@ export default function NewSystemForm({ team }) {
         }}
       >
         <Typography variant="h4" mt={2}>
-          Add System for { team.name }
+          Edit {system?.name}
         </Typography>
         <TextField
           label="System Name"
@@ -45,10 +53,17 @@ export default function NewSystemForm({ team }) {
         />
         <Button
           variant="outlined"
-          onClick={handleAddSystem}
+          onClick={handleUpdateSystem}
           sx={{ margin: 4 }}
         >
-          Add System
+          Update System
+        </Button>
+        <Button
+          variant="outlined"
+          color="error"
+          onClick={handleDeleteSystem}
+        >
+          Delete System
         </Button>
       </Box>
     </Container>
