@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from 'react';
+import { React } from 'react';
 import {
   Box,
   Container,
@@ -6,24 +6,10 @@ import {
   Typography,
 } from '@mui/material';
 import SystemsAdmin from './SystemsAdmin';
-import { systemsApi } from '../api/endpoints/teams';
 import PeopleList from './PeopleList';
 import ApplicationInfo from './ApplicationInfo';
 
 export default function TeamOverview({ team }) {
-  // States
-  const [systems, setSystems] = useState([]);
-
-  useEffect(() => {
-    if (team) {
-      systemsApi.getSystemsByTeam(team.id).then((res) => {
-        if (res.status === 200) {
-          setSystems(res.data);
-        }
-      });
-    }
-  }, [team]);
-
   return (
     <Container>
       <Box
@@ -44,7 +30,7 @@ export default function TeamOverview({ team }) {
               justifyContent="center"
             >
               <Grid item xs>
-                <SystemsAdmin team={team} systems={systems} />
+                <SystemsAdmin team={team} />
               </Grid>
               <Grid item xs>
                 <PeopleList team={team} />

@@ -19,12 +19,14 @@ class ApplicationCycleCreate(ApplicationCycleBase):
 
 class ApplicationCycle(ApplicationCycleBase):
     id: int
+    stage: str
 
 
 class ApplicationCycleUpdate(BaseModel):
     year: Optional[int] = None
     semester: Optional[str] = None
     is_active: Optional[bool] = None
+    stage: Optional[str] = None
 
 
 class ApplicationBase(BaseModel):

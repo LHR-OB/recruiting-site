@@ -38,6 +38,11 @@ async def get_users_by_team(id: int, limit: int = 100, db: Session = Depends(get
     return utils.get_users_by_team(db=db, team_id=id, limit=limit)
 
 
+@router.get('/members')
+async def get_users_members(limit: int = 100, db: Session = Depends(get_db)):
+    return utils.get_users_members(db=db, limit=limit)
+
+
 @router.get('/id/{id}')
 async def get_user_by_id(id: int, db: Session = Depends(get_db)):
     return utils.get_user_by_id(db=db, user_id=id)

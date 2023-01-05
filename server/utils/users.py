@@ -75,6 +75,10 @@ def get_users(db: Session, limit: int = 100) -> List[models.User]:
     return db.query(models.User).limit(limit).all()
 
 
+def get_users_members(db: Session, limit: int = 100) -> List[models.User]:
+    return db.query(models.User).filter(models.User.type != "APPLICANT").limit(limit).all()
+
+
 def get_users_by_team(db: Session, team_id: int, limit: int = 100) -> List[models.User]:
     return db.query(models.User).filter(models.User.team_id == team_id).limit(limit).all()
 

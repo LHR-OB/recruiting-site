@@ -24,6 +24,12 @@ export default function PeopleList({ team }) {
           setPeople(res.data);
         }
       });
+    } else {
+      usersApi.getUsersMembers().then((res) => {
+        if (res.status === 200) {
+          setPeople(res.data);
+        }
+      });
     }
   }, [team]);
 

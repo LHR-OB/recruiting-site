@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import {
   Button,
   Container,
@@ -11,12 +11,24 @@ import {
 import NewSystemForm from './NewSystemForm';
 import EditSystemForm from './EditSystemForm';
 import CenterModal from './CenterModal';
+import { systemsApi } from '../api/endpoints/teams';
 
-export default function SystemsAdmin({ team, systems }) {
+export default function SystemsAdmin({ team }) {
   // States
+  const [systems, setSystems] = useState([]);
   const [open, setOpen] = useState(false);
   const [modalMode, setModalMode] = useState('');
   const [editSystem, setEditSystem] = useState(null);
+
+  useEffect(() => {
+    if (team) {
+      systemsApi.getSystemsByTeam(team.id).then((res) => {
+        if (res.status === 200) {
+          setSystems(res.data);
+        }
+      });
+    }
+  }, [team]);
 
   const handleNewSystemButton = () => {
     setOpen(true);

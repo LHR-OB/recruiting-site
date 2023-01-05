@@ -25,6 +25,10 @@ const usersApi = {
     const url = "/users/current";
     return axiosClient.get(url);
   },
+  getUsersMembers: () => {
+    const url = "/users/members";
+    return axiosClient.get(url);
+  },
   getUsersByTeam: (teamId) => {
     const url = `/users/team/${teamId}`;
     return axiosClient.get(url);
