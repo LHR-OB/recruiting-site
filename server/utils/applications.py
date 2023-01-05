@@ -2,6 +2,7 @@ from typing import List
 from sqlalchemy.orm import Session
 
 from database.models import applications as models
+from database.models import teams as team_models
 from database.schemas import applications as schemas
 
 
@@ -48,11 +49,16 @@ def delete_application_cycle(db: Session, application_cycle_id: int) -> bool:
 
 def create_application(db: Session, user, application: schemas.Application) -> models.Application:
     application_data = application.dict()
-    application_data['user_id'] = user.id
-    application_data['application_cycle_id'] = get_application_cycle_active(
-        db=db).id
-    application_data['status'] = 'DRAFT'
-    db_application = models.Application(**application_data)
+    application_cycle = get_application_cycle_active(db=db)
+    team = db.query(team_models.Team).filter(team_models.Team.id == application.team_id).first()
+    del application_data['team_id']
+    del application_data['systems']
+    if 'status' not in application_data or application_data['status'] is None:
+        application_data['status'] = 'DRAFT'
+    db_application = models.Application(**application_data, user=user, application_cycle=application_cycle, team=team)
+    for system_id in application.systems:
+        db_application.systems.append(
+            db.query(team_models.System).filter(team_models.System.id == system_id).first())
     db.add(db_application)
     db.commit()
     db.refresh(db_application)
@@ -70,6 +76,11 @@ def get_applications(db: Session, application_cycle_id: int = None, team: str = 
         query = query.filter(models.Application.systems.contains(system))
     if user_id:
         query = query.filter(models.Application.user_id == user_id)
+    applications = query.all()
+    # This looks like it does nothing, but it makes sure the object has all the values
+    for application in applications:
+        application.team
+        application.systems
     return query.all()
 
 

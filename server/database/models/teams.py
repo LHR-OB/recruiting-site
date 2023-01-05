@@ -14,6 +14,7 @@ class Team(Base):
     # Relationships
     users = relationship("User", back_populates="team")
     systems = relationship("System", back_populates="team")
+    applications = relationship("Application", back_populates="team")
 
 
 class System(Base):

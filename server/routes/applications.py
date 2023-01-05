@@ -51,7 +51,7 @@ application_router = APIRouter(
 )
 
 
-@application_router.put('/')
+@application_router.post('/')
 async def create_application(application: schemas.ApplicationCreate, user=Depends(required_applicant), db: Session = Depends(get_db)):
     return utils.create_application(db=db, user=user, application=application)
 
@@ -82,11 +82,11 @@ async def get_applications_by_system(cycle_id: int, team: str, system: str, user
     return utils.get_applications(db=db, application_cycle_id=cycle_id, team=team, system=system)
 
 
-@application_router.get('/user/{id}')
-async def get_applications_by_user(id: int, user=Depends(required_applicant), db: Session = Depends(get_db)):
+@application_router.get('/{cycle_id}/user/id/{id}')
+async def get_applications_by_user(cycle_id: int, id: int, user=Depends(required_applicant), db: Session = Depends(get_db)):
     if user.type == "APPLICANT" and not user.id == id:
         raise HTTPException(status_code=401, detail="User not authorized for this operation")
-    return utils.get_applications(db=db, user_id=id)
+    return utils.get_applications(db=db, user_id=id, application_cycle_id=cycle_id)
 
 
 @application_router.put('/{id}')

@@ -75,7 +75,7 @@ export default function App() {
     {
       path: "/team-management",
       element: <TeamManagement user={user} />
-    }
+    },
   ]);
 
   const interviewerDrawerItems = [
@@ -115,8 +115,8 @@ export default function App() {
 
   const applicantDrawerItems = [
     {
-      name: "Application",
-      path: "/application",
+      name: "Applications",
+      path: "/applications",
       icon: <DescriptionIcon />
     },
     {

@@ -42,5 +42,6 @@ class Application(Base):
     application_cycle = relationship(
         "ApplicationCycle", back_populates="applications")
     user = relationship("User", back_populates="applications")
+    team = relationship("Team", back_populates="applications")
 
     systems = relationship("System", secondary="application_system_links", back_populates="applications")

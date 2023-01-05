@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime
 from pydantic import BaseModel
 
@@ -30,17 +30,18 @@ class ApplicationCycleUpdate(BaseModel):
 
 
 class ApplicationBase(BaseModel):
+    team_id: int
+    systems: List[int]
+    subsystems: str
     phone_number: str
     major: str
     year_entering: str
-    team: str
-    subsystems: str
     short_answer: str
     resume_link: str
 
 
 class ApplicationCreate(ApplicationBase):
-    pass
+    status: Optional[str] = None
 
 
 class Application(ApplicationBase):
@@ -51,7 +52,9 @@ class ApplicationUpdate(BaseModel):
     phone_number: Optional[str] = None
     major: Optional[str] = None
     year_entering: Optional[str] = None
-    team: Optional[str] = None
+    team_id: Optional[int] = None
+    systems: Optional[List[int]] = None
     subsystems: Optional[str] = None
     short_answer: Optional[str] = None
     resume_link: Optional[str] = None
+    status: Optional[str] = None
