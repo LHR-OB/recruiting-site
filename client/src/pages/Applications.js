@@ -9,12 +9,13 @@ import { applicationCyclesApi } from '../api/endpoints/applications';
 import ApplicationsTable from '../components/ApplicationsTable';
 import CenterModal from '../components/CenterModal';
 import NewApplicationForm from '../components/NewApplicationForm';
+import ViewApplication from '../components/ViewApplication';
 import EditApplicationForm from '../components/EditApplicationForm';
 
 export default function Applications({ user }) {
   // States
   const [applicationCycle, setApplicationCycle] = useState(null);
-  const [editApplication, setEditApplication] = useState(null);
+  const [application, setApplication] = useState(null);
   const [open, setOpen] = useState(false);
   const [modalMode, setModalMode] = useState('');
 
@@ -47,7 +48,7 @@ export default function Applications({ user }) {
           user={user}
           setOpen={setOpen}
           setModalMode={setModalMode}
-          setEditApplication={setEditApplication}
+          setApplication={setApplication}
         />
         {user?.type === 'APPLICANT' &&
           <Button
@@ -62,7 +63,13 @@ export default function Applications({ user }) {
           open={open}
           handleClose={() => setOpen(false)}
         >
-          {modalMode === 'NEW' ? <NewApplicationForm /> : <EditApplicationForm application={editApplication} />}
+          {
+            modalMode === 'NEW' ?
+              <NewApplicationForm /> :
+            modalMode === 'VIEW' ?
+              <ViewApplication application={application} /> :
+              <EditApplicationForm application={application} />
+          }
         </CenterModal>
       </Box>
     </Container>

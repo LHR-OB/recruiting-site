@@ -80,6 +80,7 @@ def get_applications(db: Session, application_cycle_id: int = None, team: str = 
     # This looks like it does nothing, but it makes sure the object has all the values
     for application in applications:
         application.team
+        application.user
         application.systems
     return query.all()
 
@@ -91,6 +92,7 @@ def get_application(db: Session, application_id: int) -> models.Application:
         return None
     # This looks like it does nothing, but it makes sure the object has all the values
     db_application.team
+    db_application.user
     db_application.systems
     return db_application
 
@@ -119,6 +121,7 @@ def update_application(db: Session, application_id: int, application: schemas.Ap
     db.refresh(db_application)
     # This looks like it does nothing, but it makes sure the object has all the values
     db_application.team
+    db_application.user
     db_application.systems
     return db_application
 

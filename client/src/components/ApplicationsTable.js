@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { applicationsApi, applicationCyclesApi } from '../api/endpoints/applications';
 
-export default function ApplicationsTable({ user, setOpen, setModalMode, setEditApplication }) {
+export default function ApplicationsTable({ user, setOpen, setModalMode, setApplication }) {
   // States
   const [applications, setApplications] = useState([]);
   const [filteredApplications, setFilteredApplications] = useState([]);
@@ -27,21 +27,21 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setEdit
           case "ADMIN":
             applicationsApi.getApplications().then((res) => {
               if (res.status === 200) {
-                setApplications(res.data);
+                setApplications(res.data.filter(a => a.status !== 'DRAFT'));
               }
             });
             break;
           case "TEAM_MANAGEMENT":
             applicationsApi.getApplicationsByTeam(user.team).then((res) => {
               if (res.status === 200) {
-                setApplications(res.data);
+                setApplications(res.data.filter(a => a.status !== 'DRAFT'));
               }
             });
             break;
           case "SYSTEM_LEAD":
             applicationsApi.getApplicationsBySystem(user.team, user.system).then((res) => {
               if (res.status === 200) {
-                setApplications(res.data);
+                setApplications(res.data.filter(a => a.status !== 'DRAFT'));
               }
             });
             break;
@@ -63,8 +63,12 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setEdit
 
   const handleApplicationClick = (application) => {
     setOpen(true);
-    setModalMode('EDIT');
-    setEditApplication(application);
+    setApplication(application);
+    if (application.status === "DRAFT") {
+      setModalMode('EDIT');
+    } else {
+      setModalMode('VIEW');
+    }
   }
 
   return (
@@ -95,9 +99,7 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setEdit
                   {application.team.name}
                 </TableCell>
                 <TableCell align="right">
-                  {application.systems.reduce((acc, system) => {
-                    return acc + system.name + ', ';
-                  }, '').slice(0, -2)}
+                  {application.systems.map(s => s.name).join(', ')}
                 </TableCell>
                 <TableCell align="right">
                   {application.major}
