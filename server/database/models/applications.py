@@ -33,6 +33,7 @@ class Application(Base):
     short_answer = Column(String)
     resume_link = Column(String)
     status = Column(Enum("DRAFT", "SUBMITTED", "ACCEPTED", "REJECTED", name="application_status_enum"), index=True)
+    stage_decision = Column(Enum("ACCEPT", "REJECT", "NEUTRAL", name="application_stage_decision_enum"), index=True)
 
     # Relationships
     application_cycle_id = Column(Integer, ForeignKey("application_cycles.id"))

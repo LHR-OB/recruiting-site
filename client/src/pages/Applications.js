@@ -67,7 +67,7 @@ export default function Applications({ user }) {
             modalMode === 'NEW' ?
               <NewApplicationForm /> :
             modalMode === 'VIEW' ?
-              <ViewApplication application={application} /> :
+              <ViewApplication application={application} setApplication={setApplication} /> :
               <EditApplicationForm application={application} />
           }
         </CenterModal>

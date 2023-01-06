@@ -61,7 +61,7 @@ export default function PeopleList({ team }) {
         open={open}
         handleClose={() => setOpen(false)}
       >
-        <PersonSummary person={selectedPerson} team={team} />
+        <PersonSummary person={selectedPerson} />
       </CenterModal>
     </Container>
   );

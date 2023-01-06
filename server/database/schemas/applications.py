@@ -46,6 +46,8 @@ class ApplicationCreate(ApplicationBase):
 
 class Application(ApplicationBase):
     id: int
+    status: str
+    stage_decision: str
 
 
 class ApplicationUpdate(BaseModel):
@@ -58,3 +60,4 @@ class ApplicationUpdate(BaseModel):
     short_answer: Optional[str] = None
     resume_link: Optional[str] = None
     status: Optional[str] = None
+    stage_decision: Optional[str] = None

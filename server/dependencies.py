@@ -5,7 +5,7 @@ from jose import JWTError, jwt
 
 from database.database import SessionLocal
 from database.models.users import User
-from utils.users import ALGORITHM, SECRET_KEY, get_user_by_id, user_is_at_least
+from utils.users import ALGORITHM, SECRET_KEY, get_user, user_is_at_least
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
@@ -32,7 +32,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
             raise credentials_exception
     except JWTError as e:
         raise credentials_exception
-    user = get_user_by_id(db=db, user_id=user_id)
+    user = get_user(db=db, user_id=user_id)
     return user
 
 

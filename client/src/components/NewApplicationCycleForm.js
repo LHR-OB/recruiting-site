@@ -113,7 +113,7 @@ export default function NewApplicationCycleForm({ applicationCycles }) {
           onClick={handleAddNewApplicationCycle}
           sx={{ margin: 4 }}
         >
-          Add System
+          Create Application Cycle
         </Button>
       </Box>
     </Container>

@@ -14,7 +14,7 @@ router = APIRouter(
 
 @router.post('/applicant')
 async def create_user_applicant(user: schemas.ApplicantCreate, db: Session = Depends(get_db)):
-    db_user = utils.get_user_by_email(db=db, email=user.email)
+    db_user = utils.get_user(db=db, email=user.email)
     if db_user:
         raise HTTPException(status_code=400, detail="Email already registered")
     return utils.create_user(db=db, user=user)
@@ -22,7 +22,7 @@ async def create_user_applicant(user: schemas.ApplicantCreate, db: Session = Dep
 
 @router.post('/member')
 async def create_user_member(user: schemas.MemberCreate, db: Session = Depends(get_db)):
-    db_user = utils.get_user_by_email(db=db, email=user.email)
+    db_user = utils.get_user(db=db, email=user.email)
     if db_user:
         raise HTTPException(status_code=400, detail="Email already registered")
     return utils.create_user(db=db, user=user)
@@ -35,17 +35,17 @@ async def get_users(limit: int = 100, db: Session = Depends(get_db)):
 
 @router.get('/team/{id}')
 async def get_users_by_team(id: int, limit: int = 100, db: Session = Depends(get_db)):
-    return utils.get_users_by_team(db=db, team_id=id, limit=limit)
+    return utils.get_users(db=db, team_id=id, limit=limit)
 
 
 @router.get('/members')
 async def get_users_members(limit: int = 100, db: Session = Depends(get_db)):
-    return utils.get_users_members(db=db, limit=limit)
+    return utils.get_users(db=db, limit=limit)
 
 
 @router.get('/id/{id}')
 async def get_user_by_id(id: int, db: Session = Depends(get_db)):
-    return utils.get_user_by_id(db=db, user_id=id)
+    return utils.get_user(db=db, user_id=id)
 
 
 @router.get('/current')
@@ -55,7 +55,7 @@ async def get_current_user(curr_user=Depends(get_current_user)):
 
 @router.put('/approve/{id}')
 async def approve_user(id: int, curr_user=Depends(required_team_management), db: Session = Depends(get_db)):
-    db_user = utils.get_user_by_id(db=db, user_id=id)
+    db_user = utils.get_user(db=db, user_id=id)
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
     unauthorized_exception = HTTPException(status_code=401, detail="User not authorized to perform this action")

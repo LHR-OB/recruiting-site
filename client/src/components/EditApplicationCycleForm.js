@@ -132,7 +132,7 @@ export default function EditApplicationCycleForm({ applicationCycle }) {
           onClick={handleUpdateApplicationCycle}
           sx={{ marginTop: 2 }}
         >
-          Update System
+          Update Application Cycle
         </Button>
         {applicationCycle.stage !== 'COMPLETE' ? <Button
           variant="outlined"
@@ -147,7 +147,7 @@ export default function EditApplicationCycleForm({ applicationCycle }) {
           onClick={handleDeleteApplicationCycle}
           sx={{ marginTop: 2 }}
         >
-          Delete ApplicationCycle
+          Delete Application Cycle
         </Button>
       </Box>
     </Container>

@@ -24,7 +24,7 @@ def verify_password(password: str, hashed_password: str) -> bool:
 
 
 def authenticate_user(db: Session, email: str, password: str):
-    user = get_user_by_email(db=db, email=email)
+    user = get_user(db=db, email=email)
     if not user:
         return None
     if not verify_password(password, user.hashed_password):
@@ -71,28 +71,39 @@ def create_user(db: Session, user: schemas.UserCreate) -> models.User:
     return db_user
 
 
-def get_users(db: Session, limit: int = 100) -> List[models.User]:
-    return db.query(models.User).limit(limit).all()
+def get_users(db: Session, limit: int = 100, members: bool = False, team_id: int = None) -> List[models.User]:
+    query = db.query(models.User)
+    if members:
+        query = query.filter(models.User.type != "APPLICANT")
+    if team_id is not None:
+        query = query.filter(models.User.team_id == team_id)
+    users = query.limit(limit).all()
+    for user in users:
+        try:
+            user.team
+        except AttributeError:
+            pass
+    return users
 
 
-def get_users_members(db: Session, limit: int = 100) -> List[models.User]:
-    return db.query(models.User).filter(models.User.type != "APPLICANT").limit(limit).all()
-
-
-def get_users_by_team(db: Session, team_id: int, limit: int = 100) -> List[models.User]:
-    return db.query(models.User).filter(models.User.team_id == team_id).limit(limit).all()
-
-
-def get_user_by_id(db: Session, user_id: int) -> models.User:
-    return db.query(models.User).filter(models.User.id == user_id).first()
-
-
-def get_user_by_email(db: Session, email: str) -> models.User:
-    return db.query(models.User).filter(models.User.email == email).first()
-
+def get_user(db: Session, user_id: int = None, team_id: int = None, email: str = None) -> models.User:
+    user = None
+    if user_id is not None:
+        user = db.query(models.User).filter(models.User.id == user_id).first()
+    elif team_id is not None:
+        user = db.query(models.User).filter(models.User.team_id == team_id).first()
+    elif email is not None:
+        user = db.query(models.User).filter(models.User.email == email).first()
+    else:
+        return None
+    try:
+        user.team
+    except AttributeError:
+        pass
+    return user
 
 def delete_user(db: Session, user_id: int) -> bool:
-    db_user = get_user_by_id(db=db, user_id=user_id)
+    db_user = get_user(db=db, user_id=user_id)
     if db_user is None:
         return False
     db.delete(db_user)

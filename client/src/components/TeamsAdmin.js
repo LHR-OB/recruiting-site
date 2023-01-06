@@ -62,7 +62,7 @@ export default function TeamsAdmin() {
           marginTop: 2,
         }}
       >
-        New System
+        New Team
       </Button>
       <CenterModal
         open={open}

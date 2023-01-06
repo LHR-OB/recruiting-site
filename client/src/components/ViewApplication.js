@@ -1,10 +1,38 @@
 import { React, useEffect } from 'react';
 import {
+  Button,
   Container,
+  Grid,
   Typography,
 } from '@mui/material';
+import { applicationsApi } from '../api/endpoints/applications';
 
-export default function ViewApplication({ application }) {
+export default function ViewApplication({ application, setApplication }) {
+
+  const handleAccept = () => {
+    applicationsApi.updateApplication(application.id, { stage_decision: 'ACCEPT' }).then(res => {
+      if (res.status === 200) {
+        setApplication(res.data);
+      }
+    });
+  }
+
+  const handleNeutral = () => {
+    applicationsApi.updateApplication(application.id, { stage_decision: 'NEUTRAL' }).then(res => {
+      if (res.status === 200) {
+        setApplication(res.data);
+      }
+    });
+  }
+
+  const handleReject = () => {
+    applicationsApi.updateApplication(application.id, { stage_decision: 'REJECT' }).then(res => {
+      if (res.status === 200) {
+        setApplication(res.data);
+      }
+    });
+  }
+
   return (
     <Container>
       <Typography variant="h4" mt={2}>
@@ -43,6 +71,48 @@ export default function ViewApplication({ application }) {
       <Typography variant="h6" mt={2}>
         Status: {application?.status}
       </Typography>
+
+      <Grid container>
+        <Grid item xs>
+          <Button
+            variant="outlined"
+            color="success"
+            onClick={handleAccept}
+            sx={{
+              marginTop: 2,
+              backgroundColor: application.stage_decision === 'ACCEPT' ? 'green' : 'white',
+            }}
+          >
+            Mark Accepted
+          </Button>
+        </Grid>
+        <Grid item xs>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={handleNeutral}
+            sx={{
+              marginTop: 2,
+              backgroundColor: application.stage_decision === 'NEUTRAL' ? 'primary.main' : 'white',
+            }}
+          >
+            Mark Neutral
+          </Button>
+        </Grid>
+        <Grid item xs>
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={handleReject}
+            sx={{
+              marginTop: 2,
+              backgroundColor: application.stage_decision === 'REJECT' ? 'red' : 'white',
+            }}
+          >
+            Mark Rejected
+          </Button>
+        </Grid>
+      </Grid>
     </Container>
   );
 }

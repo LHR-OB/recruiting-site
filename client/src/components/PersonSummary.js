@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import usersApi from '../api/endpoints/users';
 
-export default function PersonSummary({ person, team }) {
+export default function PersonSummary({ person }) {
 
   const handleApproveButton = () => {
     usersApi.approveUser(person.id).then((res) => {
@@ -25,7 +25,7 @@ export default function PersonSummary({ person, team }) {
         Role: {person?.type}
       </Typography>
       <Typography variant="h6" mt={2}>
-        Team: {team?.name}
+        Team: {person?.team?.name}
       </Typography>
       {person?.status === "UNAPPROVED" ?
         <Button

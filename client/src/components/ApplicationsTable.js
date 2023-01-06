@@ -71,6 +71,19 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
     }
   }
 
+  const getBackgroundColor = (stage_decision) => {
+    if (user.type !== 'APPLICANT') {
+      switch (stage_decision) {
+        case 'ACCEPT':
+          return 'green';
+        case 'REJECT':
+          return 'red';
+      }
+    } else {
+      return 'white';
+    }
+  }
+
   return (
     <Container>
       <TableContainer component={Paper}>
@@ -90,9 +103,17 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
               <TableRow
                 key={index}
                 onClick={() => handleApplicationClick(application)}
-                sx={{'&:hover': {cursor: 'pointer', backgroundColor: 'grey.100'}}}
+                sx={{
+                  '&:hover': {cursor: 'pointer', backgroundColor: 'grey.100'},
+                }}
               >
-                <TableCell component="th" scope="row">
+                <TableCell 
+                  component="th"
+                  scope="row" 
+                  sx={{
+                    backgroundColor: getBackgroundColor(application.stage_decision)
+                  }}
+                >
                   {application.id}
                 </TableCell>
                 <TableCell align="right">
