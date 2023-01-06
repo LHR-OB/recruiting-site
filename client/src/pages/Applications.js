@@ -9,11 +9,14 @@ import { applicationCyclesApi } from '../api/endpoints/applications';
 import ApplicationsTable from '../components/ApplicationsTable';
 import CenterModal from '../components/CenterModal';
 import NewApplicationForm from '../components/NewApplicationForm';
+import EditApplicationForm from '../components/EditApplicationForm';
 
 export default function Applications({ user }) {
   // States
   const [applicationCycle, setApplicationCycle] = useState(null);
+  const [editApplication, setEditApplication] = useState(null);
   const [open, setOpen] = useState(false);
+  const [modalMode, setModalMode] = useState('');
 
   useEffect(() => {
     // Get active application cycle
@@ -24,6 +27,7 @@ export default function Applications({ user }) {
 
   const handleNewApplication = () => {
     setOpen(true);
+    setModalMode('NEW');
   }
 
   return (
@@ -39,7 +43,12 @@ export default function Applications({ user }) {
         <Typography variant="h4" mt={2}>
           Applications for {applicationCycle?.semester + ' ' + applicationCycle?.year}
         </Typography>
-        <ApplicationsTable user={user} />
+        <ApplicationsTable
+          user={user}
+          setOpen={setOpen}
+          setModalMode={setModalMode}
+          setEditApplication={setEditApplication}
+        />
         {user?.type === 'APPLICANT' &&
           <Button
             variant="outlined"
@@ -53,7 +62,7 @@ export default function Applications({ user }) {
           open={open}
           handleClose={() => setOpen(false)}
         >
-          <NewApplicationForm user={user} applicationCycle={applicationCycle} />
+          {modalMode === 'NEW' ? <NewApplicationForm /> : <EditApplicationForm application={editApplication} />}
         </CenterModal>
       </Box>
     </Container>

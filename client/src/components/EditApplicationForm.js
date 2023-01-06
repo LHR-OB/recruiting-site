@@ -16,21 +16,21 @@ import {
 import { applicationsApi } from '../api/endpoints/applications';
 import { teamsApi, systemsApi } from '../api/endpoints/teams';
 
-export default function NewApplicationForm() {
+export default function EditApplicationForm({ application }) {
   // States
-  const [team, setTeam] = useState(null);
-  const [selectedSystems, setSelectedSystems] = useState([]);
-  const [subsystems, setSubsystems] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [major, setMajor] = useState('');
-  const [yearEntering, setYearEntering] = useState('');
-  const [shortAnswer, setShortAnswer] = useState('');
-  const [resume, setResume] = useState('');
+  const [team, setTeam] = useState(application.team);
+  const [selectedSystems, setSelectedSystems] = useState(application.systems);
+  const [subsystems, setSubsystems] = useState(application.subsystems);
+  const [phoneNumber, setPhoneNumber] = useState(application.phone_number);
+  const [major, setMajor] = useState(application.major);
+  const [yearEntering, setYearEntering] = useState(application.year_entering);
+  const [shortAnswer, setShortAnswer] = useState(application.short_answer);
+  const [resume, setResume] = useState(application.resume_link);
   const [systems, setSystems] = useState([]);
   const [teams, setTeams] = useState([]);
 
   const handleSaveApplication = () => {
-    applicationsApi.createApplication({
+    applicationsApi.updateApplication(application.id, {
       team_id: team.id,
       systems: selectedSystems.map(system => system.id),
       subsystems: subsystems,
@@ -41,13 +41,13 @@ export default function NewApplicationForm() {
       resume_link: resume,
     }).then(res => {
       if (res.status === 200) {
-        console.log('Application submitted');
+        console.log('Application saved');
       }
     });
   }
 
   const handleSubmitApplication = () => {
-    applicationsApi.createApplication({
+    applicationsApi.updateApplication(application.id, {
       team_id: team.id,
       systems: selectedSystems.map(system => system.id),
       subsystems: subsystems,
@@ -94,7 +94,7 @@ export default function NewApplicationForm() {
         }}
       >
         <Typography variant="h4" mt={2}>
-          New Application
+          Edit Application
         </Typography>
         <FormControl
           fullWidth
@@ -102,12 +102,12 @@ export default function NewApplicationForm() {
         >
           <InputLabel>Team</InputLabel>
           <Select
-            value={team || ''}
+            value={JSON.stringify(team) || ''}
             label="Team"
-            onChange={(e) => setTeam(e.target.value)}
+            onChange={(e) => setTeam(JSON.parse(e.target.value))}
           >
-            {teams.map(team => (
-              <MenuItem key={team.id} value={team}>{team.name}</MenuItem>
+            {teams.map(t => (
+              <MenuItem key={t.id} value={JSON.stringify(t)}>{t.name}</MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -122,7 +122,7 @@ export default function NewApplicationForm() {
             <Grid item key={system.id} xs>
               <FormControlLabel
                 control={<Checkbox
-                  checked={selectedSystems.includes(system)}
+                  checked={selectedSystems.some(s => s.id === system.id)}
                   onChange={(e) => {
                     if (e.target.checked) {
                       setSelectedSystems([...selectedSystems, system]);

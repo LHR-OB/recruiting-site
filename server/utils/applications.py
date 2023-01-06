@@ -84,17 +84,42 @@ def get_applications(db: Session, application_cycle_id: int = None, team: str = 
     return query.all()
 
 
+def get_application(db: Session, application_id: int) -> models.Application:
+    db_application = db.query(models.Application).filter(
+        models.Application.id == application_id).first()
+    if db_application is None:
+        return None
+    # This looks like it does nothing, but it makes sure the object has all the values
+    db_application.team
+    db_application.systems
+    return db_application
+
+
 def update_application(db: Session, application_id: int, application: schemas.ApplicationUpdate) -> models.Application:
     db_application = db.query(models.Application).filter(
         models.Application.id == application_id).first()
     if db_application is None:
         return None
     application_data = application.dict(exclude_unset=True)
+    if 'team_id' in application_data:
+        team = db.query(team_models.Team).filter(team_models.Team.id == application.team_id).first()
+        db_application.team = team
+        del application_data['team_id']
+    if 'systems' in application_data:
+        db_application.systems = []
+        for system_id in application.systems:
+            db_application.systems.append(
+                db.query(team_models.System).filter(team_models.System.id == system_id).first())
+        del application_data['systems']
     for key, value in application_data.items():
         setattr(db_application, key, value)
+    
     db.add(db_application)
     db.commit()
     db.refresh(db_application)
+    # This looks like it does nothing, but it makes sure the object has all the values
+    db_application.team
+    db_application.systems
     return db_application
 
 

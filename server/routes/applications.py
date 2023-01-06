@@ -91,13 +91,16 @@ async def get_applications_by_user(cycle_id: int, id: int, user=Depends(required
 
 @application_router.put('/{id}')
 async def update_application(id: int, application: schemas.ApplicationUpdate, user=Depends(required_applicant), db: Session = Depends(get_db)):
-    if user.type == "APPLICANT" and not user.id == id:
+    print("HERE")
+    db_application = utils.get_application(db=db, application_id=id)
+    if user.type == "APPLICANT" and not user.id == db_application.user_id:
         raise HTTPException(status_code=401, detail="User not authorized for this operation")
     return utils.update_application(db=db, application_id=id, application=application)
 
 
 @application_router.delete('/{id}')
 async def delete_application(id: int, user=Depends(required_applicant), db: Session = Depends(get_db)):
-    if user.type == "APPLICANT" and not user.id == id:
+    db_application = utils.get_application(db=db, application_id=id)
+    if user.type == "APPLICANT" and not user.id == db_application.id:
         raise HTTPException(status_code=401, detail="User not authorized for this operation")
     return utils.delete_application(db=db, application_id=id)

@@ -1,8 +1,6 @@
 import { React, useEffect, useState } from 'react';
 import {
-  Box,
   Container,
-  Typography,
   Table,
   TableBody,
   TableCell,
@@ -13,7 +11,7 @@ import {
 } from '@mui/material';
 import { applicationsApi, applicationCyclesApi } from '../api/endpoints/applications';
 
-export default function ApplicationsTable({ user }) {
+export default function ApplicationsTable({ user, setOpen, setModalMode, setEditApplication }) {
   // States
   const [applications, setApplications] = useState([]);
   const [filteredApplications, setFilteredApplications] = useState([]);
@@ -63,6 +61,12 @@ export default function ApplicationsTable({ user }) {
     }
   }, [user]);
 
+  const handleApplicationClick = (application) => {
+    setOpen(true);
+    setModalMode('EDIT');
+    setEditApplication(application);
+  }
+
   return (
     <Container>
       <TableContainer component={Paper}>
@@ -70,21 +74,22 @@ export default function ApplicationsTable({ user }) {
           <TableHead>
             <TableRow>
               <TableCell>Application Id</TableCell>
-              <TableCell align="right">Major</TableCell>
               <TableCell align="right">Team</TableCell>
               <TableCell align="right">Systems</TableCell>
+              <TableCell align="right">Major</TableCell>
               <TableCell align="right">Resume</TableCell>
               <TableCell align="right">Status</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {applications.map((application, index) => (
-              <TableRow key={index}>
+              <TableRow
+                key={index}
+                onClick={() => handleApplicationClick(application)}
+                sx={{'&:hover': {cursor: 'pointer', backgroundColor: 'grey.100'}}}
+              >
                 <TableCell component="th" scope="row">
                   {application.id}
-                </TableCell>
-                <TableCell align="right">
-                  {application.major}
                 </TableCell>
                 <TableCell align="right">
                   {application.team.name}
@@ -93,6 +98,9 @@ export default function ApplicationsTable({ user }) {
                   {application.systems.reduce((acc, system) => {
                     return acc + system.name + ', ';
                   }, '').slice(0, -2)}
+                </TableCell>
+                <TableCell align="right">
+                  {application.major}
                 </TableCell>
                 <TableCell align="right">
                   <a href={`//${application.resume_link}`} target="_blank" rel="noreferrer">
