@@ -45,7 +45,7 @@ export default function MemberSignup() {
       first_name: firstName,
       last_name: lastName,
       email: email,
-      type: role.toUpperCase(),
+      type: role.toUpperCase().replace(' ', '_'),
       password: password,
       team_id: team.id,
     }).then((res) => {

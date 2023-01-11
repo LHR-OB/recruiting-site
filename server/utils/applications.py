@@ -37,6 +37,43 @@ def update_application_cycle(db: Session, application_cycle_id: int, application
     return db_application_cycle
 
 
+def advance_application_cycle(db: Session, application_cycle_id: int) -> models.ApplicationCycle:
+    db_application_cycle = db.query(models.ApplicationCycle).filter(
+        models.ApplicationCycle.id == application_cycle_id).first()
+    if db_application_cycle is None:
+        return None
+    if db_application_cycle.stage == 'APPLICATION':
+        db_application_cycle.stage = 'INTERVIEW'
+    elif db_application_cycle.stage == 'INTERVIEW':
+        db_application_cycle.stage = 'TRIAL'
+    elif db_application_cycle.stage == 'TRIAL':
+        db_application_cycle.stage = 'OFFER'
+    elif db_application_cycle.stage == 'OFFER':
+        db_application_cycle.stage = 'COMPLETE'
+    db.add(db_application_cycle)
+    db.commit()
+    db.refresh(db_application_cycle)
+    # Update all applications to the new stage
+    applications = get_applications(db=db, application_cycle_id=application_cycle_id)
+    for application in applications:
+        if application.stage_decision == 'ACCEPT':
+            # Advance the application status
+            if application.status == 'SUBMITTED':
+                application.status = 'INTERVIEW'
+            elif application.status == 'INTERVIEW':
+                application.status = 'TRIAL'
+            elif application.status == 'TRIAL':
+                application.status = 'OFFER'
+            application.stage_decision = 'NEUTRAL'
+        else:
+            # Reject the application
+            application.status = 'REJECTED'
+            application.stage_decision = 'NEUTRAL'
+        db.add(application)
+    db.commit()
+    return db_application_cycle
+
+
 def delete_application_cycle(db: Session, application_cycle_id: int) -> bool:
     db_application_cycle = db.query(models.ApplicationCycle).filter(
         models.ApplicationCycle.id == application_cycle_id).first()

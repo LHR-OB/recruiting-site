@@ -52,11 +52,7 @@ export default function EditApplicationCycleForm({ applicationCycle }) {
   };
 
   const handleAdvanceStage = () => {
-    const currentStage = applicationCycleStages.indexOf(applicationCycle.stage);
-    const nextStage = applicationCycleStages[currentStage + 1];
-    applicationCyclesApi.updateApplicationCycle(applicationCycle.id, {
-      stage: nextStage,
-    }).then((res) => {
+    applicationCyclesApi.advanceApplicationCycle(applicationCycle.id).then((res) => {
       if (res.status === 200) {
         console.log('Application cycle stage updated');
       }

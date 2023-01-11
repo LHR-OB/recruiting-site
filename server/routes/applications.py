@@ -37,6 +37,16 @@ async def update_application_cycle(id: int, application_cycle: schemas.Applicati
     return db_application_cycle
 
 
+@application_cycle_router.put('/advance/{id}')
+async def advance_application_cycle(id: int, user=Depends(required_admin), db: Session = Depends(get_db)):
+    db_application_cycle = utils.advance_application_cycle(
+        db=db, application_cycle_id=id)
+    if db_application_cycle is None:
+        raise HTTPException(
+            status_code=404, detail="Application Cycle not found")
+    return db_application_cycle
+
+
 @application_cycle_router.delete('/{id}')
 async def delete_application_cycle(id: int, user=Depends(required_admin), db: Session = Depends(get_db)):
     if not utils.delete_application_cycle(db=db, application_cycle_id=id):

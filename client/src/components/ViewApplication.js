@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 import { applicationsApi } from '../api/endpoints/applications';
 
-export default function ViewApplication({ application, setApplication }) {
+export default function ViewApplication({ user, application, setApplication }) {
 
   const handleAccept = () => {
     applicationsApi.updateApplication(application.id, { stage_decision: 'ACCEPT' }).then(res => {
@@ -72,7 +72,7 @@ export default function ViewApplication({ application, setApplication }) {
         Status: {application?.status}
       </Typography>
 
-      <Grid container>
+      {user.type !== 'APPLICANT' && <Grid container>
         <Grid item xs>
           <Button
             variant="outlined"
@@ -112,7 +112,7 @@ export default function ViewApplication({ application, setApplication }) {
             Mark Rejected
           </Button>
         </Grid>
-      </Grid>
+      </Grid>}
     </Container>
   );
 }

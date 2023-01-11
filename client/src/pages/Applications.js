@@ -50,7 +50,7 @@ export default function Applications({ user }) {
           setModalMode={setModalMode}
           setApplication={setApplication}
         />
-        {user?.type === 'APPLICANT' &&
+        {user?.type === 'APPLICANT' && applicationCycle?.status === 'APPLICATION' &&
           <Button
             variant="outlined"
             onClick={handleNewApplication}
@@ -67,7 +67,7 @@ export default function Applications({ user }) {
             modalMode === 'NEW' ?
               <NewApplicationForm /> :
             modalMode === 'VIEW' ?
-              <ViewApplication application={application} setApplication={setApplication} /> :
+              <ViewApplication user={user} application={application} setApplication={setApplication} /> :
               <EditApplicationForm application={application} />
           }
         </CenterModal>

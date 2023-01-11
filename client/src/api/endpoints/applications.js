@@ -52,6 +52,10 @@ const applicationCyclesApi = {
     const url = `/application-cycles/${id}`;
     return axiosClient.put(url, data);
   },
+  advanceApplicationCycle: (id) => {
+    const url = `/application-cycles/advance/${id}`;
+    return axiosClient.put(url);
+  },
   deleteApplicationCycle: (id) => {
     const url = `/application-cycles/${id}`;
     return axiosClient.delete(url);
