@@ -40,7 +40,7 @@ async def get_users_by_team(id: int, limit: int = 100, db: Session = Depends(get
 
 @router.get('/members')
 async def get_users_members(limit: int = 100, db: Session = Depends(get_db)):
-    return utils.get_users(db=db, limit=limit)
+    return utils.get_users(db=db, limit=limit, members=True)
 
 
 @router.get('/id/{id}')
