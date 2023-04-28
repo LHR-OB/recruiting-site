@@ -6,6 +6,7 @@ from jose import jwt
 import bcrypt
 
 from database.models import users as models
+from database.models import teams as teams_models
 from database.schemas import users as schemas
 
 ALGORITHM = 'HS256'
@@ -52,6 +53,20 @@ def approve_user(db: Session, user_id: int) -> models.User:
     db.refresh(db_user)
     return db_user
 
+
+def join_system(db: Session, user_id: int, system_id: int) -> models.User:
+    db_user = db.query(models.User).filter(models.User.id == user_id).first()
+    db_system = db.query(teams_models.System).filter(teams_models.System.id == system_id).first()
+    if db_user is None:
+        return None
+    db_user.systems.append(db_system)
+    setattr(db_user, "status", "UNAPPROVED")
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+
 def user_is_at_least(user: models.User, type: str) -> bool:
     return USER_ROLES.index(user.type) <= USER_ROLES.index(type)
 
@@ -80,7 +95,9 @@ def get_users(db: Session, limit: int = 100, members: bool = False, team_id: int
     users = query.limit(limit).all()
     for user in users:
         try:
+            # This is so it shows up in the response
             user.team
+            user.systems
         except AttributeError:
             pass
     return users
@@ -97,7 +114,9 @@ def get_user(db: Session, user_id: int = None, team_id: int = None, email: str =
     else:
         return None
     try:
+        # This is so it shows up in the response
         user.team
+        user.systems
     except AttributeError:
         pass
     return user

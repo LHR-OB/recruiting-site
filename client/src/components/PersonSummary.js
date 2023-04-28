@@ -27,6 +27,9 @@ export default function PersonSummary({ person }) {
       <Typography variant="h6" mt={2}>
         Team: {person?.team?.name}
       </Typography>
+      <Typography variant="h6" mt={2}>
+        Systems: {person?.systems?.map((system) => system.name).join(', ')}
+      </Typography>
       {person?.status === "UNAPPROVED" ?
         <Button
           variant="outlined"

@@ -2,7 +2,7 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from dependencies import get_db, get_current_user, required_team_management
+from dependencies import get_db, get_current_user, required_team_management, required_interviewer
 from database.schemas import users as schemas
 from utils import users as utils
 
@@ -64,6 +64,15 @@ async def approve_user(id: int, curr_user=Depends(required_team_management), db:
         if (utils.user_is_at_least(user=db_user, type="ADMIN") or db_user.team != curr_user.team) and curr_user.type != "ADMIN":
             raise unauthorized_exception
     return utils.approve_user(db=db, user_id=id)
+
+
+@router.put('/join-system/{id}/{system_id}')
+async def join_system(id: int, system_id: int, db: Session = Depends(get_db)):
+    db_user = utils.get_user(db=db, user_id=id)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return utils.join_system(db=db, user_id=id, system_id=system_id)
+
 
 @router.delete('/{id}')
 async def delete_user(id: int, db: Session = Depends(get_db)):

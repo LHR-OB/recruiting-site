@@ -25,6 +25,10 @@ class ApplicationCycle(ApplicationCycleBase):
 class ApplicationCycleUpdate(BaseModel):
     year: Optional[int] = None
     semester: Optional[str] = None
+    application_open_date: Optional[datetime] = None
+    application_close_date: Optional[datetime] = None
+    interview_start_date: Optional[datetime] = None
+    interview_end_date: Optional[datetime] = None
     is_active: Optional[bool] = None
     stage: Optional[str] = None
 

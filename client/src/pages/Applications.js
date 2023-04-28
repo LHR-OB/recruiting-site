@@ -50,7 +50,7 @@ export default function Applications({ user }) {
           setModalMode={setModalMode}
           setApplication={setApplication}
         />
-        {user?.type === 'APPLICANT' && applicationCycle?.status === 'APPLICATION' &&
+        {user?.type === 'APPLICANT' && applicationCycle?.stage === 'APPLICATION' &&
           <Button
             variant="outlined"
             onClick={handleNewApplication}

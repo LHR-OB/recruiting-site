@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from routes import users, applications, events, teams
 from database.database import Base, engine
 from utils.users import authenticate_user, create_access_token
+from utils.dummy_data import main as create_dummy_data
 from dependencies import get_db, required_interviewer
 
 # Main app configuration
@@ -48,3 +49,9 @@ async def token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
 @app.get('/protected')
 async def protected(user=Depends(required_interviewer)):
     return user
+
+
+@app.post('/dummy-data')
+async def dummy_data(db: Session = Depends(get_db)):
+    create_dummy_data(db)
+    return {'status': 'ok'}

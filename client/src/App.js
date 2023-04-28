@@ -13,6 +13,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import DescriptionIcon from '@mui/icons-material/Description';
 import GroupIcon from '@mui/icons-material/Group';
@@ -25,6 +26,7 @@ import Applications from './pages/Applications';
 import Login from './pages/Login';
 import Admin from './pages/Admin';
 import TeamManagement from './pages/TeamManagement';
+import Profile from './pages/Profile';
 import usersApi from './api/endpoints/users';
 
 export default function App() {
@@ -76,7 +78,19 @@ export default function App() {
       path: "/team-management",
       element: <TeamManagement user={user} />
     },
+    {
+      path: "/profile",
+      element: <Profile user={user} />
+    }
   ]);
+
+  const commonDrawerItems = [
+    {
+      name: "Home",
+      path: "/",
+      icon: <HomeIcon />
+    },
+  ]
 
   const interviewerDrawerItems = [
     {
@@ -148,6 +162,7 @@ export default function App() {
         break;
     }
   }
+  drawerItems = [...commonDrawerItems, ...drawerItems];
 
   return (
     <div>
