@@ -67,8 +67,30 @@ def join_system(db: Session, user_id: int, system_id: int) -> models.User:
     return db_user
 
 
+def leave_system(db: Session, user_id: int, system_id: int) -> models.User:
+    db_user = db.query(models.User).filter(models.User.id == user_id).first()
+    db_system = db.query(teams_models.System).filter(teams_models.System.id == system_id).first()
+    if db_user is None:
+        return None
+    db_user.systems.remove(db_system)
+    setattr(db_user, "status", "UNAPPROVED")
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+
 def user_is_at_least(user: models.User, type: str) -> bool:
     return USER_ROLES.index(user.type) <= USER_ROLES.index(type)
+
+
+def user_in_system(db: Session, user_id: int, system_id: int) -> bool:
+    db_user = db.query(models.User).filter(models.User.id == user_id).first()
+    db_system = db.query(teams_models.System).filter(teams_models.System.id == system_id).first()
+    if db_user is None or db_system is None:
+        return False
+    return db_system in db_user.systems
+
 
 ### CRUD ###
 

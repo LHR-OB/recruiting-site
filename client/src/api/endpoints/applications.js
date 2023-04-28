@@ -17,8 +17,8 @@ const applicationsApi = {
     const url = `/applications/${cycle_id}/${team_id}`;
     return axiosClient.get(url);
   },
-  getApplicationsBySystem: (cycle_id, team_id, system) => {
-    const url = `/applications/${cycle_id}/${team_id}/${system}`;
+  getApplicationsBySystem: (cycle_id, team_id, system_id) => {
+    const url = `/applications/${cycle_id}/${team_id}/${system_id}`;
     return axiosClient.get(url);
   },
   getApplicationsByUser: (cycle_id, id) => {

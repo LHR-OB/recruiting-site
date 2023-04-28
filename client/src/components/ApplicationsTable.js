@@ -32,20 +32,23 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
             });
             break;
           case "TEAM_MANAGEMENT":
-            applicationsApi.getApplicationsByTeam(user.team).then((res) => {
+            applicationsApi.getApplicationsByTeam(applicationCycle.id, user.team.id).then((res) => {
               if (res.status === 200) {
                 setApplications(res.data.filter(a => a.status !== 'DRAFT'));
               }
             });
             break;
           case "SYSTEM_LEAD":
-            applicationsApi.getApplicationsBySystem(user.team, user.system).then((res) => {
-              if (res.status === 200) {
-                setApplications(res.data.filter(a => a.status !== 'DRAFT'));
-              }
-            });
-            break;
           case "INTERVIEWER":
+            setApplications([]);
+            for (let system of user.systems) {
+              applicationsApi.getApplicationsBySystem(applicationCycle.id, user.team.id, system.id).then((res) => {
+                if (res.status === 200) {
+                  const newApplications = res.data.filter(a => a.status !== 'DRAFT');
+                  setApplications(oldApplications => [...oldApplications, ...res.data.filter(a => a.status !== 'DRAFT')]);
+                }
+              });
+            }
             break;
           case "APPLICANT":
             applicationsApi.getApplicationsByUser(applicationCycle.id, user.id).then((res) => {
@@ -117,21 +120,21 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
                   {application.id}
                 </TableCell>
                 <TableCell align="right">
-                  {application.team.name}
+                  {application?.team?.name}
                 </TableCell>
                 <TableCell align="right">
-                  {application.systems.map(s => s.name).join(', ')}
+                  {application?.systems?.map(s => s.name).join(', ')}
                 </TableCell>
                 <TableCell align="right">
-                  {application.major}
+                  {application?.major}
                 </TableCell>
                 <TableCell align="right">
-                  <a href={`//${application.resume_link}`} target="_blank" rel="noreferrer">
+                  <a href={`//${application?.resume_link}`} target="_blank" rel="noreferrer">
                     Resume
                   </a>
                 </TableCell>
                 <TableCell align="right">
-                  {application.status}
+                  {application?.status}
                 </TableCell>
               </TableRow>
             ))}

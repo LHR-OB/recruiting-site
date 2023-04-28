@@ -102,15 +102,15 @@ def create_application(db: Session, user, application: schemas.Application) -> m
     return db_application
 
 
-def get_applications(db: Session, application_cycle_id: int = None, team: str = None, system: str = None, user_id: int = None) -> List[models.Application]:
+def get_applications(db: Session, application_cycle_id: int = None, team_id: int = None, system_id: int = None, user_id: int = None) -> List[models.Application]:
     query = db.query(models.Application)
     if application_cycle_id:
         query = query.filter(
             models.Application.application_cycle_id == application_cycle_id)
-    if team:
-        query = query.filter(models.Application.team == team)
-    if system:
-        query = query.filter(models.Application.systems.contains(system))
+    if team_id:
+        query = query.filter(models.Application.team_id == team_id)
+    if system_id:
+        query = query.filter(models.Application.systems.contains(db.query(team_models.System).filter(team_models.System.id == system_id).first()))
     if user_id:
         query = query.filter(models.Application.user_id == user_id)
     applications = query.all()

@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from dependencies import get_db, required_admin, required_applicant, required_interviewer, required_system_lead, required_team_management
 from database.schemas import applications as schemas
 from utils import applications as utils
+from utils import users as user_utils
 
 
 application_cycle_router = APIRouter(
@@ -76,20 +77,20 @@ async def get_applications_by_cycle(cycle_id: int, user=Depends(required_admin),
     return utils.get_applications(db=db, application_cycle_id=cycle_id)
 
 
-@application_router.get('/{cycle_id}/{team}')
-async def get_applications_by_team(cycle_id: int, team: str, user=Depends(required_team_management), db: Session = Depends(get_db)):
-    if user.type == "TEAM_MANAGEMENT" and user.team != team:
+@application_router.get('/{cycle_id}/{team_id}')
+async def get_applications_by_team(cycle_id: int, team_id: int, user=Depends(required_team_management), db: Session = Depends(get_db)):
+    if user.type == "TEAM_MANAGEMENT" and user.team.id != team_id:
         raise HTTPException(status_code=401, detail="User not authorized for this operation")
-    return utils.get_applications(db=db, application_cycle_id=cycle_id, team=team)
+    return utils.get_applications(db=db, application_cycle_id=cycle_id, team_id=team_id)
 
 
-@application_router.get('/{cycle_id}/{team}/{system}')
-async def get_applications_by_system(cycle_id: int, team: str, system: str, user=Depends(required_interviewer), db: Session = Depends(get_db)):
-    if user.type != "ADMIN" and user.team != team:
+@application_router.get('/{cycle_id}/{team_id}/{system_id}')
+async def get_applications_by_system(cycle_id: int, team_id: int, system_id: int, user=Depends(required_interviewer), db: Session = Depends(get_db)):
+    if user.type != "ADMIN" and user.team.id != team_id:
         raise HTTPException(status_code=401, detail="User not authorized for this operation")
-    if user.type in {"INTERVIEWER", "SYSTEM_LEAD"} and not user.system == system:
+    if user.type in {"INTERVIEWER", "SYSTEM_LEAD"} and not user_utils.user_in_system(db=db, user_id=user.id, system_id=system_id):
         raise HTTPException(status_code=401, detail="User not authorized for this operation")
-    return utils.get_applications(db=db, application_cycle_id=cycle_id, team=team, system=system)
+    return utils.get_applications(db=db, application_cycle_id=cycle_id, team_id=team_id, system_id=system_id)
 
 
 @application_router.get('/{cycle_id}/user/id/{id}')
@@ -101,7 +102,6 @@ async def get_applications_by_user(cycle_id: int, id: int, user=Depends(required
 
 @application_router.put('/{id}')
 async def update_application(id: int, application: schemas.ApplicationUpdate, user=Depends(required_applicant), db: Session = Depends(get_db)):
-    print("HERE")
     db_application = utils.get_application(db=db, application_id=id)
     if user.type == "APPLICANT" and not user.id == db_application.user_id:
         raise HTTPException(status_code=401, detail="User not authorized for this operation")

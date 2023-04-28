@@ -7,14 +7,22 @@ import {
 } from '@mui/material';
 import CenterModal from '../components/CenterModal';
 import JoinSystemForm from '../components/JoinSystemForm';
+import LeaveSystemForm from '../components/LeaveSystemForm';
 
 
 export default function Profile({ user }) {
   // States
   const [open, setOpen] = useState(false);
+  const [join, setJoin] = useState(false);
 
   const handleJoinSystem = () => {
     setOpen(true);
+    setJoin(true);
+  }
+
+  const handleLeaveSystem = () => {
+    setOpen(true);
+    setJoin(false);
   }
 
   return (
@@ -64,12 +72,26 @@ export default function Profile({ user }) {
         >
           Join System
         </Button>
+        <Button
+          variant="outlined"
+          color="error"
+          onClick={handleLeaveSystem}
+          sx={{
+            marginTop: 2,
+            width: "25%",
+          }}
+        >
+          Leave System
+        </Button>
       </Box>
       <CenterModal
         open={open}
         handleClose={() => setOpen(false)}
       >
-        <JoinSystemForm user={user} />
+        {join ?
+          <JoinSystemForm user={user} /> :
+          <LeaveSystemForm user={user} />
+        }
       </CenterModal>
     </Container>
   );

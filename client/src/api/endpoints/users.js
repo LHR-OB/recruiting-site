@@ -41,6 +41,10 @@ const usersApi = {
     const url = `/users/join-system/${id}/${system_id}`;
     return axiosClient.put(url);
   },
+  leaveSystem: (id, system_id) => {
+    const url = `/users/leave-system/${id}/${system_id}`;
+    return axiosClient.put(url);
+  },
   // TODO: Remove after dev
   protected: () => {
     const url = "/protected";

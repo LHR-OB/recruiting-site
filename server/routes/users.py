@@ -74,6 +74,14 @@ async def join_system(id: int, system_id: int, db: Session = Depends(get_db)):
     return utils.join_system(db=db, user_id=id, system_id=system_id)
 
 
+@router.put('/leave-system/{id}/{system_id}')
+async def leave_system(id: int, system_id: int, db: Session = Depends(get_db)):
+    db_user = utils.get_user(db=db, user_id=id)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return utils.leave_system(db=db, user_id=id, system_id=system_id)
+
+
 @router.delete('/{id}')
 async def delete_user(id: int, db: Session = Depends(get_db)):
     return utils.delete_user(db=db, user_id=id)
