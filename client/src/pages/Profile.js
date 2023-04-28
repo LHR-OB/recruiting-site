@@ -1,15 +1,20 @@
-import { React } from 'react';
+import { React, useState } from 'react';
 import {
     Box,
     Button,
     Container,
     Typography,
 } from '@mui/material';
+import CenterModal from '../components/CenterModal';
+import JoinSystemForm from '../components/JoinSystemForm';
 
 
 export default function Profile({ user }) {
+  // States
+  const [open, setOpen] = useState(false);
+
   const handleJoinSystem = () => {
-    console.log("Join System");
+    setOpen(true);
   }
 
   return (
@@ -60,6 +65,12 @@ export default function Profile({ user }) {
           Join System
         </Button>
       </Box>
+      <CenterModal
+        open={open}
+        handleClose={() => setOpen(false)}
+      >
+        <JoinSystemForm user={user} />
+      </CenterModal>
     </Container>
   );
 }
