@@ -60,7 +60,8 @@ def join_system(db: Session, user_id: int, system_id: int) -> models.User:
     if db_user is None:
         return None
     db_user.systems.append(db_system)
-    setattr(db_user, "status", "UNAPPROVED")
+    if not user_is_at_least(db_user, "TEAM_MANAGEMENT"):
+        setattr(db_user, "status", "UNAPPROVED")
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -73,7 +74,6 @@ def leave_system(db: Session, user_id: int, system_id: int) -> models.User:
     if db_user is None:
         return None
     db_user.systems.remove(db_system)
-    setattr(db_user, "status", "UNAPPROVED")
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
