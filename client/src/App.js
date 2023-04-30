@@ -18,6 +18,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import DescriptionIcon from '@mui/icons-material/Description';
 import GroupIcon from '@mui/icons-material/Group';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import MemberSignup from './pages/MemberSignup';
 import ApplicantSignup from './pages/ApplicantSignup';
 import Dashboard from './pages/Dashboard';
@@ -27,6 +28,7 @@ import Login from './pages/Login';
 import Admin from './pages/Admin';
 import TeamManagement from './pages/TeamManagement';
 import Profile from './pages/Profile';
+import InterviewAvailability from './pages/InterviewAvailability';
 import usersApi from './api/endpoints/users';
 
 export default function App() {
@@ -81,6 +83,10 @@ export default function App() {
     {
       path: "/profile",
       element: <Profile user={user} />
+    },
+    {
+      path: "/interview-availability",
+      element: <InterviewAvailability user={user} />
     }
   ]);
 
@@ -97,7 +103,12 @@ export default function App() {
       name: "Calendar",
       path: "/calendar",
       icon: <CalendarMonthIcon />
-    }
+    },
+    {
+      name: "Interview Availability",
+      path: "/interview-availability",
+      icon: <AccessTimeIcon />
+    },
   ]
 
   const leadDrawerItems = [
@@ -137,6 +148,11 @@ export default function App() {
       name: "Calendar",
       path: "/calendar",
       icon: <CalendarMonthIcon />
+    },
+    {
+      name: "Interview Availability",
+      path: "/interview-availability",
+      icon: <AccessTimeIcon />
     },
   ]
 

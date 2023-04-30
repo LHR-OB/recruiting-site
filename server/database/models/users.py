@@ -20,6 +20,7 @@ class User(Base):
     team_id = Column(Integer, ForeignKey("teams.id"), index=True)
 
     applications = relationship("Application", back_populates="user")
+    availabilities = relationship("Availability", back_populates="user")
     team = relationship("Team", back_populates="users")
     
     events = relationship("Event", secondary="event_user_links", back_populates="users")
