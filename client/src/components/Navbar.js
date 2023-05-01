@@ -37,7 +37,7 @@ export default function Navbar({ user, setOpen }) {
             Longhorn Racing Recruiting Portal
           </Typography>
           {
-            user &&
+            user && user.type !== 'APPLICANT' &&
             <IconButton
               size="large"
               color="inherit"

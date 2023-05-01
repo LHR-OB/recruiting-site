@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from database.models import availabilities as models
+from database.models.applications import Application
 from database.models.users import User
 from database.schemas import availabilities as schemas
 
@@ -26,6 +27,22 @@ def get_availability(db: Session, availability_id: int) -> models.Availability:
 
 def get_availabilities_by_user(db: Session, user_id: int) -> List[models.Availability]:
     return db.query(User).filter(User.id == user_id).first().availabilities
+
+
+def get_availabilities_applicant(db: Session, user_id: int) -> List[models.Availability]:
+    # Get all applications for this applicant that are in the interview stage
+    applications = db.query(Application).filter(
+            Application.user_id == user_id
+        ).filter(
+            Application.status == "INTERVIEW"
+        ).all()
+    # Get all availabilities for the interviewers of those applications
+    availabilities = []
+    for application in applications:
+        for system in application.systems:
+            for interviewer in system.users:
+                availabilities += interviewer.availabilities
+    return availabilities
 
 
 def update_availability(db: Session, availability_id: int, availability: schemas.AvailabilityUpdate) -> models.Availability:

@@ -5,6 +5,7 @@ import {
   Typography,
 } from '@mui/material';
 
+import InterviewAvailabilityCalendar from '../components/InterviewAvailabilityCalendar';
 import InterviewAvailabilityList from '../components/InterviewAvailabilityList';
 
 
@@ -23,7 +24,11 @@ export default function InterviewAvailability({ user }) {
           Interview Availability
         </Typography>
 
-        <InterviewAvailabilityList user={user} />
+        {
+          user?.type === 'APPLICANT' ?
+            <InterviewAvailabilityList user={user} /> :
+            <InterviewAvailabilityCalendar user={user} />
+        }
 
       </Box>
     </Container>

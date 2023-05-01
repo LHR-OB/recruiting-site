@@ -5,6 +5,10 @@ const availabilitiesApi = {
     const url = "/availabilities";
     return axiosClient.post(url, data);
   },
+  setAvailabilities: (data) => {
+    const url = "/availabilities/set";
+    return axiosClient.post(url, data);
+  },
   getAvailabilities: () => {
     const url = "/availabilities";
     return axiosClient.get(url);
@@ -19,6 +23,10 @@ const availabilitiesApi = {
   },
   getAvailabilitiesCurrentUser: () => {
     const url = `/availabilities/user`;
+    return axiosClient.get(url);
+  },
+  getAvailabilitiesApplicant: () => {
+    const url = `/availabilities/applicant`;
     return axiosClient.get(url);
   },
   updateAvailability: (id, data) => {

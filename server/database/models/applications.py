@@ -32,7 +32,7 @@ class Application(Base):
     subsystems = Column(String)
     short_answer = Column(String)
     resume_link = Column(String)
-    status = Column(Enum("DRAFT", "SUBMITTED", "INTERVIEW", "TRIAL", "OFFER", "ACCEPTED", "REJECTED", name="application_status_enum"), index=True)
+    status = Column(Enum("DRAFT", "SUBMITTED", "INTERVIEW", "INTERVIEW_COMPLETE", "TRIAL", "OFFER", "ACCEPTED", "REJECTED", name="application_status_enum"), index=True)
     stage_decision = Column(Enum("ACCEPT", "REJECT", "NEUTRAL", name="application_stage_decision_enum"), index=True)
 
     # Relationships
