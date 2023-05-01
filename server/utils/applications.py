@@ -60,7 +60,7 @@ def advance_application_cycle(db: Session, application_cycle_id: int) -> models.
             # Advance the application status
             if application.status == 'SUBMITTED':
                 application.status = 'INTERVIEW'
-            elif application.status == 'INTERVIEW':
+            elif application.status == 'INTERVIEW_COMPLETE':
                 application.status = 'TRIAL'
             elif application.status == 'TRIAL':
                 application.status = 'OFFER'

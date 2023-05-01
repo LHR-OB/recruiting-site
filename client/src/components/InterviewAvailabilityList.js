@@ -36,6 +36,7 @@ export default function InterviewAvailabilityList({ user }) {
                                         const start = new Date(availability.start_time).getTime() - availability.offset * 60 * 60 * 1000;
                                         const end = new Date(availability.end_time).getTime() - availability.offset * 60 * 60 * 1000;
                                         eventsApi.getEventsByUser(availability.user_id).then((res) => {
+                                            // TODO: also check conflicts with current user
                                             if (res.status === 200) {
                                                 for (let i = start; i + (application.team.interview_time_duration * 60 * 1000) <= end + (30 * 60 * 1000); i += application.team.interview_time_duration * 60 * 1000) {
                                                     const start_time = i;
@@ -116,8 +117,8 @@ export default function InterviewAvailabilityList({ user }) {
                                 {systemNameFull}
                             </Typography>
                             <List>
-                                {availabilities[systemNameFull].map((availability) => (
-                                    <ListItem key={availability.start_time}>
+                                {availabilities[systemNameFull].map((availability, idx) => (
+                                    <ListItem key={idx}>
                                         <ListItemButton
                                             onClick={() => handleClickAvailability(systemNameFull, availability)}
                                         >

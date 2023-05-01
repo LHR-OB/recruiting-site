@@ -19,7 +19,6 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
   useEffect(() => {
     if (user) {
       // Get application cycle
-      // TOOD: Filter by active application cycle instead of throwing away response
       applicationCyclesApi.getApplicationCycleActive().then((res) => {
         // Get applications
         const applicationCycle = res.data;
@@ -27,25 +26,26 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
           case "ADMIN":
             applicationsApi.getApplications().then((res) => {
               if (res.status === 200) {
-                setApplications(res.data.filter(a => a.status !== 'DRAFT'));
+                setApplications(res.data);
               }
             });
             break;
           case "TEAM_MANAGEMENT":
             applicationsApi.getApplicationsByTeam(applicationCycle.id, user.team.id).then((res) => {
               if (res.status === 200) {
-                setApplications(res.data.filter(a => a.status !== 'DRAFT'));
+                setApplications(res.data);
               }
             });
             break;
           case "SYSTEM_LEAD":
           case "INTERVIEWER":
-            setApplications([]);
+            let newApplications = [];
             for (let system of user.systems) {
               applicationsApi.getApplicationsBySystem(applicationCycle.id, user.team.id, system.id).then((res) => {
                 if (res.status === 200) {
-                  const newApplications = res.data.filter(a => a.status !== 'DRAFT');
-                  setApplications(oldApplications => [...oldApplications, ...res.data.filter(a => a.status !== 'DRAFT')]);
+                  console.log(res.data);
+                  newApplications = [...newApplications, ...res.data];
+                  setApplications(newApplications);
                 }
               });
             }
@@ -90,6 +90,7 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
           <TableHead>
             <TableRow>
               <TableCell>Application Id</TableCell>
+              <TableCell align="right">Name</TableCell>
               <TableCell align="right">Team</TableCell>
               <TableCell align="right">System</TableCell>
               <TableCell align="right">Major</TableCell>
@@ -114,6 +115,9 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
                   }}
                 >
                   {application.id}
+                </TableCell>
+                <TableCell align="right">
+                  {application?.user?.first_name} {application?.user?.last_name}
                 </TableCell>
                 <TableCell align="right">
                   {application?.team?.name}
