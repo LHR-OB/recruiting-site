@@ -67,11 +67,7 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
   const handleApplicationClick = (application) => {
     setOpen(true);
     setApplication(application);
-    if (application.status === "DRAFT") {
-      setModalMode('EDIT');
-    } else {
-      setModalMode('VIEW');
-    }
+    setModalMode('VIEW')
   }
 
   const getBackgroundColor = (stage_decision) => {
@@ -95,7 +91,7 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
             <TableRow>
               <TableCell>Application Id</TableCell>
               <TableCell align="right">Team</TableCell>
-              <TableCell align="right">Systems</TableCell>
+              <TableCell align="right">System</TableCell>
               <TableCell align="right">Major</TableCell>
               <TableCell align="right">Resume</TableCell>
               <TableCell align="right">Status</TableCell>
@@ -123,7 +119,7 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
                   {application?.team?.name}
                 </TableCell>
                 <TableCell align="right">
-                  {application?.systems?.map(s => s.name).join(', ')}
+                  {application?.system?.name}
                 </TableCell>
                 <TableCell align="right">
                   {application?.major}

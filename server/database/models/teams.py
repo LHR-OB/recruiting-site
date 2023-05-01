@@ -27,5 +27,6 @@ class System(Base):
     team_id = Column(Integer, ForeignKey("teams.id"), index=True)
     team = relationship("Team", back_populates="systems")
 
+    applications = relationship("Application", back_populates="system")
     users = relationship("User", secondary="user_system_links", back_populates="systems")
-    applications = relationship("Application", secondary="application_system_links", back_populates="systems")
+

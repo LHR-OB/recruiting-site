@@ -10,7 +10,6 @@ import ApplicationsTable from '../components/ApplicationsTable';
 import CenterModal from '../components/CenterModal';
 import NewApplicationForm from '../components/NewApplicationForm';
 import ViewApplication from '../components/ViewApplication';
-import EditApplicationForm from '../components/EditApplicationForm';
 
 export default function Applications({ user }) {
   // States
@@ -66,9 +65,7 @@ export default function Applications({ user }) {
           {
             modalMode === 'NEW' ?
               <NewApplicationForm /> :
-            modalMode === 'VIEW' ?
-              <ViewApplication user={user} application={application} setApplication={setApplication} /> :
-              <EditApplicationForm application={application} />
+              <ViewApplication user={user} application={application} setApplication={setApplication} />
           }
         </CenterModal>
       </Box>

@@ -88,14 +88,12 @@ def create_application(db: Session, user, application: schemas.Application) -> m
     application_data = application.dict()
     application_cycle = get_application_cycle_active(db=db)
     team = db.query(team_models.Team).filter(team_models.Team.id == application.team_id).first()
+    system = db.query(team_models.System).filter(team_models.System.id == application.system_id).first()
     del application_data['team_id']
-    del application_data['systems']
+    del application_data['system_id']
     if 'status' not in application_data or application_data['status'] is None:
-        application_data['status'] = 'DRAFT'
-    db_application = models.Application(**application_data, user=user, application_cycle=application_cycle, team=team)
-    for system_id in application.systems:
-        db_application.systems.append(
-            db.query(team_models.System).filter(team_models.System.id == system_id).first())
+        application_data['status'] = 'SUBMITTED'
+    db_application = models.Application(**application_data, user=user, application_cycle=application_cycle, team=team, system=system)
     db.add(db_application)
     db.commit()
     db.refresh(db_application)
@@ -110,7 +108,7 @@ def get_applications(db: Session, application_cycle_id: int = None, team_id: int
     if team_id:
         query = query.filter(models.Application.team_id == team_id)
     if system_id:
-        query = query.filter(models.Application.systems.contains(db.query(team_models.System).filter(team_models.System.id == system_id).first()))
+        query = query.filter(models.Application.system_id == system_id)
     if user_id:
         query = query.filter(models.Application.user_id == user_id)
     applications = query.all()
@@ -118,7 +116,7 @@ def get_applications(db: Session, application_cycle_id: int = None, team_id: int
     for application in applications:
         application.team
         application.user
-        application.systems
+        application.system
     return query.all()
 
 
@@ -130,7 +128,7 @@ def get_application(db: Session, application_id: int) -> models.Application:
     # This looks like it does nothing, but it makes sure the object has all the values
     db_application.team
     db_application.user
-    db_application.systems
+    db_application.system
     return db_application
 
 
@@ -144,12 +142,10 @@ def update_application(db: Session, application_id: int, application: schemas.Ap
         team = db.query(team_models.Team).filter(team_models.Team.id == application.team_id).first()
         db_application.team = team
         del application_data['team_id']
-    if 'systems' in application_data:
-        db_application.systems = []
-        for system_id in application.systems:
-            db_application.systems.append(
-                db.query(team_models.System).filter(team_models.System.id == system_id).first())
-        del application_data['systems']
+    if 'system_id' in application_data:
+        system = db.query(team_models.System).filter(team_models.System.id == application.system_id).first()
+        db_application.system = system
+        del application_data['system_id']
     for key, value in application_data.items():
         setattr(db_application, key, value)
     
@@ -159,7 +155,7 @@ def update_application(db: Session, application_id: int, application: schemas.Ap
     # This looks like it does nothing, but it makes sure the object has all the values
     db_application.team
     db_application.user
-    db_application.systems
+    db_application.system
     return db_application
 
 

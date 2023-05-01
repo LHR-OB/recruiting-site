@@ -32,17 +32,17 @@ class Application(Base):
     subsystems = Column(String)
     short_answer = Column(String)
     resume_link = Column(String)
-    status = Column(Enum("DRAFT", "SUBMITTED", "INTERVIEW", "INTERVIEW_COMPLETE", "TRIAL", "OFFER", "ACCEPTED", "REJECTED", name="application_status_enum"), index=True)
+    status = Column(Enum("SUBMITTED", "INTERVIEW", "INTERVIEW_COMPLETE", "TRIAL", "OFFER", "ACCEPTED", "REJECTED", name="application_status_enum"), index=True)
     stage_decision = Column(Enum("ACCEPT", "REJECT", "NEUTRAL", name="application_stage_decision_enum"), index=True)
 
     # Relationships
     application_cycle_id = Column(Integer, ForeignKey("application_cycles.id"))
     user_id = Column(Integer, ForeignKey("users.id"))
     team_id = Column(Integer, ForeignKey("teams.id"))
+    system_id = Column(Integer, ForeignKey("systems.id"))
 
     application_cycle = relationship(
         "ApplicationCycle", back_populates="applications")
     user = relationship("User", back_populates="applications")
     team = relationship("Team", back_populates="applications")
-
-    systems = relationship("System", secondary="application_system_links", back_populates="applications")
+    system = relationship("System", back_populates="applications")

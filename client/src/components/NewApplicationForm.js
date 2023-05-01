@@ -29,39 +29,24 @@ export default function NewApplicationForm() {
   const [systems, setSystems] = useState([]);
   const [teams, setTeams] = useState([]);
 
-  const handleSaveApplication = () => {
-    applicationsApi.createApplication({
-      team_id: team.id,
-      systems: selectedSystems.map(system => system.id),
-      subsystems: subsystems,
-      phone_number: phoneNumber,
-      major: major,
-      year_entering: yearEntering,
-      short_answer: shortAnswer,
-      resume_link: resume,
-    }).then(res => {
-      if (res.status === 200) {
-        console.log('Application submitted');
-      }
-    });
-  }
-
   const handleSubmitApplication = () => {
-    applicationsApi.createApplication({
-      team_id: team.id,
-      systems: selectedSystems.map(system => system.id),
-      subsystems: subsystems,
-      phone_number: phoneNumber,
-      major: major,
-      year_entering: yearEntering,
-      short_answer: shortAnswer,
-      resume_link: resume,
-      status: "SUBMITTED"
-    }).then(res => {
-      if (res.status === 200) {
-        console.log('Application submitted');
-      }
-    });
+    for (let system of selectedSystems) {
+      applicationsApi.createApplication({
+        team_id: team.id,
+        system_id: system.id,
+        subsystems: subsystems,
+        phone_number: phoneNumber,
+        major: major,
+        year_entering: yearEntering,
+        short_answer: shortAnswer,
+        resume_link: resume,
+        status: "SUBMITTED"
+      }).then(res => {
+        if (res.status === 200) {
+          console.log('Application submitted');
+        }
+      });
+    }
   };
 
   useEffect(() => {
@@ -181,15 +166,7 @@ export default function NewApplicationForm() {
         />
         <Button
           variant="outlined"
-          onClick={handleSaveApplication}
-          sx={{ marginTop: 2 }}
-        >
-          Save Application (Draft)
-        </Button>
-        <Button
-          variant="outlined"
           onClick={handleSubmitApplication}
-          color="success"
           sx={{ marginTop: 2 }}
         >
           Submit Application

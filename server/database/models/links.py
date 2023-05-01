@@ -15,10 +15,3 @@ class UserSystemLink(Base):
 
     user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
     system_id = Column(Integer, ForeignKey("systems.id"), primary_key=True)
-
-
-class ApplicationSystemLink(Base):
-    __tablename__ = 'application_system_links'
-
-    application_id = Column(Integer, ForeignKey("applications.id"), primary_key=True)
-    system_id = Column(Integer, ForeignKey("systems.id"), primary_key=True)
