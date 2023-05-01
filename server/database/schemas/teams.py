@@ -19,7 +19,7 @@ class Team(TeamBase):
 
 class TeamUpdate(BaseModel):
     name: Optional[str] = None
-    interview_time_duration: Optional[datetime] = None
+    interview_time_duration: Optional[int] = None
 
 
 class SystemBase(BaseModel):

@@ -54,9 +54,9 @@ async def get_availabilities_current_user(user=Depends(required_interviewer), db
     return utils.get_availabilities_by_user(db, user_id=user.id)
 
 
-@router.get('/applicant')
-async def get_availabilities_applicant(user=Depends(required_applicant), db: Session = Depends(get_db)):
-    return utils.get_availabilities_applicant(db, user_id=user.id)
+@router.get('/system/{system_id}')
+async def get_availabilities_by_system(system_id: int, user=Depends(required_applicant), db: Session = Depends(get_db)):
+    return utils.get_availabilities_by_system(db, system_id=system_id)
 
 
 @router.put('/{id}')

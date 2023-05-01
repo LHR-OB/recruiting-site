@@ -15,7 +15,7 @@ class ApplicationCycle(Base):
     interview_start_date = Column(DateTime, index=True)
     interview_end_date = Column(DateTime, index=True)
     is_active = Column(Boolean, index=True)
-    stage = Column(Enum("APPLICATION", "INTERVIEW", "TRIAL", "OFFER", "COMPLETE", name="application_cycle_stage_enum"), index=True)
+    stage = Column(Enum("APPLICATION", "INTERVIEW", "INTERVIEW_SCHEDULED", "INTERVIEW_COMPLETE", "TRIAL", "OFFER", "COMPLETE", name="application_cycle_stage_enum"), index=True)
 
     applications = relationship(
         "Application", back_populates="application_cycle")

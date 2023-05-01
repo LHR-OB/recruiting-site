@@ -25,8 +25,8 @@ const availabilitiesApi = {
     const url = `/availabilities/user`;
     return axiosClient.get(url);
   },
-  getAvailabilitiesApplicant: () => {
-    const url = `/availabilities/applicant`;
+  getAvailabilitiesBySystem: (system_id) => {
+    const url = `/availabilities/system/${system_id}`;
     return axiosClient.get(url);
   },
   updateAvailability: (id, data) => {
