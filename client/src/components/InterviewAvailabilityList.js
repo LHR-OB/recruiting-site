@@ -8,13 +8,17 @@ import {
     ListItemText,
     Typography,
 } from '@mui/material';
+import CenterModal from './CenterModal';
 import availabilitiesApi from '../api/endpoints/availabilities';
 import { applicationsApi, applicationCyclesApi } from '../api/endpoints/applications';
+import ScheduleInterviewForm from './ScheduleInterviewForm';
 
 export default function InterviewAvailabilityList({ user }) {
     // States
     const [availabilities, setAvailabilities] = useState({});
     const [applicationCycle, setApplicationCycle] = useState(null);
+    const [selectedInterview, setSelectedInterview] = useState(null);
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         // This function is long and ugly, but breaking it up caused issues with state transfer, so I left it as is. If it works it works yaknow
@@ -34,6 +38,7 @@ export default function InterviewAvailabilityList({ user }) {
                                             interviewTimes.push({
                                                 start_time: new Date(i),
                                                 end_time: new Date(i + application.team.interview_time_duration * 60 * 1000),
+                                                interviewer_id: availability.user_id,
                                             });
                                         }
                                     }
@@ -58,6 +63,16 @@ export default function InterviewAvailabilityList({ user }) {
         });
     }, []);
 
+    const handleClickAvailability = (system, availability) => {
+        setSelectedInterview({
+            system: system,
+            start_time: availability.start_time,
+            end_time: availability.end_time,
+            interviewer_id: availability.interviewer_id,
+        });
+        setOpen(true);
+    };
+
     return (
         <Container>
             <Box
@@ -69,16 +84,16 @@ export default function InterviewAvailabilityList({ user }) {
                 }}
             >
                 {
-                    Object.keys(availabilities).map((systemName) => (
-                        <Box key={systemName}>
+                    Object.keys(availabilities).map((systemNameFull) => (
+                        <Box key={systemNameFull}>
                             <Typography variant="h6" component="h2">
-                                {systemName}
+                                {systemNameFull}
                             </Typography>
                             <List>
-                                {availabilities[systemName].map((availability) => (
+                                {availabilities[systemNameFull].map((availability) => (
                                     <ListItem key={availability.start_time}>
                                         <ListItemButton
-                                            onClick={() => { }}
+                                            onClick={() => handleClickAvailability(systemNameFull, availability)}
                                         >
                                             <ListItemText primary={new Date(availability.start_time).toLocaleString() + " - " + new Date(availability.end_time).toLocaleString()} />
                                         </ListItemButton>
@@ -89,6 +104,12 @@ export default function InterviewAvailabilityList({ user }) {
                     ))
                 }
             </Box>
+            <CenterModal
+                open={open}
+                handleClose={() => setOpen(false)}
+            >
+                <ScheduleInterviewForm interview={selectedInterview} />
+            </CenterModal>
         </Container>
     );
 }

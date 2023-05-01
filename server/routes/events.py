@@ -13,7 +13,7 @@ router = APIRouter(
 
 
 @router.post('/')
-async def create_event(event: schemas.EventCreate, user=Depends(required_interviewer), db: Session = Depends(get_db)):
+async def create_event(event: schemas.EventCreate, user=Depends(required_applicant), db: Session = Depends(get_db)):
     return utils.create_event(db=db, event=event)
 
 
@@ -53,7 +53,34 @@ async def update_event(id: int, event: schemas.EventUpdate, user=Depends(require
 
 @router.put('/join/{id}')
 async def join_event(id: int, user=Depends(get_current_user), db: Session = Depends(get_db)):
-    db_event = utils.join_event(db=db, event_id=id, user=user)
+    db_event = utils.join_event(db=db, event_id=id, user_id=user.id)
+    if db_event is None:
+        raise HTTPException(
+            status_code=404, detail="Event not found")
+    return db_event
+
+
+@router.put('/leave/{id}')
+async def leave_event(id: int, user=Depends(get_current_user), db: Session = Depends(get_db)):
+    db_event = utils.leave_event(db=db, event_id=id, user_id=user.id)
+    if db_event is None:
+        raise HTTPException(
+            status_code=404, detail="Event not found")
+    return db_event
+
+
+@router.put('/add/{id}/{user_id}')
+async def add_user_to_event(id: int, user_id: int, user=Depends(required_applicant), db: Session = Depends(get_db)):
+    db_event = utils.join_event(db=db, event_id=id, user_id=user_id)
+    if db_event is None:
+        raise HTTPException(
+            status_code=404, detail="Event not found")
+    return db_event
+
+
+@router.put('/remove/{id}/{user_id}')
+async def remove_user_from_event(id: int, user_id: int, user=Depends(required_applicant), db: Session = Depends(get_db)):
+    db_event = utils.leave_event(db=db, event_id=id, user_id=user_id)
     if db_event is None:
         raise HTTPException(
             status_code=404, detail="Event not found")

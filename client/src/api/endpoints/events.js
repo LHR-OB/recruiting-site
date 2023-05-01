@@ -29,6 +29,18 @@ const schedulingApi = {
     const url = `/events/join/${id}`;
     return axiosClient.put(url);
   },
+  leaveEvent: (id) => {
+    const url = `/events/leave/${id}`;
+    return axiosClient.put(url);
+  },
+  addUserToEvent: (id, user_id) => {
+    const url = `/events/add/${id}/${user_id}`;
+    return axiosClient.put(url);
+  },
+  removeUserFromEvent: (id, user_id) => {
+    const url = `/events/remove/${id}/${user_id}`;
+    return axiosClient.put(url);
+  },
   deleteEvent: (id) => {
     const url = `/events/${id}`;
     return axiosClient.delete(url);

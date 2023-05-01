@@ -41,12 +41,26 @@ def update_event(db: Session, event_id: int, event: schemas.EventUpdate) -> mode
     return db_event
 
 
-def join_event(db: Session, event_id: int, user) -> models.Event:
+def join_event(db: Session, event_id: int, user_id: int) -> models.Event:
     db_event = db.query(models.Event).filter(
         models.Event.id == event_id).first()
     if db_event is None:
         return None
-    db_event.users.append(user)
+    db_user = db.query(User).filter(User.id == user_id).first()
+    db_event.users.append(db_user)
+    db.add(db_event)
+    db.commit()
+    db.refresh(db_event)
+    return db_event
+
+
+def leave_event(db: Session, event_id: int, user_id: int) -> models.Event:
+    db_event = db.query(models.Event).filter(
+        models.Event.id == event_id).first()
+    if db_event is None:
+        return None
+    db_user = db.query(User).filter(User.id == user_id).first()
+    db_event.users.remove(db_user)
     db.add(db_event)
     db.commit()
     db.refresh(db_event)
