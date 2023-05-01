@@ -38,3 +38,4 @@ class System(SystemBase):
 class SystemUpdate(BaseModel):
     name: Optional[str] = None
     team_id: Optional[int] = None
+    interview_default_location: Optional[str] = None

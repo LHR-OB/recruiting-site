@@ -6,6 +6,11 @@ from database.models.users import User
 from database.schemas import events as schemas
 
 
+def events_conflict(event1: models.Event, event2: models.Event) -> bool:
+    return (event1.start_time < event2.end_time and event1.end_time > event2.start_time) \
+        or (event2.start_time < event1.end_time and event2.end_time > event1.start_time)
+
+
 ### CRUD ###
 def create_event(db: Session, event: schemas.EventCreate) -> models.Event:
     db_event = models.Event(**event.dict())
@@ -47,6 +52,10 @@ def join_event(db: Session, event_id: int, user_id: int) -> models.Event:
     if db_event is None:
         return None
     db_user = db.query(User).filter(User.id == user_id).first()
+    user_events = db_user.events
+    for user_event in user_events:
+        if events_conflict(user_event, db_event):
+            return False
     db_event.users.append(db_user)
     db.add(db_event)
     db.commit()
@@ -60,6 +69,10 @@ def leave_event(db: Session, event_id: int, user_id: int) -> models.Event:
     if db_event is None:
         return None
     db_user = db.query(User).filter(User.id == user_id).first()
+    user_events = db_user.events
+    for user_event in user_events:
+        if events_conflict(user_event, db_event):
+            return False
     db_event.users.remove(db_user)
     db.add(db_event)
     db.commit()

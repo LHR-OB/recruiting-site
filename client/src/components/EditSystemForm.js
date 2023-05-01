@@ -11,10 +11,12 @@ import { systemsApi } from '../api/endpoints/teams';
 export default function NewSystemForm({ team, system }) {
   // States
   const [name, setName] = useState(system?.name);
+  const [interviewDefaultLocation, setInterviewDefaultLocation] = useState(system?.interview_default_location);
 
   const handleUpdateSystem = () => {
     systemsApi.updateSystem(system.id, {
       name,
+      interview_default_location: interviewDefaultLocation,
       team_id: team.id,
     }).then((res) => {
       if (res.status === 200) {
@@ -49,6 +51,13 @@ export default function NewSystemForm({ team, system }) {
           variant="standard"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          sx={{ width: '100%' }}
+        />
+        <TextField
+          label="Interview Default Location"
+          variant="standard"
+          value={interviewDefaultLocation}
+          onChange={(e) => setInterviewDefaultLocation(e.target.value)}
           sx={{ width: '100%' }}
         />
         <Button

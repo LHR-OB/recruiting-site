@@ -32,7 +32,7 @@ async def get_event(id: int, user=Depends(required_applicant), db: Session = Dep
 
 
 @router.get('/user/{id}')
-async def get_events_by_user(id: int, user=Depends(required_admin), db: Session = Depends(get_db)):
+async def get_events_by_user(id: int, user=Depends(required_applicant), db: Session = Depends(get_db)):
     return utils.get_events_by_user(db, user_id=id)
 
 
@@ -57,6 +57,9 @@ async def join_event(id: int, user=Depends(get_current_user), db: Session = Depe
     if db_event is None:
         raise HTTPException(
             status_code=404, detail="Event not found")
+    if db_event == False:
+        raise HTTPException(
+            status_code=409, detail="User has conflicting event")
     return db_event
 
 
@@ -66,6 +69,9 @@ async def leave_event(id: int, user=Depends(get_current_user), db: Session = Dep
     if db_event is None:
         raise HTTPException(
             status_code=404, detail="Event not found")
+    if db_event == False:
+        raise HTTPException(
+            status_code=409, detail="User has conflicting event")
     return db_event
 
 
@@ -75,6 +81,9 @@ async def add_user_to_event(id: int, user_id: int, user=Depends(required_applica
     if db_event is None:
         raise HTTPException(
             status_code=404, detail="Event not found")
+    if db_event == False:
+        raise HTTPException(
+            status_code=409, detail="User has conflicting event")
     return db_event
 
 
@@ -84,6 +93,9 @@ async def remove_user_from_event(id: int, user_id: int, user=Depends(required_ap
     if db_event is None:
         raise HTTPException(
             status_code=404, detail="Event not found")
+    if db_event == False:
+        raise HTTPException(
+            status_code=409, detail="User has conflicting event")
     return db_event
 
 

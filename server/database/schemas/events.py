@@ -7,6 +7,7 @@ class EventBase(BaseModel):
     title: str
     start_time: datetime
     end_time: datetime
+    offset: int
     location: str
     description: str
 
@@ -23,14 +24,15 @@ class Event(EventBase):
 class EventUpdate(BaseModel):
     start_time: Optional[datetime] = None
     end_time: Optional[datetime] = None
+    offset: Optional[int] = None
     location: Optional[str] = None
     description: Optional[str] = None
-    users: Optional[List[int]] = None
 
 
 class AvailabilityBase(BaseModel):
     start_time: datetime
     end_time: datetime
+    offset: int
 
 
 class AvailabilityCreate(AvailabilityBase):
@@ -45,4 +47,5 @@ class Availability(AvailabilityBase):
 class AvailabilityUpdate(BaseModel):
     start_time: Optional[datetime] = None
     end_time: Optional[datetime] = None
+    offset: Optional[int] = None
     user_id: Optional[int] = None

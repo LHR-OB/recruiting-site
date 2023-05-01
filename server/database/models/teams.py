@@ -22,6 +22,7 @@ class System(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
+    interview_default_location = Column(String)
 
     # Relationships
     team_id = Column(Integer, ForeignKey("teams.id"), index=True)

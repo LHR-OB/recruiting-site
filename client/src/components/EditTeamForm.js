@@ -55,7 +55,7 @@ export default function NewTeamForm({ team }) {
           onClick={handleUpdateTeam}
           sx={{ margin: 4 }}
         >
-          Update System
+          Update Team
         </Button>
         <Button
           variant="outlined"

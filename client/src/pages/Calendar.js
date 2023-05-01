@@ -61,7 +61,9 @@ export default function Calendar() {
             <ListItem key={index}>
               <ListItemText
                 primary={event.title}
-                secondary={new Date(event.start_time).toLocaleTimeString() + ' - ' + new Date(event.end_time).toLocaleTimeString()}
+                // I have no idea why dates are this weird. There's probably a better way but I couldn't figure it out. Basically this applies offset and displays the time in the user's timezone
+                secondary={new Date(new Date(event.start_time).getTime() - (event.offset * 60 * 60 * 1000)).toLocaleTimeString() + " - " + 
+                          new Date(new Date(event.end_time).getTime() - (event.offset * 60 * 60 * 1000)).toLocaleTimeString()}
               />
             </ListItem>
           ))}

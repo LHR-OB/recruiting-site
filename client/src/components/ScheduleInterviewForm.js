@@ -6,6 +6,7 @@ import {
     Typography
 } from '@mui/material';
 import eventApi from '../api/endpoints/events';
+import { applicationsApi } from '../api/endpoints/applications';
 
 export default function ScheduleInterviewForm({ interview }) {
 
@@ -14,8 +15,9 @@ export default function ScheduleInterviewForm({ interview }) {
             title: interview.system + " Interview",
             start_time: interview.start_time,
             end_time: interview.end_time,
-            location: "TODO",
-            description: "Interview",
+            offset: interview.offset,
+            location: interview.location,
+            description: "System interview",
         }).then((res) => {
             if (res.status === 200) {
                 // Add the event to user's and interviewer's calendars
@@ -24,7 +26,13 @@ export default function ScheduleInterviewForm({ interview }) {
                     if (res.status === 200) {
                         eventApi.addUserToEvent(event.id, interview.interviewer_id).then((res) => {
                             if (res.status === 200) {
-                                console.log("Successfully scheduled interview");
+                                applicationsApi.updateApplication(interview.application_id, {
+                                    status: "INTERVIEW_SCHEDULED",
+                                }).then((res) => {
+                                    if (res.status === 200) {
+                                        console.log("Successfully scheduled interview");
+                                    }
+                                })
                             }
                         });
                     }

@@ -12,6 +12,7 @@ class Event(Base):
     title = Column(String)
     start_time = Column(DateTime)
     end_time = Column(DateTime)
+    offset = Column(Integer)    # Offset from UTC in hours
     location = Column(String)
     description = Column(String)
 
