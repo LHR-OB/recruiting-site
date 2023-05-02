@@ -26,13 +26,15 @@ export default function JoinSystemForm({ user }) {
   }
 
   useEffect(() => {
-    // Get all systems
-    systemsApi.getSystemsByTeam(user.team_id).then((res) => {
-      if (res.status === 200) {
-        setSystems(res.data);
-      }
-    });
-  }, []);
+    if (user) {
+      // Get all systems
+      systemsApi.getSystemsByTeam(user.team_id).then((res) => {
+        if (res.status === 200) {
+          setSystems(res.data);
+        }
+      });
+    }
+  }, [user]);
 
   return (
     <Container>

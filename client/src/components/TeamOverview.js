@@ -36,7 +36,7 @@ export default function TeamOverview({ team }) {
                 <PeopleList team={team} />
               </Grid>
               <Grid item xs>
-                <ApplicationInfo />
+                <ApplicationInfo team={team} />
               </Grid>
             </Grid>
           : null}
