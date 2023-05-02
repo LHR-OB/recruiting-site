@@ -5,10 +5,13 @@ import {
   Typography,
   List,
   ListItem,
+  ListItemButton,
   ListItemText,
 } from '@mui/material';
 import { Calendar as ReactCalendar } from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import CenterModal from '../components/CenterModal';
+import EventView from '../components/EventView';
 import eventsApi from '../api/endpoints/events';
 
 export default function Calendar() {
@@ -16,6 +19,8 @@ export default function Calendar() {
   const [value, onChange] = useState(new Date());
   const [events, setEvents] = useState([]);
   const [dayEvents, setDayEvents] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   useEffect(() => {
     eventsApi.getEventsCurrentUser().then((res) => {
@@ -34,6 +39,11 @@ export default function Calendar() {
     });
     setDayEvents(dayEvents);
   }, [value, events]);
+
+  const handleClickEvent = (selectedEvent) => {
+    setOpen(true);
+    setSelectedEvent(selectedEvent);
+  }
 
   return (
     <Container>
@@ -59,16 +69,26 @@ export default function Calendar() {
         <List>
           {dayEvents.map((event, index) => (
             <ListItem key={index}>
-              <ListItemText
-                primary={event.title}
-                // I have no idea why dates are this weird. There's probably a better way but I couldn't figure it out. Basically this applies offset and displays the time in the user's timezone
-                secondary={new Date(new Date(event.start_time).getTime() - (event.offset * 60 * 60 * 1000)).toLocaleTimeString() + " - " + 
-                          new Date(new Date(event.end_time).getTime() - (event.offset * 60 * 60 * 1000)).toLocaleTimeString()}
-              />
+              <ListItemButton
+                onClick={() => handleClickEvent(event)}
+              >
+                <ListItemText
+                  primary={event.title}
+                  // I have no idea why dates are this weird. There's probably a better way but I couldn't figure it out. Basically this applies offset and displays the time in the user's timezone
+                  secondary={new Date(new Date(event.start_time).getTime() - (event.offset * 60 * 60 * 1000)).toLocaleTimeString() + " - " + 
+                            new Date(new Date(event.end_time).getTime() - (event.offset * 60 * 60 * 1000)).toLocaleTimeString()}
+                />
+              </ListItemButton>
             </ListItem>
           ))}
         </List>
       </Box>
+      <CenterModal
+        open={open}
+        handleClose={() => setOpen(false)}
+      >
+        <EventView event={selectedEvent} />
+      </CenterModal>
     </Container>
   );
 }
