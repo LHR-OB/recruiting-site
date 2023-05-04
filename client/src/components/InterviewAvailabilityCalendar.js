@@ -19,6 +19,35 @@ export default function InterviewAvailabilityCalendar({ user }) {
   const [open, setOpen] = useState(false);
   const [modalMode, setModalMode] = useState('');
 
+  useEffect(() => {
+    // Get the current active application cycle
+    applicationCyclesApi.getApplicationCycleActive().then((res) => {
+      if (res.status === 200) {
+        setApplicationCycle(res.data);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      availabilitiesApi.getAvailabilitiesByUser(user.id).then((res) => {
+        if (res.status === 200) {
+          const currentSchedule = [];
+          for (let availability of res.data) {
+            // Split availability into 30 minute chunks for schedule
+            const start = (new Date(availability.start_time)).getTime();
+            const end = (new Date(availability.end_time)).getTime();
+            const offset = availability.offset;
+            for (let i = start; i <= end; i += 30 * 60 * 1000) {
+              currentSchedule.push(new Date(i) - offset * 60 * 60 * 1000);
+            }
+          }
+          setSchedule(currentSchedule.map((date) => new Date(date)));
+        }
+      });
+    }
+  }, [user]);
+
   const handleSetSchedule = () => {
     // Create new array of availabilities by grouping consecutive 30 minute time blocks
     const availabilities = [];
@@ -52,34 +81,15 @@ export default function InterviewAvailabilityCalendar({ user }) {
     });
   }
 
-  useEffect(() => {
-    // Get the current active application cycle
-    applicationCyclesApi.getApplicationCycleActive().then((res) => {
-      if (res.status === 200) {
-        setApplicationCycle(res.data);
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    if (user) {
-      availabilitiesApi.getAvailabilitiesByUser(user.id).then((res) => {
-        if (res.status === 200) {
-          const currentSchedule = [];
-          for (let availability of res.data) {
-            // Split availability into 30 minute chunks for schedule
-            const start = (new Date(availability.start_time)).getTime();
-            const end = (new Date(availability.end_time)).getTime();
-            const offset = availability.offset;
-            for (let i = start; i <= end; i += 30 * 60 * 1000) {
-              currentSchedule.push(new Date(i) - offset * 60 * 60 * 1000);
-            }
-          }
-          setSchedule(currentSchedule.map((date) => new Date(date)));
-        }
-      });
+  const getInterviewDays = () => {
+    if (applicationCycle) {
+      const start = new Date(applicationCycle.interview_start_date);
+      const end = new Date(applicationCycle.interview_end_date);
+      const numDays = Math.round((end - start) / (1000 * 60 * 60 * 24)) + 1;
+      return numDays;
     }
-  }, [user]);
+    return 1;
+  }
 
   return (
     <Container>
@@ -100,7 +110,7 @@ export default function InterviewAvailabilityCalendar({ user }) {
         <ScheduleSelector
           selection={schedule}
           startDate={applicationCycle?.interview_start_date}
-          endDate={applicationCycle?.end_date}
+          numDays={getInterviewDays()}
           minTime={8}
           maxTime={22}
           hourlyChunks={2}
