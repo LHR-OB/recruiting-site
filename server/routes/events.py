@@ -42,7 +42,7 @@ async def get_events_current_user(user=Depends(get_current_user), db: Session = 
 
 
 @router.put('/{id}')
-async def update_event(id: int, event: schemas.EventUpdate, user=Depends(required_interviewer), db: Session = Depends(get_db)):
+async def update_event(id: int, event: schemas.EventUpdate, user=Depends(required_applicant), db: Session = Depends(get_db)):
     db_event = utils.update_event(
         db=db, event_id=id, event=event)
     if db_event is None:

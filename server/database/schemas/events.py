@@ -19,6 +19,7 @@ class EventCreate(EventBase):
 class Event(EventBase):
     id: int
     users: List[int] = []
+    interview_id: int
 
 
 class EventUpdate(BaseModel):
@@ -27,6 +28,7 @@ class EventUpdate(BaseModel):
     offset: Optional[int] = None
     location: Optional[str] = None
     description: Optional[str] = None
+    interview_id: Optional[int] = None
 
 
 class AvailabilityBase(BaseModel):

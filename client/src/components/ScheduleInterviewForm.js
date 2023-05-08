@@ -7,6 +7,7 @@ import {
 } from '@mui/material';
 import eventApi from '../api/endpoints/events';
 import { applicationsApi } from '../api/endpoints/applications';
+import { interviewsApi } from '../api/endpoints/interviews';
 
 export default function ScheduleInterviewForm({ interview }) {
 
@@ -26,13 +27,25 @@ export default function ScheduleInterviewForm({ interview }) {
                     if (res.status === 200) {
                         eventApi.addUserToEvent(event.id, interview.interviewer_id).then((res) => {
                             if (res.status === 200) {
-                                applicationsApi.updateApplication(interview.application_id, {
-                                    status: "INTERVIEW_SCHEDULED",
-                                }).then((res) => {
+                                interviewsApi.createInterview({}).then((res) => {
                                     if (res.status === 200) {
-                                        console.log("Successfully scheduled interview");
+                                        const newInterview = res.data;
+                                        eventApi.updateEvent(event.id, {
+                                            interview_id: res.data.id,
+                                        }).then((res) => {
+                                            if (res.status === 200) {
+                                                applicationsApi.updateApplication(interview.application_id, {
+                                                    status: "INTERVIEW_SCHEDULED",
+                                                    interview_id: newInterview.id,
+                                                }).then((res) => {
+                                                    if (res.status === 200) {
+                                                        console.log("Interview scheduled");
+                                                    }
+                                                });
+                                            }
+                                        });
                                     }
-                                })
+                                });
                             }
                         });
                     }

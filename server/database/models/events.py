@@ -18,3 +18,4 @@ class Event(Base):
 
     # Relationships
     users = relationship("User", secondary="event_user_links", back_populates="events")
+    interview_id = Column(Integer, ForeignKey('interviews.id'))

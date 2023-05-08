@@ -117,7 +117,7 @@ def get_applications(db: Session, application_cycle_id: int = None, team_id: int
         application.team
         application.user
         application.system
-    return query.all()
+    return applications
 
 
 def get_application(db: Session, application_id: int) -> models.Application:

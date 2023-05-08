@@ -65,3 +65,4 @@ class ApplicationUpdate(BaseModel):
     resume_link: Optional[str] = None
     status: Optional[str] = None
     stage_decision: Optional[str] = None
+    interview_id: Optional[int] = None

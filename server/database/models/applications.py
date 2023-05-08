@@ -40,6 +40,7 @@ class Application(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     team_id = Column(Integer, ForeignKey("teams.id"))
     system_id = Column(Integer, ForeignKey("systems.id"))
+    interview_id = Column(Integer, ForeignKey('interviews.id'))
 
     application_cycle = relationship(
         "ApplicationCycle", back_populates="applications")

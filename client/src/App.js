@@ -19,6 +19,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import GroupIcon from '@mui/icons-material/Group';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import MemberSignup from './pages/MemberSignup';
 import ApplicantSignup from './pages/ApplicantSignup';
 import Dashboard from './pages/Dashboard';
@@ -29,6 +30,7 @@ import Admin from './pages/Admin';
 import TeamManagement from './pages/TeamManagement';
 import Profile from './pages/Profile';
 import InterviewAvailability from './pages/InterviewAvailability';
+import Interviews from './pages/Interviews';
 import usersApi from './api/endpoints/users';
 
 export default function App() {
@@ -87,7 +89,11 @@ export default function App() {
     {
       path: "/interview-availability",
       element: <InterviewAvailability user={user} />
-    }
+    },
+    {
+      path: "/interviews",
+      element: <Interviews user={user} />
+    },
   ]);
 
   const commonDrawerItems = [
@@ -109,6 +115,11 @@ export default function App() {
       path: "/interview-availability",
       icon: <AccessTimeIcon />
     },
+    {
+      name: "Interviews",
+      path: "/interviews",
+      icon: <QuestionAnswerIcon />
+    }
   ]
 
   const leadDrawerItems = [

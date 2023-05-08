@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
-from routes import users, applications, events, teams, availabilities
+from routes import users, applications, events, teams, availabilities, interviews
 from database.database import Base, engine
 from utils.users import authenticate_user, create_access_token
 from utils.dummy_data import main as create_dummy_data
@@ -30,6 +30,8 @@ app.include_router(events.router)
 app.include_router(teams.teams_router)
 app.include_router(teams.systems_router)
 app.include_router(availabilities.router)
+app.include_router(interviews.interview_router)
+app.include_router(interviews.interview_note_router)
 
 
 @app.post('/token')
