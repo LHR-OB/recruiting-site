@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
 from ..database import Base
@@ -10,6 +10,11 @@ class Team(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     interview_time_duration = Column(Integer)
+    interview_message = Column(String)
+    trial_workday_start_time = Column(DateTime)
+    trial_workday_end_time = Column(DateTime)
+    trial_workday_message = Column(String)
+    offer_message = Column(String)
 
     # Relationships
     users = relationship("User", back_populates="team")

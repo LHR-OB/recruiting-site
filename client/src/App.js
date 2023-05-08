@@ -31,6 +31,7 @@ import TeamManagement from './pages/TeamManagement';
 import Profile from './pages/Profile';
 import InterviewAvailability from './pages/InterviewAvailability';
 import Interviews from './pages/Interviews';
+import Messages from './pages/Messages';
 import usersApi from './api/endpoints/users';
 
 export default function App() {
@@ -94,6 +95,10 @@ export default function App() {
       path: "/interviews",
       element: <Interviews user={user} />
     },
+    {
+      path: "/messages",
+      element: <Messages user={user} />
+    }
   ]);
 
   const commonDrawerItems = [

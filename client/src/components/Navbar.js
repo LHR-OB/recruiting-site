@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import MailIcon from '@mui/icons-material/Mail';
 
 export default function Navbar({ user, setOpen }) {
   const handleLoginLogout = (e) => {
@@ -36,6 +37,16 @@ export default function Navbar({ user, setOpen }) {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Longhorn Racing Recruiting Portal
           </Typography>
+          {
+            user &&
+            <IconButton
+              size="large"
+              color="inherit"
+              onClick={() => window.location.href = '/messages'}
+            >
+              <MailIcon />
+            </IconButton>
+          }
           {
             user && user.type !== 'APPLICANT' &&
             <IconButton

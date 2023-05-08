@@ -21,6 +21,7 @@ class User(Base):
 
     applications = relationship("Application", back_populates="user")
     availabilities = relationship("Availability", back_populates="user")
+    messages = relationship("Message", back_populates="user")
     team = relationship("Team", back_populates="users")
     
     events = relationship("Event", secondary="event_user_links", back_populates="users")

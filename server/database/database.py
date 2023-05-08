@@ -16,4 +16,6 @@ from .models.events import Event
 from .models.applications import Application, ApplicationCycle
 from .models.teams import Team, System
 from .models.interviews import Interview, InterviewNote
-from .models.links import EventUserLink
+from .models.availabilities import Availability
+from .models.messages import Message
+from .models.links import EventUserLink, UserSystemLink

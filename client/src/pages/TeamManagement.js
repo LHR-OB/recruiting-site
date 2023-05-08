@@ -18,6 +18,7 @@ export default function TeamManagement() {
     teamsApi.getTeams().then((res) => {
       if (res.status === 200) {
         setTeams(res.data);
+        setSelectedTeam(res.data[0]);
       }
     });
   }, []);
@@ -32,10 +33,9 @@ export default function TeamManagement() {
           alignItems: 'center',
         }}
       >
-        <Typography variant="h4" mt={2}>
+        <Typography variant="h4" mt={2} mb={2}>
           Team Management
         </Typography>
-        <br />
         <ButtonGroup variant="outlined">
           {teams.map((team) => (
             <Button
