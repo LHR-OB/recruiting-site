@@ -2,7 +2,7 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from dependencies import get_db, get_current_user, required_team_management, required_member
+from dependencies import get_db, get_current_user, required_team_management, required_member, required_admin
 from database.schemas import users as schemas
 from utils import users as utils
 
@@ -29,7 +29,7 @@ async def create_user_member(user: schemas.MemberCreate, db: Session = Depends(g
 
 
 @router.get('/')
-async def get_users(limit: int = 100, db: Session = Depends(get_db)):
+async def get_users(limit: int = 100, user=Depends(required_admin), db: Session = Depends(get_db)):
     return utils.get_users(db=db, limit=limit)
 
 
