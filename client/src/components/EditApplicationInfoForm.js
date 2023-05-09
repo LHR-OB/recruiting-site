@@ -43,7 +43,6 @@ export default function EditApplicationInfoForm({ team, setTeam, setTeams, setSn
                         if (res.status === 200) {
                             setTeams((curr) => {
                                 const index = curr.findIndex((team) => team.id === updatedTeam.id);
-                                console.log(index, updatedTeam);
                                 curr[index] = updatedTeam;
                                 return curr;
                             });

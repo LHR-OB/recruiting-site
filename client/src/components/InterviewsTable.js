@@ -16,7 +16,6 @@ export default function InterviewsTable({ setOpen, setInterview, interviews, set
         interviewsApi.getInterviewsCurrentuser().then((res) => {
             if (res.status === 200) {
                 setInterviews(res.data);
-                console.log(res.data);
             }
         });
     }, []);

@@ -42,7 +42,6 @@ export default function MemberSignup() {
       password: password,
       team_id: team.id,
     }).then((res) => {
-      console.log(res);
       if (res.status === 200) {
         window.location.href = '/login';
       }

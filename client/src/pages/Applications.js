@@ -56,6 +56,7 @@ export default function Applications({ user, setSnackbarData }) {
           setApplication={setApplication}
           applications={applications}
           setApplications={setApplications}
+          setSnackbarData={setSnackbarData}
         />
         {user?.type === 'APPLICANT' && applicationCycle?.stage === 'APPLICATION' &&
           <Button

@@ -12,7 +12,7 @@ import {
 import { applicationsApi, applicationCyclesApi } from '../api/endpoints/applications';
 import SelectOffer from './SelectOffer';
 
-export default function ApplicationsTable({ user, setOpen, setModalMode, setApplication, applications, setApplications }) {
+export default function ApplicationsTable({ user, setOpen, setModalMode, setApplication, applications, setApplications, setSnackbarData }) {
   useEffect(() => {
     if (user) {
       // Get application cycle
@@ -40,7 +40,6 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
             for (let system of user.systems) {
               applicationsApi.getApplicationsBySystem(applicationCycle.id, user.team.id, system.id).then((res) => {
                 if (res.status === 200) {
-                  console.log(res.data);
                   newApplications = [...newApplications, ...res.data];
                   setApplications(newApplications);
                 }
@@ -140,7 +139,7 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
       </TableContainer>
       {
         user?.type === 'APPLICANT' && applications.some((application) => application.status === 'OFFER') &&
-        <SelectOffer applications={applications} />
+        <SelectOffer applications={applications} setApplications={setApplications} setSnackbarData={setSnackbarData} />
       }
     </Container>
   );

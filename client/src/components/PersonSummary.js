@@ -11,7 +11,6 @@ export default function PersonSummary({ person, setPeople, setSnackbarData, setO
   const handleApproveButton = () => {
     usersApi.approveUser(person.id).then((res) => {
       if (res.status === 200) {
-        console.log(res.data);
         setPeople((curr) => {
           const index = curr.findIndex((person) => person.id === res.data.id);
           curr[index] = res.data;

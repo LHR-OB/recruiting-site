@@ -36,7 +36,6 @@ export default function InterviewView({ interview, setInterview, setInterviews, 
                     }
                 });
                 setInterviews((curr) => {
-                    console.log(curr);
                     const index = curr.findIndex((i) => i.id === interview.id);
                     if (curr[index].notes.findIndex((n) => n.id === res.data.id) === -1)
                         curr[index].notes.push(res.data);

@@ -26,7 +26,6 @@ export default function ApplicantSignup() {
       type: type,
       password: password,
     }).then((res) => {
-      console.log(res);
       if (res.status === 200) {
         window.location.href = '/login';
       }

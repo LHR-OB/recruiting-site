@@ -11,14 +11,14 @@ import {
 } from '@mui/material';
 import usersApi from '../api/endpoints/users';
 
-export default function LeaveSystemForm({ user, userSystems, setUserSystems, setSnackbarData, setOpen }) {
+export default function LeaveSystemForm({ user, setUser, setSnackbarData, setOpen }) {
   // States
   const [system, setSystem] = useState({});
 
   const handleLeaveSystem = () => {
     usersApi.leaveSystem(user.id, system.id).then((res) => {
       if (res.status === 200) {
-        setUserSystems(res.data.systems);
+        setUser(res.data);
         setSnackbarData({
           open: true,
           message: 'Successfully left system!',
@@ -57,7 +57,7 @@ export default function LeaveSystemForm({ user, userSystems, setUserSystems, set
             label="System"
             onChange={(e) => setSystem(e.target.value)}
           >
-            {userSystems.map(system => (
+            {user?.systems.map(system => (
               <MenuItem key={system.id} value={system}>{system.name}</MenuItem>
             ))}
           </Select>

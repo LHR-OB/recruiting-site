@@ -12,7 +12,7 @@ import {
 import { applicationsApi } from '../api/endpoints/applications';
 
 
-export default function SelectOffer({ applications }) {
+export default function SelectOffer({ applications, setApplications, setSnackbarData }) {
     // States
     const [application, setApplication] = useState({});
 
@@ -24,7 +24,11 @@ export default function SelectOffer({ applications }) {
                     status: 'REJECTED',
                 }).then((res) => {
                     if (res.status === 200) {
-                        console.log('Rejected application successfully');
+                        setApplications((curr) => {
+                            const index = curr.findIndex((application) => application.id === applicationOffer.id);
+                            curr[index].status = 'REJECTED';
+                            return curr;
+                        });
                     }
                 });
             }
@@ -33,7 +37,16 @@ export default function SelectOffer({ applications }) {
             status: 'ACCEPTED',
         }).then((res) => {
             if (res.status === 200) {
-                console.log('Accepted application successfully');
+                setApplications((curr) => {
+                    const index = curr.findIndex((application) => application.id === application.id);
+                    curr[index].status = 'ACCEPTED';
+                    return curr;
+                });
+                setSnackbarData({
+                    severity: 'success',
+                    message: 'Offer accepted',
+                    isOpen: true,
+                });
             }
         });
     }

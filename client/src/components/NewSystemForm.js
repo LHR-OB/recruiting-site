@@ -18,7 +18,6 @@ export default function NewSystemForm({ team, setSystems, setSnackbarData, setOp
       team_id: team.id,
     }).then((res) => {
       if (res.status === 200) {
-        console.log('System created successfully');
         setSystems((curr) => [...curr, res.data]);
         setSnackbarData({
           severity: 'success',

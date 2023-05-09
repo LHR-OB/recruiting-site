@@ -62,7 +62,6 @@ export default function EditApplicationCycleForm({ applicationCycle, setApplicat
   const handleDeleteApplicationCycle = () => {
     applicationCyclesApi.deleteApplicationCycle(applicationCycle.id).then((res) => {
       if (res.status === 200) {
-        console.log('Application cycle deleted');
         setApplicationCycles((curr) => {
           const index = curr.findIndex((applicationCycle) => applicationCycle.id === res.data.id);
           curr.splice(index, 1);

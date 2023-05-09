@@ -15,13 +15,6 @@ export default function Profile({ user, setUser, setSnackbarData }) {
   // States
   const [open, setOpen] = useState(false);
   const [modalMode, setModalMode] = useState(false);
-  const [systems, setSystems] = useState([]);
-
-  useEffect(() => {
-    if (user) {
-      setSystems(user.systems);
-    }
-  }, [user]);
 
   const handleJoinSystem = () => {
     setOpen(true);
@@ -77,7 +70,7 @@ export default function Profile({ user, setUser, setSnackbarData }) {
           Interview Location: {user?.interview_location}
         </Typography>
         <Typography variant="h6" mt={2}>
-          Systems: {systems?.map((system) => system.name).join(', ')}
+          Systems: {user?.systems?.map((system) => system.name).join(', ')}
         </Typography>
         <Button
           variant="outlined"
@@ -118,8 +111,8 @@ export default function Profile({ user, setUser, setSnackbarData }) {
         {modalMode === "UPDATE" ?
           <EditProfileForm user={user} setUser={setUser} setSnackbarData={setSnackbarData} setOpen={setOpen} /> :
           modalMode === "JOIN" ?
-          <JoinSystemForm user={user} setUserSystems={setSystems} setSnackbarData={setSnackbarData} setOpen={setOpen} /> :
-          <LeaveSystemForm user={user} userSystems={systems} setUserSystems={setSystems} setSnackbarData={setSnackbarData} setOpen={setOpen} />
+          <JoinSystemForm user={user} setUser={setUser} setSnackbarData={setSnackbarData} setOpen={setOpen} /> :
+          <LeaveSystemForm user={user} setUser={setUser} setSnackbarData={setSnackbarData} setOpen={setOpen} />
         }
       </CenterModal>
     </Container>
