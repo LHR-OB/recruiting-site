@@ -26,7 +26,8 @@ def get_availabilities(db: Session, limit: int = 100) -> List[models.Availabilit
 
 def get_availability(db: Session, availability_id: int) -> models.Availability:
     availability = db.query(models.Availability).filter(models.Availability.id == availability_id).first()
-    availability.user
+    if availability:
+        availability.user
     return availability
 
 
