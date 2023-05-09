@@ -16,6 +16,7 @@ COPY . .
 
 # API URL
 RUN echo "REACT_APP_API_URL=$REACT_APP_API_URL" > .env
+RUN cat /app/.env
 
 RUN npm run build
 
