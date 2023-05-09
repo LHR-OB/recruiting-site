@@ -13,15 +13,6 @@ from dependencies import get_db, required_interviewer
 Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
-# Middleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=['*'],
-    allow_credentials=True,
-    allow_methods=['*'],
-    allow_headers=['*'],
-)
-
 # Routers
 app.include_router(users.router)
 app.include_router(applications.router)
@@ -34,6 +25,14 @@ app.include_router(interviews.interview_router)
 app.include_router(interviews.interview_note_router)
 app.include_router(messages.router)
 
+# Middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*'],
+)
 
 @app.post('/token')
 async def token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
