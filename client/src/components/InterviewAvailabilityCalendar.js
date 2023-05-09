@@ -26,7 +26,7 @@ export default function InterviewAvailabilityCalendar({ user, setSnackbarData })
 
   useEffect(() => {
     if (user) {
-      availabilitiesApi.getAvailabilitiesByUser(user.id).then((res) => {
+      availabilitiesApi.getAvailabilitiesCurrentUser().then((res) => {
         if (res.status === 200) {
           const currentSchedule = [];
           for (let availability of res.data) {
