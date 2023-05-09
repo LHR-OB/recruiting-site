@@ -27,7 +27,7 @@ middleware = [
 
 # Main app configuration
 Base.metadata.create_all(bind=engine)
-app = FastAPI()
+app = FastAPI(middleware=middleware)
 
 # Routers
 app.include_router(users.router)
