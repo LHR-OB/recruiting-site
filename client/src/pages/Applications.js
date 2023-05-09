@@ -10,6 +10,7 @@ import ApplicationsTable from '../components/ApplicationsTable';
 import CenterModal from '../components/CenterModal';
 import NewApplicationForm from '../components/NewApplicationForm';
 import ViewApplication from '../components/ViewApplication';
+import ApplicationCycleClosed from '../components/ApplicationCycleClosed';
 
 export default function Applications({ user }) {
   // States
@@ -29,6 +30,10 @@ export default function Applications({ user }) {
     setOpen(true);
     setModalMode('NEW');
   }
+
+  if (!applicationCycle) return (
+    <ApplicationCycleClosed />
+  )
 
   return (
     <Container>

@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import {
     Box,
     Container,
@@ -7,13 +7,30 @@ import {
 import InterviewsTable from '../components/InterviewsTable';
 import CenterModal from '../components/CenterModal';
 import InterviewView from '../components/InterviewView';
+import ApplicationCycleClosed from '../components/ApplicationCycleClosed';
+import { applicationCyclesApi } from '../api/endpoints/applications';
 
 
 export default function Interviews({ user })  {
     // States
     const [open, setOpen] = useState(false);
     const [interview, setInterview] = useState(null);
-    
+    const [applicationCycle, setApplicationCycle] = useState(null);
+
+    useEffect(() => {
+        applicationCyclesApi.getApplicationCycleActive().then((res) => {
+            if (res.status === 200) {
+                setApplicationCycle(res.data);
+            }
+        });
+    }, []);
+
+    if (!applicationCycle) {
+        return (
+            <ApplicationCycleClosed />
+        );
+    }
+
     return (
         <Container>
             <Box

@@ -1,4 +1,4 @@
-import { React } from 'react';
+import { React, useState, useEffect } from 'react';
 import {
   Box,
   Container,
@@ -7,9 +7,28 @@ import {
 
 import InterviewAvailabilityCalendar from '../components/InterviewAvailabilityCalendar';
 import InterviewAvailabilityList from '../components/InterviewAvailabilityList';
+import { applicationCyclesApi } from '../api/endpoints/applications';
+import ApplicationCycleClosed from '../components/ApplicationCycleClosed';
 
 
 export default function InterviewAvailability({ user }) {
+  // States
+  const [applicationCycle, setApplicationCycle] = useState(null);
+
+  useEffect(() => {
+    applicationCyclesApi.getApplicationCycleActive().then((res) => {
+      if (res.status === 200) {
+        setApplicationCycle(res.data);
+      }
+    });
+  }, []);
+
+  if (!applicationCycle) {
+    return (
+      <ApplicationCycleClosed />
+    );
+  }
+  
   return (
     <Container>
       <Box
