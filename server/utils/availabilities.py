@@ -36,6 +36,7 @@ def get_availabilities_by_user(db: Session, user_id: int) -> List[models.Availab
     availabilities = db.query(User).filter(User.id == user_id).first().availabilities
     for availability in availabilities:
         availability.user
+    print(availabilities)
     return availabilities
 
 
