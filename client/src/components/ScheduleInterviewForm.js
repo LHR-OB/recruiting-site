@@ -19,6 +19,7 @@ export default function ScheduleInterviewForm({ interview }) {
             offset: interview.offset,
             location: interview.location,
             description: "System interview",
+            is_global: false,
         }).then((res) => {
             if (res.status === 200) {
                 // Add the event to user's and interviewer's calendars

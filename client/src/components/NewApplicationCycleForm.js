@@ -71,41 +71,37 @@ export default function NewApplicationCycleForm({ applicationCycles }) {
           sx={{ width: '100%' }}
         />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <br />
           <DatePicker
             label="Application Open Date"
             value={openDate}
             onChange={(openDate) => {
               setOpenDate(openDate);
             }}
-            renderInput={(params) => <TextField {...params} />}
+            renderInput={(params) => <TextField {...params} sx={{ mt: 2 }} />}
           />
-          <br />
           <DatePicker
             label="Application Close Date"
             value={closeDate}
             onChange={(closeDate) => {
               setCloseDate(closeDate);
             }}
-            renderInput={(params) => <TextField {...params} />}
+            renderInput={(params) => <TextField {...params} sx={{ mt: 2 }} />}
           />
-          <br />
           <DatePicker
             label="Interview Start Date"
             value={interviewStartDate}
             onChange={(interviewStartDate) => {
               setInterviewStartDate(interviewStartDate);
             }}
-            renderInput={(params) => <TextField {...params} />}
+            renderInput={(params) => <TextField {...params} sx={{ mt: 2 }} />}
           />
-          <br />
           <DatePicker
             label="Interview End Date"
             value={interviewEndDate}
             onChange={(interviewEndDate) => {
               setInterviewEndDate(interviewEndDate);
             }}
-            renderInput={(params) => <TextField {...params} />}
+            renderInput={(params) => <TextField {...params} sx={{ mt: 2 }} />}
           />
         </LocalizationProvider>
         <Button

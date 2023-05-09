@@ -68,11 +68,8 @@ export default function ViewApplication({ user, application, setApplication }) {
       <Typography variant="h6" mt={2}>
         Resume: {application?.resume_link}
       </Typography>
-      <Typography variant="h6" mt={2}>
-        Status: {application?.status}
-      </Typography>
 
-      {user.type !== 'APPLICANT' && <Grid container>
+      {user.type !== 'APPLICANT' && application?.status !== 'OFFER' && application?.status !== 'ACCEPTED' && application?.status !== 'REJECTED' && <Grid container>
         <Grid item xs>
           <Button
             variant="outlined"

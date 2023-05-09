@@ -10,6 +10,7 @@ import {
   Paper,
 } from '@mui/material';
 import { applicationsApi, applicationCyclesApi } from '../api/endpoints/applications';
+import SelectOffer from './SelectOffer';
 
 export default function ApplicationsTable({ user, setOpen, setModalMode, setApplication }) {
   // States
@@ -141,6 +142,10 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
           </TableBody>
         </Table>
       </TableContainer>
+      {
+        user?.type === 'APPLICANT' && applications.some((application) => application.status === 'OFFER') &&
+        <SelectOffer applications={applications} />
+      }
     </Container>
   );
 }

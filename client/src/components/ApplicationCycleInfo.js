@@ -34,9 +34,11 @@ export default function ApplicationCycleInfo() {
   };
 
   const handleClickApplicationCycle = (applicationCycle) => {
-    setOpen(true);
-    setModalMode('EDIT');
-    setEditApplicationCycle(applicationCycle);
+    if (applicationCycle.is_active) {
+      setOpen(true);
+      setModalMode('EDIT');
+      setEditApplicationCycle(applicationCycle);
+    }
   }
 
   return (

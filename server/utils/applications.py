@@ -1,8 +1,10 @@
 from typing import List
 from sqlalchemy.orm import Session
+import datetime
 
 from database.models import applications as models
 from database.models import teams as team_models
+from database.models import messages as message_models
 from database.schemas import applications as schemas
 
 
@@ -50,26 +52,44 @@ def advance_application_cycle(db: Session, application_cycle_id: int) -> models.
         db_application_cycle.stage = 'OFFER'
     elif db_application_cycle.stage == 'OFFER':
         db_application_cycle.stage = 'COMPLETE'
+        db_application_cycle.is_active = False
     db.add(db_application_cycle)
     db.commit()
     db.refresh(db_application_cycle)
-    # Update all applications to the new stage
-    applications = get_applications(db=db, application_cycle_id=application_cycle_id)
-    for application in applications:
-        if application.stage_decision == 'ACCEPT':
-            # Advance the application status
-            if application.status == 'SUBMITTED':
-                application.status = 'INTERVIEW'
-            elif application.status == 'INTERVIEW_COMPLETE':
-                application.status = 'TRIAL'
-            elif application.status == 'TRIAL':
-                application.status = 'OFFER'
-            application.stage_decision = 'NEUTRAL'
-        else:
-            # Reject the application
-            application.status = 'REJECTED'
-            application.stage_decision = 'NEUTRAL'
-        db.add(application)
+    # Update all applications to the new stage if it isn't complete yet
+    if db_application_cycle.stage != 'COMPLETE':
+        applications = get_applications(db=db, application_cycle_id=application_cycle_id)
+        for application in applications:
+            if application.stage_decision == 'ACCEPT':
+                # Advance the application status
+                message_body = ''
+                application_team = application.team
+                if application.status == 'SUBMITTED':
+                    application.status = 'INTERVIEW'
+                    message_body = application_team.interview_message
+                elif application.status == 'INTERVIEW_COMPLETE':
+                    application.status = 'TRIAL'
+                    message_body = application_team.trial_workday_message
+                elif application.status == 'TRIAL':
+                    application.status = 'OFFER'
+                    message_body = application_team.offer_message
+                application.stage_decision = 'NEUTRAL'
+
+                # Send a message to the user
+                message = message_models.Message(
+                    title="Application Update",
+                    message=message_body,
+                    timestamp=datetime.datetime.now(),
+                    is_read=False,
+                    user_id=application.user_id
+                )
+                db.add(message)
+
+            else:
+                # Reject the application
+                application.status = 'REJECTED'
+                application.stage_decision = 'NEUTRAL'
+            db.add(application)
     db.commit()
     return db_application_cycle
 
