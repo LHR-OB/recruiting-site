@@ -12,12 +12,12 @@ router = APIRouter(
 )
 
 
-@router.post('/')
+@router.post('')
 async def create_application_cycle(application_cycle: schemas.ApplicationCycleCreate, user=Depends(required_admin), db: Session = Depends(get_db)):
     return utils.create_application_cycle(db=db, application_cycle=application_cycle)
 
 
-@router.get('/')
+@router.get('')
 async def get_application_cycles(user=Depends(required_admin), db: Session = Depends(get_db)):
     return utils.get_application_cycles(db)
 

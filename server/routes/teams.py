@@ -12,12 +12,12 @@ teams_router = APIRouter(
 )
 
 
-@teams_router.post('/')
+@teams_router.post('')
 async def create_team(team: schemas.TeamCreate, user=Depends(required_admin), db: Session = Depends(get_db)):
     return utils.create_team(db=db, team=team)
 
 
-@teams_router.get('/')
+@teams_router.get('')
 async def get_teams(db: Session = Depends(get_db)):
     return utils.get_teams(db)
 
