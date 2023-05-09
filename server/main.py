@@ -17,7 +17,8 @@ middleware = [
         CORSMiddleware,
         allow_origins=[
             'http://localhost:3000',
-            os.environ.get('CLIENT_URL'),
+            'https://lhr-recruitingclient-test.up.railway.app/',
+            os.environ.get('CLIENT_URL')
         ],
         allow_credentials=True,
         allow_methods=['*'],
