@@ -32,6 +32,8 @@ import Profile from './pages/Profile';
 import InterviewAvailability from './pages/InterviewAvailability';
 import Interviews from './pages/Interviews';
 import Messages from './pages/Messages';
+import Unauthorized from './pages/Unauthorized';
+import PageNotFound from './pages/PageNotFound';
 import usersApi from './api/endpoints/users';
 
 export default function App() {
@@ -98,6 +100,14 @@ export default function App() {
     {
       path: "/messages",
       element: <Messages user={user} />
+    },
+    {
+      path: "/unauthorized",
+      element: <Unauthorized user={user} />
+    },
+    {
+      path: "*",
+      element: <PageNotFound user={user} />
     }
   ]);
 

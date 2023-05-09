@@ -24,8 +24,7 @@ axiosClient.interceptors.response.use(
     if (error.response) {
       switch (error.response.status) {
         case 401:
-          localStorage.removeItem('token');
-          window.location.href = '/login';
+          window.location.href = '/unauthorized';
           break;
         default:
           throw error;
