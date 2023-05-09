@@ -25,13 +25,15 @@ export default function EditProfileForm({ user, setUser, setSnackbarData, setOpe
     const [teams, setTeams] = useState([]);
 
     useEffect(() => {
-        teamsApi.getTeams().then((res) => {
-            if (res.status === 200) {
-                setTeams(res.data);
-                setTeam(res.data.find((team) => team.id === user.team_id));
-            }
-        });
-    }, []);
+        if (user) {
+            teamsApi.getTeams().then((res) => {
+                if (res.status === 200) {
+                    setTeams(res.data);
+                    setTeam(res.data.find((team) => team.id === user.team_id));
+                }
+            });
+        }
+    }, [user]);
 
     const handleUpdateUser = () => {
         usersApi.updateUser(user.id, {

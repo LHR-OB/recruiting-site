@@ -3,11 +3,9 @@ import {
   Box,
   Button,
   Container,
-  Typography,
 } from '@mui/material';
 import ScheduleSelector from 'react-schedule-selector';
 
-import CenterModal from './CenterModal';
 import availabilitiesApi from '../api/endpoints/availabilities';
 import { applicationCyclesApi } from '../api/endpoints/applications';
 

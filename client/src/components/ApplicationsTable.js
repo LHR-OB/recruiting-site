@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from 'react';
+import { React, useEffect } from 'react';
 import {
   Container,
   Table,
@@ -14,7 +14,7 @@ import SelectOffer from './SelectOffer';
 
 export default function ApplicationsTable({ user, setOpen, setModalMode, setApplication, applications, setApplications, setSnackbarData }) {
   useEffect(() => {
-    if (user) {
+    if (user && setApplications) {
       // Get application cycle
       applicationCyclesApi.getApplicationCycleActive().then((res) => {
         // Get applications
@@ -37,13 +37,14 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
           case "SYSTEM_LEAD":
           case "INTERVIEWER":
             let newApplications = [];
+            const callback = (res) => {
+              if (res.status === 200) {
+                newApplications = [...newApplications, ...res.data];
+                setApplications(newApplications);
+              }
+            }
             for (let system of user.systems) {
-              applicationsApi.getApplicationsBySystem(applicationCycle.id, user.team.id, system.id).then((res) => {
-                if (res.status === 200) {
-                  newApplications = [...newApplications, ...res.data];
-                  setApplications(newApplications);
-                }
-              });
+              applicationsApi.getApplicationsBySystem(applicationCycle.id, user.team.id, system.id).then(callback);
             }
             break;
           case "APPLICANT":
@@ -58,7 +59,7 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
         }
       });
     }
-  }, [user]);
+  }, [user, setApplications]);
 
   const handleApplicationClick = (application) => {
     setOpen(true);
@@ -73,6 +74,8 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
           return 'green';
         case 'REJECT':
           return 'red';
+        default:
+          return 'white';
       }
     } else {
       return 'white';

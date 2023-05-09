@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from 'react';
+import { React, useEffect } from 'react';
 import {
     Container,
     Paper,
@@ -13,12 +13,14 @@ import { interviewsApi } from '../api/endpoints/interviews';
 
 export default function InterviewsTable({ setOpen, setInterview, interviews, setInterviews }) {
     useEffect(() => {
-        interviewsApi.getInterviewsCurrentuser().then((res) => {
-            if (res.status === 200) {
-                setInterviews(res.data);
-            }
-        });
-    }, []);
+        if (setInterviews) {
+            interviewsApi.getInterviewsCurrentuser().then((res) => {
+                if (res.status === 200) {
+                    setInterviews(res.data);
+                }
+            });
+        }
+    }, [setInterviews]);
     
     const handleInterviewClick = (interview) => {
         setOpen(true);

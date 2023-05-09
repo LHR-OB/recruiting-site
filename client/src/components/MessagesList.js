@@ -4,7 +4,6 @@ import {
     Container,
     List,
     ListItemButton,
-    ListItem,
     ListItemText,
 } from '@mui/material';
 import messagesApi from '../api/endpoints/messages';

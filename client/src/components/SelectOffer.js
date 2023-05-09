@@ -38,7 +38,7 @@ export default function SelectOffer({ applications, setApplications, setSnackbar
         }).then((res) => {
             if (res.status === 200) {
                 setApplications((curr) => {
-                    const index = curr.findIndex((application) => application.id === application.id);
+                    const index = curr.findIndex((a) => a.id === application.id);
                     curr[index].status = 'ACCEPTED';
                     return curr;
                 });
