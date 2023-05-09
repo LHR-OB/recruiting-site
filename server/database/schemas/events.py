@@ -10,6 +10,9 @@ class EventBase(BaseModel):
     offset: int
     location: str
     description: str
+    interview_id: Optional[int] = None
+    trial_workday_team_id: Optional[int] = None
+    is_global: bool
 
 
 class EventCreate(EventBase):
@@ -19,7 +22,6 @@ class EventCreate(EventBase):
 class Event(EventBase):
     id: int
     users: List[int] = []
-    interview_id: int
 
 
 class EventUpdate(BaseModel):
@@ -29,6 +31,8 @@ class EventUpdate(BaseModel):
     location: Optional[str] = None
     description: Optional[str] = None
     interview_id: Optional[int] = None
+    trial_workday_team_id: Optional[int] = None
+    is_global: Optional[bool] = None
 
 
 class AvailabilityBase(BaseModel):

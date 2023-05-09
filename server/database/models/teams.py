@@ -11,8 +11,6 @@ class Team(Base):
     name = Column(String)
     interview_time_duration = Column(Integer)
     interview_message = Column(String)
-    trial_workday_start_time = Column(DateTime)
-    trial_workday_end_time = Column(DateTime)
     trial_workday_message = Column(String)
     offer_message = Column(String)
 
@@ -20,6 +18,7 @@ class Team(Base):
     users = relationship("User", back_populates="team")
     systems = relationship("System", back_populates="team")
     applications = relationship("Application", back_populates="team")
+    trial_workday_event = relationship("Event", backref="teams", uselist=False)
 
 
 class System(Base):

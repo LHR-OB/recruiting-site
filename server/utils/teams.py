@@ -15,11 +15,16 @@ def create_team(db: Session, team: schemas.TeamCreate) -> models.Team:
 
 
 def get_teams(db: Session, limit: int = 100) -> List[models.Team]:
-    return db.query(models.Team).limit(limit).all()
+    teams = db.query(models.Team).limit(limit).all()
+    for team in teams:
+        team.trial_workday_event
+    return teams
 
 
 def get_team(db: Session, team_id: int) -> models.Team:
-    return db.query(models.Team).filter(models.Team.id == team_id).first()
+    team = db.query(models.Team).filter(models.Team.id == team_id).first()
+    team.trial_workday_event
+    return team
 
 
 def update_team(db: Session, team_id: int, team: schemas.TeamUpdate) -> models.Team:

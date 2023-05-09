@@ -29,7 +29,10 @@ def get_event(db: Session, event_id: int) -> models.Event:
 
 
 def get_events_by_user(db: Session, user_id: int) -> List[models.Event]:
-    return db.query(User).filter(User.id == user_id).first().events
+    user_events = db.query(User).filter(User.id == user_id).first().events
+    # Add global events
+    global_events = db.query(models.Event).filter(models.Event.is_global == True).all()
+    return user_events + global_events
 
 
 def update_event(db: Session, event_id: int, event: schemas.EventUpdate) -> models.Event:

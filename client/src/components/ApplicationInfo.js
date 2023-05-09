@@ -22,7 +22,7 @@ export default function ApplicationInfo({ team }) {
         Application Info
       </Typography>
       <Typography variant="body1" mt={2}>
-        Interview Time Duration: {team?.interview_time_duration ? team.interview_time_duration + " minutes": "Not Set"}
+        TODO: Application Summary Goes Here
       </Typography>
       <Button
         variant="outlined"
