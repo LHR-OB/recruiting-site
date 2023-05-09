@@ -12,12 +12,12 @@ router = APIRouter(
 )
 
 
-@router.post('/')
+@router.post('')
 async def create_event(event: schemas.EventCreate, user=Depends(required_applicant), db: Session = Depends(get_db)):
     return utils.create_event(db=db, event=event)
 
 
-@router.get('/')
+@router.get('')
 async def get_events(user=Depends(required_admin), db: Session = Depends(get_db)):
     return utils.get_events(db)
 

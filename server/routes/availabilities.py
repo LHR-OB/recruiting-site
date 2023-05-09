@@ -13,7 +13,7 @@ router = APIRouter(
 )
 
 
-@router.post('/')
+@router.post('')
 async def create_availability(availability: schemas.AvailabilityCreate, user=Depends(required_interviewer), db: Session = Depends(get_db)):
     return utils.create_availability(db=db, availability=availability, user=user)
 
@@ -30,7 +30,7 @@ async def set_availabilities(availabilities: Optional[List[schemas.AvailabilityC
     return True
 
 
-@router.get('/')
+@router.get('')
 async def get_availabilities(user=Depends(required_interviewer), db: Session = Depends(get_db)):
     return utils.get_availabilities(db)
 

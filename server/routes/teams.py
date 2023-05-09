@@ -56,7 +56,7 @@ systems_router = APIRouter(
 )
 
 
-@systems_router.post('/')
+@systems_router.post('')
 async def create_system(system: schemas.SystemCreate, user=Depends(required_team_management), db: Session = Depends(get_db)):
     team_systems = utils.get_systems_by_team(db, team_id=system.team_id)
     for team_system in team_systems:
@@ -66,7 +66,7 @@ async def create_system(system: schemas.SystemCreate, user=Depends(required_team
     return utils.create_system(db=db, system=system)
 
 
-@systems_router.get('/')
+@systems_router.get('')
 async def get_systems(user=Depends(required_applicant), db: Session = Depends(get_db)):
     return utils.get_systems(db)
 

@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
-from routes import users, applications, application_cycles, events, teams, availabilities, interviews, messages
+from routes import users, applications, events, teams, availabilities, interviews, messages
 from database.database import Base, engine
 from utils.users import authenticate_user, create_access_token
 from utils.dummy_data import main as create_dummy_data
@@ -13,18 +13,6 @@ from dependencies import get_db, required_interviewer
 Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
-# Routers
-app.include_router(users.router)
-app.include_router(applications.router)
-app.include_router(application_cycles.router)
-app.include_router(events.router)
-app.include_router(teams.teams_router)
-app.include_router(teams.systems_router)
-app.include_router(availabilities.router)
-app.include_router(interviews.interview_router)
-app.include_router(interviews.interview_note_router)
-app.include_router(messages.router)
-
 # Middleware
 app.add_middleware(
     CORSMiddleware,
@@ -33,6 +21,18 @@ app.add_middleware(
     allow_methods=['*'],
     allow_headers=['*'],
 )
+
+# Routers
+app.include_router(users.router)
+app.include_router(applications.application_cycles_router)
+app.include_router(applications.applications_router)
+app.include_router(events.router)
+app.include_router(teams.teams_router)
+app.include_router(teams.systems_router)
+app.include_router(availabilities.router)
+app.include_router(interviews.interview_router)
+app.include_router(interviews.interview_note_router)
+app.include_router(messages.router)
 
 @app.post('/token')
 async def token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):

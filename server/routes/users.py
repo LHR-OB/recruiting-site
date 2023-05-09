@@ -28,7 +28,7 @@ async def create_user_member(user: schemas.MemberCreate, db: Session = Depends(g
     return utils.create_user(db=db, user=user)
 
 
-@router.get('/')
+@router.get('')
 async def get_users(limit: int = 100, user=Depends(required_admin), db: Session = Depends(get_db)):
     return utils.get_users(db=db, limit=limit)
 

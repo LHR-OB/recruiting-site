@@ -12,12 +12,12 @@ interview_router = APIRouter(
 )
 
 
-@interview_router.post('/')
+@interview_router.post('')
 async def create_interview(interview: schemas.InterviewCreate, user=Depends(required_applicant), db: Session = Depends(get_db)):
     return utils.create_interview(db=db, interview=interview)
 
 
-@interview_router.get('/')
+@interview_router.get('')
 async def get_interviews(user=Depends(required_admin), db: Session = Depends(get_db)):
     return utils.get_interviews(db)
 
@@ -66,13 +66,13 @@ interview_note_router = APIRouter(
 )
 
 
-@interview_note_router.post('/')
+@interview_note_router.post('')
 async def create_interview_note(interview_note: schemas.InterviewNoteCreate, user=Depends(required_interviewer), db: Session = Depends(get_db)):
     return utils.create_interview_note(
         db=db, interview_note=interview_note)
 
 
-@interview_note_router.get('/')
+@interview_note_router.get('')
 async def get_interview_notes(user=Depends(required_admin), db: Session = Depends(get_db)):
     return utils.get_interview_notes(db)
 

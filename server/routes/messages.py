@@ -12,12 +12,12 @@ router = APIRouter(
 )
 
 
-@router.post('/')
+@router.post('')
 async def create_message(message: schemas.MessageCreate, user=Depends(required_applicant), db: Session = Depends(get_db)):
     return utils.create_message(db=db, message=message)
 
 
-@router.get('/')
+@router.get('')
 async def get_messages(user=Depends(required_admin), db: Session = Depends(get_db)):
     return utils.get_messages(db)
 
