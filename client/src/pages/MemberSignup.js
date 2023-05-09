@@ -13,14 +13,7 @@ import {
 } from '@mui/material';
 import usersApi from '../api/endpoints/users';
 import { teamsApi } from '../api/endpoints/teams';
-
-// Constants
-const USER_ROLES = [
-  "Admin",
-  "Team Management",
-  "System Lead",
-  "Interviewer",
-];
+import consts from '../config/consts';
 
 export default function MemberSignup() {
   // States
@@ -112,7 +105,7 @@ export default function MemberSignup() {
             value={role}
             onChange={(e) => setRole(e.target.value)}
           >
-            {USER_ROLES.map((r, i) => (
+            {consts.USER_ROLES.map((r, i) => (
               <MenuItem
                 value={r}
                 key={i}

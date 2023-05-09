@@ -15,6 +15,7 @@ class User(Base):
     type = Column(Enum("ADMIN", "TEAM_MANAGEMENT",
                   "SYSTEM_LEAD", "INTERVIEWER", "APPLICANT", name='type_enum'), index=True)
     status = Column(Enum("UNAPPROVED", "APPROVED", name='user_status_enum'), index=True)
+    interview_location = Column(String)
 
     # Relationships
     team_id = Column(Integer, ForeignKey("teams.id"), index=True)

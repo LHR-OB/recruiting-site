@@ -2,7 +2,7 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from dependencies import get_db, get_current_user, required_team_management, required_interviewer
+from dependencies import get_db, get_current_user, required_team_management, required_member
 from database.schemas import users as schemas
 from utils import users as utils
 
@@ -81,6 +81,19 @@ async def leave_system(id: int, system_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User not found")
     return utils.leave_system(db=db, user_id=id, system_id=system_id)
 
+
+@router.put('/{id}')
+async def update_user(id: int, user: schemas.MemberUpdate, curr_user=Depends(required_member), db: Session = Depends(get_db)):
+    db_user = utils.get_user(db=db, user_id=id)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    unauthorized_exception = HTTPException(status_code=401, detail="User not authorized to perform this action")
+    if not db_user.id == curr_user.id:
+        if utils.user_is_at_least(user=curr_user, type="TEAM_MANAGEMENT"):
+            # Team Management can update <= Team Management on their own team
+            if (utils.user_is_at_least(user=db_user, type="ADMIN") or db_user.team != curr_user.team) and curr_user.type != "ADMIN":
+                raise unauthorized_exception
+    return utils.update_user(db=db, user_id=id, user=user)
 
 @router.delete('/{id}')
 async def delete_user(id: int, db: Session = Depends(get_db)):

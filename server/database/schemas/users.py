@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 
 class UserBase(BaseModel):
@@ -18,6 +19,15 @@ class ApplicantCreate(UserCreate):
 
 class MemberCreate(UserCreate):
     team_id: int
+
+
+class MemberUpdate(BaseModel):
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    email: Optional[str] = None
+    interview_location: Optional[str] = None
+    type: Optional[str] = None
+    team_id: Optional[int] = None
 
 
 class User(UserBase):

@@ -18,22 +18,33 @@ def create_availability(db: Session, availability: schemas.AvailabilityCreate, u
 
 
 def get_availabilities(db: Session, limit: int = 100) -> List[models.Availability]:
-    return db.query(models.Availability).limit(limit).all()
+    availabilities = db.query(models.Availability).limit(limit).all()
+    for availability in availabilities:
+        availability.user
+    return availabilities
 
 
 def get_availability(db: Session, availability_id: int) -> models.Availability:
-    return db.query(models.Availability).filter(models.Availability.id == availability_id).first()
+    availability = db.query(models.Availability).filter(models.Availability.id == availability_id).first()
+    availability.user
+    return availability
 
 
 def get_availabilities_by_user(db: Session, user_id: int) -> List[models.Availability]:
-    return db.query(User).filter(User.id == user_id).first().availabilities
+    availabilities = db.query(User).filter(User.id == user_id).first().availabilities
+    for availability in availabilities:
+        availability.user
+    return availabilities
 
 
 def get_availabilities_by_system(db: Session, system_id: int) -> List[models.Availability]:
     interviewers = db.query(User).filter(User.systems.contains(
         db.query(System).filter(System.id == system_id).first()
     )).all()
-    return [availability for interviewer in interviewers for availability in interviewer.availabilities]
+    availabilities = [availability for interviewer in interviewers for availability in interviewer.availabilities]
+    for availability in availabilities:
+        availability.user
+    return availabilities
 
 
 def update_availability(db: Session, availability_id: int, availability: schemas.AvailabilityUpdate) -> models.Availability:

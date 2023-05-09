@@ -36,7 +36,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     return user
 
 
-def required_role(role: str, user: User):
+def required_role(role: str, user: User, bypass_approved: bool = False):
     if user_is_at_least(user, role) and user.status == "APPROVED":
         return user
     if role == "APPLICANT" and user.type == "APPLICANT":
@@ -63,3 +63,7 @@ def required_interviewer(user: User = Depends(get_current_user)):
 
 def required_applicant(user: User = Depends(get_current_user)):
     return required_role("APPLICANT", user)
+
+
+def required_member(user: User = Depends(get_current_user)):
+    return required_role("INTERVIEWER", user, bypass_approved=True)

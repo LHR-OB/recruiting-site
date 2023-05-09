@@ -8,12 +8,13 @@ import {
 import CenterModal from '../components/CenterModal';
 import JoinSystemForm from '../components/JoinSystemForm';
 import LeaveSystemForm from '../components/LeaveSystemForm';
+import EditProfileForm from '../components/EditProfileForm';
 
 
-export default function Profile({ user, setSnackbarData }) {
+export default function Profile({ user, setUser, setSnackbarData }) {
   // States
   const [open, setOpen] = useState(false);
-  const [join, setJoin] = useState(false);
+  const [modalMode, setModalMode] = useState(false);
   const [systems, setSystems] = useState([]);
 
   useEffect(() => {
@@ -24,12 +25,17 @@ export default function Profile({ user, setSnackbarData }) {
 
   const handleJoinSystem = () => {
     setOpen(true);
-    setJoin(true);
+    setModalMode("JOIN");
   }
 
   const handleLeaveSystem = () => {
     setOpen(true);
-    setJoin(false);
+    setModalMode("LEAVE");
+  }
+
+  const handleUpdateProfile = () => {
+    setOpen(true);
+    setModalMode("UPDATE");
   }
 
 
@@ -68,8 +74,21 @@ export default function Profile({ user, setSnackbarData }) {
           Status: {user?.status}
         </Typography>
         <Typography variant="h6" mt={2}>
+          Interview Location: {user?.interview_location}
+        </Typography>
+        <Typography variant="h6" mt={2}>
           Systems: {systems?.map((system) => system.name).join(', ')}
         </Typography>
+        <Button
+          variant="outlined"
+          onClick={handleUpdateProfile}
+          sx={{
+            marginTop: 2,
+            width: "25%",
+          }}
+        >
+          Update Profile
+        </Button>
         <Button
           variant="outlined"
           onClick={handleJoinSystem}
@@ -96,7 +115,9 @@ export default function Profile({ user, setSnackbarData }) {
         open={open}
         handleClose={() => setOpen(false)}
       >
-        {join ?
+        {modalMode === "UPDATE" ?
+          <EditProfileForm user={user} setUser={setUser} setSnackbarData={setSnackbarData} setOpen={setOpen} /> :
+          modalMode === "JOIN" ?
           <JoinSystemForm user={user} setUserSystems={setSystems} setSnackbarData={setSnackbarData} setOpen={setOpen} /> :
           <LeaveSystemForm user={user} userSystems={systems} setUserSystems={setSystems} setSnackbarData={setSnackbarData} setOpen={setOpen} />
         }

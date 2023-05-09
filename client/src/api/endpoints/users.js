@@ -45,6 +45,10 @@ const usersApi = {
     const url = `/users/leave-system/${id}/${system_id}`;
     return axiosClient.put(url);
   },
+  updateUser: (id, data) => {
+    const url = `/users/${id}`;
+    return axiosClient.put(url, data);
+  },
   // TODO: Remove after dev
   protected: () => {
     const url = "/protected";

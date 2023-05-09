@@ -145,6 +145,22 @@ def get_user(db: Session, user_id: int = None, team_id: int = None, email: str =
         pass
     return user
 
+
+def update_user(db: Session, user_id: int, user: schemas.MemberUpdate) -> models.User:
+    db_user = get_user(db=db, user_id=user_id)
+    if db_user is None:
+        return None
+    update_data = user.dict(exclude_unset=True)
+    if update_data.get("type") != db_user.type or update_data.get("team_id") != db_user.team_id:
+        update_data["status"] = "UNAPPROVED"
+    for key, value in update_data.items():
+        setattr(db_user, key, value)
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+
 def delete_user(db: Session, user_id: int) -> bool:
     db_user = get_user(db=db, user_id=user_id)
     if db_user is None:

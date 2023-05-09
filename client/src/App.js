@@ -98,7 +98,7 @@ export default function App() {
     },
     {
       path: "/profile",
-      element: <Profile user={user} setSnackbarData={setSnackbarData} />
+      element: <Profile user={user} setUser={setUser} setSnackbarData={setSnackbarData} />
     },
     {
       path: "/interview-availability",

@@ -9,7 +9,7 @@ class Team(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
-    interview_time_duration = Column(Integer)
+    interview_time_duration = Column(Integer, default=30)
     interview_message = Column(String)
     trial_workday_message = Column(String)
     offer_message = Column(String)
@@ -26,7 +26,7 @@ class System(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
-    interview_default_location = Column(String)
+    interview_default_location = Column(String, default="ETC")
 
     # Relationships
     team_id = Column(Integer, ForeignKey("teams.id"), index=True)

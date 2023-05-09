@@ -36,7 +36,6 @@ export default function InterviewAvailabilityList({ user, setSnackbarData }) {
                                         const start = new Date(availability.start_time).getTime() - availability.offset * 60 * 60 * 1000;
                                         const end = new Date(availability.end_time).getTime() - availability.offset * 60 * 60 * 1000;
                                         eventsApi.getEventsByUser(availability.user_id).then((res) => {
-                                            // TODO: also check conflicts with current user
                                             if (res.status === 200) {
                                                 for (let i = start; i + (application.team.interview_time_duration * 60 * 1000) <= end + (30 * 60 * 1000); i += application.team.interview_time_duration * 60 * 1000) {
                                                     const start_time = i;
@@ -58,7 +57,7 @@ export default function InterviewAvailabilityList({ user, setSnackbarData }) {
                                                             offset: availability.offset,
                                                             interviewer_id: availability.user_id,
                                                             application_id: application.id,
-                                                            location: application.system.interview_default_location,
+                                                            location: availability.user.interview_location || application.system.interview_default_location,
                                                         });
                                                     }
                                                 }
