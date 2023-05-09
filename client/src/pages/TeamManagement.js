@@ -9,7 +9,7 @@ import {
 import TeamOverview from '../components/TeamOverview';
 import { teamsApi } from '../api/endpoints/teams';
 
-export default function TeamManagement() {
+export default function TeamManagement({ setSnackbarData }) {
   // States
   const [teams, setTeams] = useState([]);
   const [selectedTeam, setSelectedTeam] = useState(null);
@@ -51,7 +51,7 @@ export default function TeamManagement() {
           ))}
         </ButtonGroup>
         <br />
-        <TeamOverview team={selectedTeam} />
+        <TeamOverview team={selectedTeam} setTeam={setSelectedTeam} setTeams={setTeams} setSnackbarData={setSnackbarData} />
       </Box>
     </Container>
   );

@@ -6,12 +6,23 @@ import {
 } from '@mui/material';
 import usersApi from '../api/endpoints/users';
 
-export default function PersonSummary({ person }) {
+export default function PersonSummary({ person, setPeople, setSnackbarData, setOpen }) {
 
   const handleApproveButton = () => {
     usersApi.approveUser(person.id).then((res) => {
       if (res.status === 200) {
         console.log(res.data);
+        setPeople((curr) => {
+          const index = curr.findIndex((person) => person.id === res.data.id);
+          curr[index] = res.data;
+          return curr;
+        });
+        setSnackbarData({
+          open: true,
+          severity: 'success',
+          message: 'User approved',
+        });
+        setOpen(false);
       }
     });
   }

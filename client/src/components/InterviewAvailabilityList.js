@@ -14,7 +14,7 @@ import eventsApi from '../api/endpoints/events';
 import { applicationsApi, applicationCyclesApi } from '../api/endpoints/applications';
 import ScheduleInterviewForm from './ScheduleInterviewForm';
 
-export default function InterviewAvailabilityList({ user }) {
+export default function InterviewAvailabilityList({ user, setSnackbarData }) {
     // States
     const [availabilities, setAvailabilities] = useState({});
     const [applicationCycle, setApplicationCycle] = useState(null);
@@ -135,7 +135,7 @@ export default function InterviewAvailabilityList({ user }) {
                 open={open}
                 handleClose={() => setOpen(false)}
             >
-                <ScheduleInterviewForm interview={selectedInterview} />
+                <ScheduleInterviewForm interview={selectedInterview} setSnackbarData={setSnackbarData} setOpen={setOpen} />
             </CenterModal>
         </Container>
     );

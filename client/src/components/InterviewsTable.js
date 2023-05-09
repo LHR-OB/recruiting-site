@@ -11,10 +11,7 @@ import {
 } from '@mui/material';
 import { interviewsApi } from '../api/endpoints/interviews';
 
-export default function InterviewsTable({ setOpen, setInterview }) {
-    // States
-    const [interviews, setInterviews] = useState([]);
-
+export default function InterviewsTable({ setOpen, setInterview, interviews, setInterviews }) {
     useEffect(() => {
         interviewsApi.getInterviewsCurrentuser().then((res) => {
             if (res.status === 200) {

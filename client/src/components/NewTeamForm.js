@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { teamsApi } from '../api/endpoints/teams';
 
-export default function NewTeamForm() {
+export default function NewTeamForm({ setTeams, setSnackbarData, setOpen }) {
   // States
   const [name, setName] = useState('');
 
@@ -17,9 +17,20 @@ export default function NewTeamForm() {
       name
     }).then((res) => {
       if (res.status === 200) {
-        // TODO: Give success notification
-        console.log('Team created successfully');
+        setTeams((curr) => [...curr, res.data]);
+        setSnackbarData({
+          open: true,
+          severity: 'success',
+          message: 'Team created successfully',
+        });
+        setOpen(false);
       }
+    }, (err) => {
+      setSnackbarData({
+        open: true,
+        severity: 'error',
+        message: 'Error creating team',
+      });
     });
   };
 

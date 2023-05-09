@@ -11,7 +11,7 @@ import usersApi from '../api/endpoints/users';
 import CenterModal from './CenterModal';
 import PersonSummary from './PersonSummary';
 
-export default function PeopleList({ team }) {
+export default function PeopleList({ team, setSnackbarData }) {
   // States
   const [people, setPeople] = useState([]);
   const [open, setOpen] = useState(false);
@@ -61,7 +61,7 @@ export default function PeopleList({ team }) {
         open={open}
         handleClose={() => setOpen(false)}
       >
-        <PersonSummary person={selectedPerson} />
+        <PersonSummary person={selectedPerson} setPeople={setPeople} setSnackbarData={setSnackbarData} setOpen={setOpen} />
       </CenterModal>
     </Container>
   );

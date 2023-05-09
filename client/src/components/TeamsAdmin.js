@@ -13,7 +13,7 @@ import { teamsApi } from '../api/endpoints/teams';
 import NewTeamForm from './NewTeamForm';
 import EditTeamForm from './EditTeamForm';
 
-export default function TeamsAdmin() {
+export default function TeamsAdmin({ setSnackbarData }) {
   // States
   const [teams, setTeams] = useState([]);
   const [open, setOpen] = useState(false);
@@ -68,7 +68,11 @@ export default function TeamsAdmin() {
         open={open}
         handleClose={() => setOpen(false)}
       >
-        {modalMode === 'NEW' ? <NewTeamForm /> : <EditTeamForm team={editTeam} />}
+        {
+          modalMode === 'NEW' ?
+          <NewTeamForm setTeams={setTeams} setSnackbarData={setSnackbarData} setOpen={setOpen} /> 
+          : <EditTeamForm team={editTeam} setTeams={setTeams} setSnackbarData={setSnackbarData} setOpen={setOpen} />
+        }
       </CenterModal>
     </Container>
   );

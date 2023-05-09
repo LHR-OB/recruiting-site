@@ -13,7 +13,7 @@ import NewApplicationCycleForm from './NewApplicationCycleForm';
 import EditApplicationCycleForm from './EditApplicationCycleForm';
 import CenterModal from './CenterModal';
 
-export default function ApplicationCycleInfo() {
+export default function ApplicationCycleInfo({ setSnackbarData }) {
   // States
   const [applicationCycles, setApplicationCycles] = useState([]);
   const [editApplicationCycle, setEditApplicationCycle] = useState(null);
@@ -73,7 +73,10 @@ export default function ApplicationCycleInfo() {
         open={open}
         handleClose={() => setOpen(false)}
       >
-        {modalMode === 'NEW' ? <NewApplicationCycleForm /> : <EditApplicationCycleForm applicationCycle={editApplicationCycle} />}
+        {
+          modalMode === 'NEW' ? 
+          <NewApplicationCycleForm applicationCycles={applicationCycles} setApplicationCycles={setApplicationCycles} setSnackbarData={setSnackbarData} setOpen={setOpen} /> 
+          : <EditApplicationCycleForm applicationCycle={editApplicationCycle} setApplicationCycles={setApplicationCycles} setSnackbarData={setSnackbarData} setOpen={setOpen} />}
       </CenterModal>
     </Container>
   );

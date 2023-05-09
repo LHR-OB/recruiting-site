@@ -12,7 +12,7 @@ import {
 import usersApi from '../api/endpoints/users';
 import { systemsApi } from '../api/endpoints/teams';
 
-export default function JoinSystemForm({ user }) {
+export default function JoinSystemForm({ user, setUserSystems, setSnackbarData, setOpen }) {
   // States
   const [systems, setSystems] = useState([]);
   const [system, setSystem] = useState({});
@@ -20,8 +20,20 @@ export default function JoinSystemForm({ user }) {
   const handleJoinSystem = () => {
     usersApi.joinSystem(user.id, system.id).then((res) => {
       if (res.status === 200) {
-        console.log('Joined system successfully');
+        setUserSystems(res.data.systems);
+        setSnackbarData({
+          open: true,
+          message: 'Successfully joined system!',
+          severity: 'success'
+        });
+        setOpen(false);
       }
+    }, (error) => {
+      setSnackbarData({
+        open: true,
+        message: 'Failed to join system!',
+        severity: 'error'
+      });
     });
   }
 

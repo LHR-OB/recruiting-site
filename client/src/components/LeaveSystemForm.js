@@ -10,17 +10,28 @@ import {
   Typography,
 } from '@mui/material';
 import usersApi from '../api/endpoints/users';
-import { systemsApi } from '../api/endpoints/teams';
 
-export default function JoinSystemForm({ user }) {
+export default function LeaveSystemForm({ user, userSystems, setUserSystems, setSnackbarData, setOpen }) {
   // States
   const [system, setSystem] = useState({});
 
   const handleLeaveSystem = () => {
     usersApi.leaveSystem(user.id, system.id).then((res) => {
       if (res.status === 200) {
-        console.log('Left system successfully');
+        setUserSystems(res.data.systems);
+        setSnackbarData({
+          open: true,
+          message: 'Successfully left system!',
+          severity: 'success'
+        });
+        setOpen(false);
       }
+    }, (error) => {
+      setSnackbarData({
+        open: true,
+        message: 'Failed to leave system!',
+        severity: 'error'
+      });
     });
   }
 
@@ -46,7 +57,7 @@ export default function JoinSystemForm({ user }) {
             label="System"
             onChange={(e) => setSystem(e.target.value)}
           >
-            {user.systems.map(system => (
+            {userSystems.map(system => (
               <MenuItem key={system.id} value={system}>{system.name}</MenuItem>
             ))}
           </Select>

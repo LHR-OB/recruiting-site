@@ -9,7 +9,7 @@ import PeopleList from '../components/PeopleList';
 import TeamsAdmin from '../components/TeamsAdmin';
 import ApplicationCycleInfo from '../components/ApplicationCycleInfo';
 
-export default function Admin() {
+export default function Admin({ user, setSnackbarData }) {
   return (
     <Container>
       <Box
@@ -31,13 +31,13 @@ export default function Admin() {
           justifyContent="center"
         >
           <Grid item xs>
-            <TeamsAdmin />
+            <TeamsAdmin setSnackbarData={setSnackbarData} />
           </Grid>
           <Grid item xs>
-            <PeopleList team={null} />
+            <PeopleList team={null} setSnackbarData={setSnackbarData} />
           </Grid>
           <Grid item xs>
-            <ApplicationCycleInfo />
+            <ApplicationCycleInfo setSnackbarData={setSnackbarData} />
           </Grid>
         </Grid>
       </Box>

@@ -11,7 +11,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { applicationCyclesApi } from '../api/endpoints/applications';
 
-export default function NewApplicationCycleForm({ applicationCycles }) {
+export default function NewApplicationCycleForm({ applicationCycles, setApplicationCycles, setSnackbarData, setOpen }) {
   // States
   const [year, setYear] = useState('');
   const [semester, setSemester] = useState('');
@@ -39,8 +39,20 @@ export default function NewApplicationCycleForm({ applicationCycles }) {
       is_active: true,
     }).then((res) => {
       if (res.status === 200) {
-        console.log('New application cycle created');
+        setApplicationCycles((curr) => ([...curr, res.data]));
+        setSnackbarData({
+          open: true,
+          severity: 'success',
+          message: 'New application cycle created',
+        });
+        setOpen(false);
       }
+    }, (error) => {
+      setSnackbarData({
+        open: true,
+        severity: 'error',
+        message: 'Error creating new application cycle',
+      });
     });
   };
 

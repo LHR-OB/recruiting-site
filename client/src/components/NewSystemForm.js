@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { systemsApi } from '../api/endpoints/teams';
 
-export default function NewSystemForm({ team }) {
+export default function NewSystemForm({ team, setSystems, setSnackbarData, setOpen }) {
   // States
   const [name, setName] = useState('');
 
@@ -18,9 +18,21 @@ export default function NewSystemForm({ team }) {
       team_id: team.id,
     }).then((res) => {
       if (res.status === 200) {
-        // TODO: Give success notification
         console.log('System created successfully');
+        setSystems((curr) => [...curr, res.data]);
+        setSnackbarData({
+          severity: 'success',
+          message: 'System created successfully',
+          open: true,
+        });
+        setOpen(false);
       }
+    }, (error) => {
+      setSnackbarData({
+        severity: 'error',
+        message: 'Error creating system',
+        open: true,
+      });
     });
   };
 

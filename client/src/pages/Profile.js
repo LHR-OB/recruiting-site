@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import {
     Box,
     Button,
@@ -10,10 +10,17 @@ import JoinSystemForm from '../components/JoinSystemForm';
 import LeaveSystemForm from '../components/LeaveSystemForm';
 
 
-export default function Profile({ user }) {
+export default function Profile({ user, setSnackbarData }) {
   // States
   const [open, setOpen] = useState(false);
   const [join, setJoin] = useState(false);
+  const [systems, setSystems] = useState([]);
+
+  useEffect(() => {
+    if (user) {
+      setSystems(user.systems);
+    }
+  }, [user]);
 
   const handleJoinSystem = () => {
     setOpen(true);
@@ -24,6 +31,7 @@ export default function Profile({ user }) {
     setOpen(true);
     setJoin(false);
   }
+
 
   return (
     <Container>
@@ -60,7 +68,7 @@ export default function Profile({ user }) {
           Status: {user?.status}
         </Typography>
         <Typography variant="h6" mt={2}>
-          Systems: {user?.systems?.map((system) => system.name).join(', ')}
+          Systems: {systems?.map((system) => system.name).join(', ')}
         </Typography>
         <Button
           variant="outlined"
@@ -89,8 +97,8 @@ export default function Profile({ user }) {
         handleClose={() => setOpen(false)}
       >
         {join ?
-          <JoinSystemForm user={user} /> :
-          <LeaveSystemForm user={user} />
+          <JoinSystemForm user={user} setUserSystems={setSystems} setSnackbarData={setSnackbarData} setOpen={setOpen} /> :
+          <LeaveSystemForm user={user} userSystems={systems} setUserSystems={setSystems} setSnackbarData={setSnackbarData} setOpen={setOpen} />
         }
       </CenterModal>
     </Container>

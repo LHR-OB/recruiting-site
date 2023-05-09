@@ -90,7 +90,8 @@ def advance_application_cycle(db: Session, application_cycle_id: int) -> models.
                 application.status = 'REJECTED'
                 application.stage_decision = 'NEUTRAL'
             db.add(application)
-    db.commit()
+        db.commit()
+        db.refresh(db_application_cycle)
     return db_application_cycle
 
 
@@ -113,10 +114,14 @@ def create_application(db: Session, user, application: schemas.Application) -> m
     del application_data['system_id']
     if 'status' not in application_data or application_data['status'] is None:
         application_data['status'] = 'SUBMITTED'
+    application_data['stage_decision'] = 'NEUTRAL'
     db_application = models.Application(**application_data, user=user, application_cycle=application_cycle, team=team, system=system)
     db.add(db_application)
     db.commit()
     db.refresh(db_application)
+    db_application.team
+    db_application.user
+    db_application.system
     return db_application
 
 

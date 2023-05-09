@@ -38,6 +38,7 @@ def update_team(db: Session, team_id: int, team: schemas.TeamUpdate) -> models.T
     db.add(db_team)
     db.commit()
     db.refresh(db_team)
+    db_team.trial_workday_event
     return db_team
 
 

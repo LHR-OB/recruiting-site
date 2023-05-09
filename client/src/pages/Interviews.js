@@ -11,11 +11,12 @@ import ApplicationCycleClosed from '../components/ApplicationCycleClosed';
 import { applicationCyclesApi } from '../api/endpoints/applications';
 
 
-export default function Interviews({ user })  {
+export default function Interviews({ user, setSnackbarData })  {
     // States
     const [open, setOpen] = useState(false);
     const [interview, setInterview] = useState(null);
     const [applicationCycle, setApplicationCycle] = useState(null);
+    const [interviews, setInterviews] = useState([]);
 
     useEffect(() => {
         applicationCyclesApi.getApplicationCycleActive().then((res) => {
@@ -47,12 +48,14 @@ export default function Interviews({ user })  {
                 <InterviewsTable 
                     setOpen={setOpen}
                     setInterview={setInterview}
+                    interviews={interviews}
+                    setInterviews={setInterviews}
                 />
                 <CenterModal
                     open={open}
                     handleClose={() => setOpen(false)}
                 >
-                    <InterviewView interview={interview} />
+                    <InterviewView interview={interview} setInterview={setInterview} setInterviews={setInterviews} setSnackbarData={setSnackbarData} setOpen={setOpen} />
                 </CenterModal>
             </Box>
         </Container>

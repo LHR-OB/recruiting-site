@@ -8,7 +8,7 @@ import {
 import CenterModal from './CenterModal';
 import EditApplicationInfoForm from './EditApplicationInfoForm';
 
-export default function ApplicationInfo({ team }) {
+export default function ApplicationInfo({ team, setTeam, setTeams, setSnackbarData }) {
   // States
   const [open, setOpen] = useState(false);
 
@@ -35,7 +35,7 @@ export default function ApplicationInfo({ team }) {
         open={open}
         handleClose={() => {setOpen(false)}}
       >
-        <EditApplicationInfoForm team={team} />
+        <EditApplicationInfoForm team={team} setTeam={setTeam} setTeams={setTeams} setSnackbarData={setSnackbarData} setOpen={setOpen} />
       </CenterModal>
     </Container>
   );

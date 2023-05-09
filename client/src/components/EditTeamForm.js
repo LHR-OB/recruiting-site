@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { teamsApi } from '../api/endpoints/teams';
 
-export default function NewTeamForm({ team }) {
+export default function NewTeamForm({ team, setTeams, setSnackbarData, setOpen }) {
   // States
   const [name, setName] = useState(team?.name);
 
@@ -17,17 +17,48 @@ export default function NewTeamForm({ team }) {
       name,
     }).then((res) => {
       if (res.status === 200) {
-        // TODO: Give success notification
-        console.log('Team edited successfully');
+        setTeams((curr) => {
+          const index = curr.findIndex((t) => t.id === team.id);
+          curr[index] = res.data;
+          return curr;
+        });
+        setSnackbarData({
+          open: true,
+          severity: 'success',
+          message: 'Team edited successfully',
+        });
+        setOpen(false);
       }
+    }, (err) => {
+      setSnackbarData({
+        open: true,
+        severity: 'error',
+        message: 'Error editing team',
+      });
     });
   };
 
   const handleDeleteTeam = () => {
     teamsApi.deleteTeam(team.id).then((res) => {
       if (res.status === 200) {
-        console.log('Team deleted successfully');
+        setTeams((curr) => {
+          const index = curr.findIndex((t) => t.id === team.id);
+          curr.splice(index, 1);
+          return curr;
+        });
+        setSnackbarData({
+          open: true,
+          severity: 'success',
+          message: 'Team deleted successfully',
+        });
+        setOpen(false);
       }
+    }, (err) => {
+      setSnackbarData({
+        open: true,
+        severity: 'error',
+        message: 'Error deleting team',
+      });
     });
   };
 

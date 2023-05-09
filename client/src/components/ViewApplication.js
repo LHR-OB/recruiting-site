@@ -7,13 +7,30 @@ import {
 } from '@mui/material';
 import { applicationsApi } from '../api/endpoints/applications';
 
-export default function ViewApplication({ user, application, setApplication }) {
+export default function ViewApplication({ user, application, setApplication, setApplications, setSnackbarData, setOpen }) {
 
   const handleAccept = () => {
     applicationsApi.updateApplication(application.id, { stage_decision: 'ACCEPT' }).then(res => {
       if (res.status === 200) {
         setApplication(res.data);
+        setApplications((curr) => {
+          const index = curr.findIndex(a => a.id === res.data.id);
+          curr[index] = res.data;
+          return curr;
+        });
+        setSnackbarData({
+          open: true,
+          message: 'Application marked accepted',
+          severity: 'success',
+        });
+        setOpen(false);
       }
+    }, (error) => {
+      setSnackbarData({
+        open: true,
+        message: 'Error marking application accepted',
+        severity: 'error',
+      });
     });
   }
 
@@ -21,7 +38,24 @@ export default function ViewApplication({ user, application, setApplication }) {
     applicationsApi.updateApplication(application.id, { stage_decision: 'NEUTRAL' }).then(res => {
       if (res.status === 200) {
         setApplication(res.data);
+        setApplications((curr) => {
+          const index = curr.findIndex(a => a.id === res.data.id);
+          curr[index] = res.data;
+          return curr;
+        });
+        setSnackbarData({
+          open: true,
+          message: 'Application marked neutral',
+          severity: 'success',
+        });
+        setOpen(false);
       }
+    }, (error) => {
+      setSnackbarData({
+        open: true,
+        message: 'Error marking application neutral',
+        severity: 'error',
+      });
     });
   }
 
@@ -29,7 +63,24 @@ export default function ViewApplication({ user, application, setApplication }) {
     applicationsApi.updateApplication(application.id, { stage_decision: 'REJECT' }).then(res => {
       if (res.status === 200) {
         setApplication(res.data);
+        setApplications((curr) => {
+          const index = curr.findIndex(a => a.id === res.data.id);
+          curr[index] = res.data;
+          return curr;
+        });
+        setSnackbarData({
+          open: true,
+          message: 'Application marked rejected',
+          severity: 'success',
+        });
+        setOpen(false);
       }
+    }, (error) => {
+      setSnackbarData({
+        open: true,
+        message: 'Error marking application rejected',
+        severity: 'error',
+      });
     });
   }
 

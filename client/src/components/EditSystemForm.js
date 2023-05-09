@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { systemsApi } from '../api/endpoints/teams';
 
-export default function NewSystemForm({ team, system }) {
+export default function NewSystemForm({ team, system, setSystems, setSnackbarData, setOpen }) {
   // States
   const [name, setName] = useState(system?.name);
   const [interviewDefaultLocation, setInterviewDefaultLocation] = useState(system?.interview_default_location);
@@ -20,16 +20,37 @@ export default function NewSystemForm({ team, system }) {
       team_id: team.id,
     }).then((res) => {
       if (res.status === 200) {
-        // TODO: Give success notification
-        console.log('System edited successfully');
+        setSystems((curr) => {
+          const index = curr.findIndex((s) => s.id === system.id);
+          curr[index] = res.data;
+          return curr;
+        });
+        setSnackbarData({
+          severity: 'success',
+          message: 'System updated successfully',
+          open: true,
+        });
+        setOpen(false);
       }
+    }, (error) => {
+      setSnackbarData({
+        severity: 'error',
+        message: 'Error updating system',
+        open: true,
+      });
     });
   };
 
   const handleDeleteSystem = () => {
     systemsApi.deleteSystem(system.id).then((res) => {
       if (res.status === 200) {
-        console.log('System deleted successfully');
+        setSystems((curr) => curr.filter((s) => s.id !== system.id));
+        setSnackbarData({
+          severity: 'success',
+          message: 'System deleted successfully',
+          open: true,
+        });
+        setOpen(false);
       }
     });
   };
@@ -56,7 +77,7 @@ export default function NewSystemForm({ team, system }) {
         <TextField
           label="Interview Default Location"
           variant="standard"
-          value={interviewDefaultLocation}
+          value={interviewDefaultLocation || ''}
           onChange={(e) => setInterviewDefaultLocation(e.target.value)}
           sx={{ width: '100%' }}
         />

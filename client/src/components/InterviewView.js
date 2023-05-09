@@ -9,7 +9,7 @@ import {
 import { applicationsApi } from '../api/endpoints/applications';
 import { interviewNotesApi } from '../api/endpoints/interviews';
 
-export default function InterviewView({ interview }) {
+export default function InterviewView({ interview, setInterview, setInterviews, setSnackbarData, setOpen }) {
     // States
     const [newNote, setNewNote] = useState("");
 
@@ -29,8 +29,32 @@ export default function InterviewView({ interview }) {
             note: newNote,
         }).then((res) => {
             if (res.status === 200) {
-                console.log('Note created successfully');
+                setInterview((curr) => {
+                    return {
+                        ...curr,
+                        notes: [...curr.notes, res.data],
+                    }
+                });
+                setInterviews((curr) => {
+                    console.log(curr);
+                    const index = curr.findIndex((i) => i.id === interview.id);
+                    if (curr[index].notes.findIndex((n) => n.id === res.data.id) === -1)
+                        curr[index].notes.push(res.data);
+                    return curr;
+                });
+                setSnackbarData({
+                    open: true,
+                    message: "Note added successfully",
+                    severity: "success",
+                });
+                setNewNote("");
             }
+        }, (err) => {
+            setSnackbarData({
+                open: true,
+                message: "Error adding note",
+                severity: "error",
+            });
         });
     }
 
@@ -39,8 +63,30 @@ export default function InterviewView({ interview }) {
             status: "INTERVIEW_COMPLETE",
         }).then((res) => {
             if (res.status === 200) {
-                console.log('Application updated successfully');
+                setInterview((curr) => {
+                    return {
+                        ...curr,
+                        application: res.data,
+                    }
+                });
+                setInterviews((curr) => {
+                    const index = curr.findIndex((i) => i.id === interview.id);
+                    curr[index].application = res.data;
+                    return curr;
+                });
+                setSnackbarData({
+                    open: true,
+                    message: "Interview completed successfully",
+                    severity: "success",
+                });
+                setOpen(false);
             }
+        }, (err) => {
+            setSnackbarData({
+                open: true,
+                message: "Error completing interview",
+                severity: "error",
+            });
         });
     }
 
@@ -49,8 +95,30 @@ export default function InterviewView({ interview }) {
             status: "INTERVIEW_SCHEDULED",
         }).then((res) => {
             if (res.status === 200) {
-                console.log('Application updated successfully');
+                setInterview((curr) => {
+                    return {
+                        ...curr,
+                        application: res.data,
+                    }
+                });
+                setInterviews((curr) => {
+                    const index = curr.findIndex((i) => i.id === interview.id);
+                    curr[index].application = res.data;
+                    return curr;
+                });
+                setSnackbarData({
+                    open: true,
+                    message: "Interview uncompleted successfully",
+                    severity: "success",
+                });
+                setOpen(false);
             }
+        }, (err) => {
+            setSnackbarData({
+                open: true,
+                message: "Error uncompleting interview",
+                severity: "error",
+            });
         });
     }
 

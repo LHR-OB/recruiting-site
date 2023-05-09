@@ -16,7 +16,7 @@ import {
 import { applicationsApi } from '../api/endpoints/applications';
 import { teamsApi, systemsApi } from '../api/endpoints/teams';
 
-export default function NewApplicationForm() {
+export default function NewApplicationForm({ setApplications, setSnackbarData, setOpen }) {
   // States
   const [team, setTeam] = useState(null);
   const [selectedSystems, setSelectedSystems] = useState([]);
@@ -43,8 +43,20 @@ export default function NewApplicationForm() {
         status: "SUBMITTED"
       }).then(res => {
         if (res.status === 200) {
-          console.log('Application submitted');
+          setApplications((curr) => [...curr, res.data]);
+          setSnackbarData({
+            open: true,
+            severity: 'success',
+            message: 'Application submitted successfully',
+          });
+          setOpen(false);
         }
+      }, (err) => {
+        setSnackbarData({
+          open: true,
+          severity: 'error',
+          message: 'Error submitting application',
+        });
       });
     }
   };

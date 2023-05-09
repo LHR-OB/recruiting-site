@@ -5,7 +5,7 @@ import {
   Typography,
 } from '@mui/material';
 
-export default function Dashboard({ user }) {
+export default function Dashboard({ user, setSnackbarData }) {
   return (
     <Container>
       <Box

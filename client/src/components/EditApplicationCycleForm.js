@@ -11,7 +11,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { applicationCyclesApi } from '../api/endpoints/applications';
 
-export default function EditApplicationCycleForm({ applicationCycle }) {
+export default function EditApplicationCycleForm({ applicationCycle, setApplicationCycles, setSnackbarData, setOpen }) {
   // States
   const [year, setYear] = useState(applicationCycle?.year);
   const [semester, setSemester] = useState(applicationCycle?.semester);
@@ -38,8 +38,24 @@ export default function EditApplicationCycleForm({ applicationCycle }) {
       interview_end_date: new Date(interviewEndDate),
     }).then((res) => {
       if (res.status === 200) {
-        console.log('Application cycle updated');
+        setApplicationCycles((curr) => {
+          const index = curr.findIndex((applicationCycle) => applicationCycle.id === res.data.id);
+          curr[index] = res.data;
+          return curr;
+        });
+        setSnackbarData({
+          open: true,
+          severity: 'success',
+          message: 'Application cycle updated',
+        });
+        setOpen(false);
       }
+    }, (error) => {
+      setSnackbarData({
+        open: true,
+        severity: 'error',
+        message: 'Error updating application cycle',
+      });
     });
   };
 
@@ -47,15 +63,48 @@ export default function EditApplicationCycleForm({ applicationCycle }) {
     applicationCyclesApi.deleteApplicationCycle(applicationCycle.id).then((res) => {
       if (res.status === 200) {
         console.log('Application cycle deleted');
+        setApplicationCycles((curr) => {
+          const index = curr.findIndex((applicationCycle) => applicationCycle.id === res.data.id);
+          curr.splice(index, 1);
+          return curr;
+        });
+        setSnackbarData({
+          open: true,
+          severity: 'success',
+          message: 'Application cycle deleted',
+        });
+        setOpen(false);
       }
+    }, (error) => {
+      setSnackbarData({
+        open: true,
+        severity: 'error',
+        message: 'Error deleting application cycle',
+      });
     });
   };
 
   const handleAdvanceStage = () => {
     applicationCyclesApi.advanceApplicationCycle(applicationCycle.id).then((res) => {
       if (res.status === 200) {
-        console.log('Application cycle stage updated');
+        setApplicationCycles((curr) => {
+          const index = curr.findIndex((applicationCycle) => applicationCycle.id === res.data.id);
+          curr[index] = res.data;
+          return curr;
+        });
+        setSnackbarData({
+          open: true,
+          severity: 'success',
+          message: 'Application cycle advanced',
+        });
+        setOpen(false);
       }
+    }, (error) => {
+      setSnackbarData({
+        open: true,
+        severity: 'error',
+        message: 'Error advancing application cycle',
+      });
     });
   }
 

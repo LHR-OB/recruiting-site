@@ -12,9 +12,10 @@ import NewApplicationForm from '../components/NewApplicationForm';
 import ViewApplication from '../components/ViewApplication';
 import ApplicationCycleClosed from '../components/ApplicationCycleClosed';
 
-export default function Applications({ user }) {
+export default function Applications({ user, setSnackbarData }) {
   // States
   const [applicationCycle, setApplicationCycle] = useState(null);
+  const [applications, setApplications] = useState([]);
   const [application, setApplication] = useState(null);
   const [open, setOpen] = useState(false);
   const [modalMode, setModalMode] = useState('');
@@ -53,6 +54,8 @@ export default function Applications({ user }) {
           setOpen={setOpen}
           setModalMode={setModalMode}
           setApplication={setApplication}
+          applications={applications}
+          setApplications={setApplications}
         />
         {user?.type === 'APPLICANT' && applicationCycle?.stage === 'APPLICATION' &&
           <Button
@@ -69,8 +72,8 @@ export default function Applications({ user }) {
         >
           {
             modalMode === 'NEW' ?
-              <NewApplicationForm /> :
-              <ViewApplication user={user} application={application} setApplication={setApplication} />
+              <NewApplicationForm setApplications={setApplications} setSnackbarData={setSnackbarData} setOpen={setOpen} /> :
+              <ViewApplication user={user} application={application} setApplication={setApplication} setApplications={setApplications} setSnackbarData={setSnackbarData} setOpen={setOpen} />
           }
         </CenterModal>
       </Box>

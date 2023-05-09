@@ -13,7 +13,7 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { teamsApi } from '../api/endpoints/teams';
 import eventsApi from '../api/endpoints/events';
 
-export default function EditApplicationInfoForm({ team }) {
+export default function EditApplicationInfoForm({ team, setTeam, setTeams, setSnackbarData, setOpen }) {
     // States
     const [interviewTimeDuration, setInterviewTimeDuration] = useState(team?.interview_time_duration);
     const [interviewMessage, setInterviewMessage] = useState(team?.interview_message);
@@ -31,6 +31,7 @@ export default function EditApplicationInfoForm({ team }) {
             offer_message: offerMessage,
         }).then((res) => {
             if (res.status === 200) {
+                const updatedTeam = res.data;
                 // Event update
                 if (team.trial_workday_event) {
                     eventsApi.updateEvent(team.trial_workday_event.id, {
@@ -40,8 +41,26 @@ export default function EditApplicationInfoForm({ team }) {
                         location: trialWorkdayLocation,
                     }).then((res) => {
                         if (res.status === 200) {
-                            console.log('Application Info Updated');
+                            setTeams((curr) => {
+                                const index = curr.findIndex((team) => team.id === updatedTeam.id);
+                                console.log(index, updatedTeam);
+                                curr[index] = updatedTeam;
+                                return curr;
+                            });
+                            setTeam(updatedTeam);
+                            setSnackbarData({
+                                severity: 'success',
+                                message: 'Application Info updated successfully',
+                                open: true,
+                            });
+                            setOpen(false);
                         }
+                    }, (error) => {
+                        setSnackbarData({
+                            severity: 'error',
+                            message: 'Error updating Application Info',
+                            open: true,
+                        });
                     });
                 } else {
                     eventsApi.createEvent({
@@ -55,8 +74,25 @@ export default function EditApplicationInfoForm({ team }) {
                         is_global: true,
                     }).then((res) => {
                         if (res.status === 200) {
-                            console.log('Application Info Updated');
+                            setTeams((curr) => {
+                                const index = curr.findIndex((team) => team.id === updatedTeam.id);
+                                curr[index] = updatedTeam;
+                                return curr;
+                            });
+                            setTeam(updatedTeam);
+                            setSnackbarData({
+                                severity: 'success',
+                                message: 'Application Info updated successfully',
+                                open: true,
+                            });
+                            setOpen(false);
                         }
+                    }, (error) => {
+                        setSnackbarData({
+                            severity: 'error',
+                            message: 'Error updating Application Info',
+                            open: true,
+                        });
                     });
                 }
             }

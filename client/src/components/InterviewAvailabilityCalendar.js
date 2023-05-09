@@ -12,12 +12,10 @@ import availabilitiesApi from '../api/endpoints/availabilities';
 import { applicationCyclesApi } from '../api/endpoints/applications';
 
 
-export default function InterviewAvailabilityCalendar({ user }) {
+export default function InterviewAvailabilityCalendar({ user, setSnackbarData }) {
   // States
   const [schedule, setSchedule] = useState([]);
   const [applicationCycle, setApplicationCycle] = useState(null);
-  const [open, setOpen] = useState(false);
-  const [modalMode, setModalMode] = useState('');
 
   useEffect(() => {
     // Get the current active application cycle
@@ -76,8 +74,18 @@ export default function InterviewAvailabilityCalendar({ user }) {
     }
     availabilitiesApi.setAvailabilities(availabilities).then((res) => {
       if (res.status === 200) {
-        console.log("Set availabilities successfully");
+        setSnackbarData({
+          open: true,
+          message: 'Successfully set interview availability.',
+          severity: 'success',
+        });
       }
+    }, (err) => {
+      setSnackbarData({
+        open: true,
+        message: 'Failed to set interview availability.',
+        severity: 'error',
+      });
     });
   }
 

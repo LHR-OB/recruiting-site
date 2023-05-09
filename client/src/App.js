@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, forwardRef } from 'react';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -35,11 +35,22 @@ import Messages from './pages/Messages';
 import Unauthorized from './pages/Unauthorized';
 import PageNotFound from './pages/PageNotFound';
 import usersApi from './api/endpoints/users';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
+const Alert = forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 export default function App() {
   // States
   const [user, setUser] = useState(null);
   const [open, setOpen] = useState(false);
+  const [snackbarData, setSnackbarData] = useState({
+    open: false,
+    message: '',
+    severity: 'success'
+  });
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -55,59 +66,59 @@ export default function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Dashboard user={user} />
+      element: <Dashboard user={user} setSnackbarData={setSnackbarData} />
     },
     {
       path: "/login",
-      element: <Login user={user} />
+      element: <Login user={user} setSnackbarData={setSnackbarData} />
     },
     {
       path: "/applicant-signup",
-      element: <ApplicantSignup user={user} />
+      element: <ApplicantSignup user={user} setSnackbarData={setSnackbarData} />
     },
     {
       path: "/member-signup",
-      element: <MemberSignup user={user} />
+      element: <MemberSignup user={user} setSnackbarData={setSnackbarData} />
     },
     {
       path: "/calendar",
-      element: <Calendar user={user} />
+      element: <Calendar user={user} setSnackbarData={setSnackbarData} />
     },
     {
       path: "/applications",
-      element: <Applications user={user} />
+      element: <Applications user={user} setSnackbarData={setSnackbarData} />
     },
     {
       path: "/admin",
-      element: <Admin user={user} />
+      element: <Admin user={user} setSnackbarData={setSnackbarData} />
     },
     {
       path: "/team-management",
-      element: <TeamManagement user={user} />
+      element: <TeamManagement user={user} setSnackbarData={setSnackbarData} />
     },
     {
       path: "/profile",
-      element: <Profile user={user} />
+      element: <Profile user={user} setSnackbarData={setSnackbarData} />
     },
     {
       path: "/interview-availability",
-      element: <InterviewAvailability user={user} />
+      element: <InterviewAvailability user={user} setSnackbarData={setSnackbarData} />
     },
     {
       path: "/interviews",
-      element: <Interviews user={user} />
+      element: <Interviews user={user} setSnackbarData={setSnackbarData} />
     },
     {
       path: "/messages",
-      element: <Messages user={user} />
+      element: <Messages user={user} setSnackbarData={setSnackbarData} />
     },
     {
       path: "/unauthorized",
-      element: <Unauthorized user={user} />
+      element: <Unauthorized user={user} setSnackbarData={setSnackbarData} />
     },
     {
       path: "*",
-      element: <PageNotFound user={user} />
+      element: <PageNotFound user={user} setSnackbarData={setSnackbarData} />
     }
   ]);
 
@@ -232,6 +243,11 @@ export default function App() {
           </List>
         </Box>
       </Drawer>
+      <Snackbar open={snackbarData.open} autoHideDuration={6000} onClose={() => setSnackbarData((curr) => ({...curr, open: false}))}>
+        <Alert onClose={() => setSnackbarData((curr) => ({...curr, open: false}))} severity={snackbarData.severity} sx={{ width: '100%' }}>
+          {snackbarData.message}
+        </Alert>
+      </Snackbar>
       <RouterProvider
         router={router}
       />

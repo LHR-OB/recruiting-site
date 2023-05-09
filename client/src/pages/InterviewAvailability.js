@@ -11,7 +11,7 @@ import { applicationCyclesApi } from '../api/endpoints/applications';
 import ApplicationCycleClosed from '../components/ApplicationCycleClosed';
 
 
-export default function InterviewAvailability({ user }) {
+export default function InterviewAvailability({ user, setSnackbarData }) {
   // States
   const [applicationCycle, setApplicationCycle] = useState(null);
 
@@ -45,8 +45,8 @@ export default function InterviewAvailability({ user }) {
 
         {
           user?.type === 'APPLICANT' ?
-            <InterviewAvailabilityList user={user} /> :
-            <InterviewAvailabilityCalendar user={user} />
+            <InterviewAvailabilityList user={user} setSnackbarData={setSnackbarData} /> :
+            <InterviewAvailabilityCalendar user={user} setSnackbarData={setSnackbarData} />
         }
 
       </Box>

@@ -65,6 +65,7 @@ def join_system(db: Session, user_id: int, system_id: int) -> models.User:
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
+    db_user.systems
     return db_user
 
 
@@ -77,6 +78,7 @@ def leave_system(db: Session, user_id: int, system_id: int) -> models.User:
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
+    db_user.systems
     return db_user
 
 

@@ -58,6 +58,11 @@ systems_router = APIRouter(
 
 @systems_router.post('/')
 async def create_system(system: schemas.SystemCreate, user=Depends(required_team_management), db: Session = Depends(get_db)):
+    team_systems = utils.get_systems_by_team(db, team_id=system.team_id)
+    for team_system in team_systems:
+        if team_system.name == system.name:
+            raise HTTPException(
+                status_code=400, detail="System with that name already exists")
     return utils.create_system(db=db, system=system)
 
 

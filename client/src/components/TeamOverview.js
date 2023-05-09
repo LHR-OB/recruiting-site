@@ -9,7 +9,7 @@ import SystemsAdmin from './SystemsAdmin';
 import PeopleList from './PeopleList';
 import ApplicationInfo from './ApplicationInfo';
 
-export default function TeamOverview({ team }) {
+export default function TeamOverview({ team, setTeam, setTeams, setSnackbarData }) {
   return (
     <Container>
       <Box
@@ -30,13 +30,13 @@ export default function TeamOverview({ team }) {
               justifyContent="center"
             >
               <Grid item xs>
-                <SystemsAdmin team={team} />
+                <SystemsAdmin team={team} setSnackbarData={setSnackbarData} />
               </Grid>
               <Grid item xs>
-                <PeopleList team={team} />
+                <PeopleList team={team} setSnackbarData={setSnackbarData} />
               </Grid>
               <Grid item xs>
-                <ApplicationInfo team={team} />
+                <ApplicationInfo team={team} setTeam={setTeam} setTeams={setTeams} setSnackbarData={setSnackbarData} />
               </Grid>
             </Grid>
           : null}

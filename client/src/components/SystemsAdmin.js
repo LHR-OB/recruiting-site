@@ -13,7 +13,7 @@ import EditSystemForm from './EditSystemForm';
 import CenterModal from './CenterModal';
 import { systemsApi } from '../api/endpoints/teams';
 
-export default function SystemsAdmin({ team }) {
+export default function SystemsAdmin({ team, setSnackbarData }) {
   // States
   const [systems, setSystems] = useState([]);
   const [open, setOpen] = useState(false);
@@ -70,7 +70,11 @@ export default function SystemsAdmin({ team }) {
         open={open}
         handleClose={() => setOpen(false)}
       >
-        {modalMode === 'NEW' ? <NewSystemForm team={team} /> : <EditSystemForm team={team} system={editSystem} />}
+        {
+          modalMode === 'NEW' ?
+          <NewSystemForm team={team} setSystems={setSystems} setSnackbarData={setSnackbarData} setOpen={setOpen} /> 
+          : <EditSystemForm team={team} system={editSystem} setSystems={setSystems} setSnackbarData={setSnackbarData} setOpen={setOpen} />
+        }
       </CenterModal>
     </Container>
   );

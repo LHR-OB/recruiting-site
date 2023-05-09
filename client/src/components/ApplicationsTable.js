@@ -12,11 +12,7 @@ import {
 import { applicationsApi, applicationCyclesApi } from '../api/endpoints/applications';
 import SelectOffer from './SelectOffer';
 
-export default function ApplicationsTable({ user, setOpen, setModalMode, setApplication }) {
-  // States
-  const [applications, setApplications] = useState([]);
-  const [filteredApplications, setFilteredApplications] = useState([]);
-
+export default function ApplicationsTable({ user, setOpen, setModalMode, setApplication, applications, setApplications }) {
   useEffect(() => {
     if (user) {
       // Get application cycle
@@ -25,7 +21,7 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
         const applicationCycle = res.data;
         switch (user.type) {
           case "ADMIN":
-            applicationsApi.getApplications().then((res) => {
+            applicationsApi.getApplicationsByCycle(applicationCycle.id).then((res) => {
               if (res.status === 200) {
                 setApplications(res.data);
               }

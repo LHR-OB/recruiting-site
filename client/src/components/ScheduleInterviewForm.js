@@ -9,7 +9,7 @@ import eventApi from '../api/endpoints/events';
 import { applicationsApi } from '../api/endpoints/applications';
 import { interviewsApi } from '../api/endpoints/interviews';
 
-export default function ScheduleInterviewForm({ interview }) {
+export default function ScheduleInterviewForm({ interview, setSnackbarData, setOpen }) {
 
     const handleScheduleInterview = () => {
         eventApi.createEvent({
@@ -40,18 +40,59 @@ export default function ScheduleInterviewForm({ interview }) {
                                                     interview_id: newInterview.id,
                                                 }).then((res) => {
                                                     if (res.status === 200) {
-                                                        console.log("Interview scheduled");
+                                                        setSnackbarData({
+                                                            open: true,
+                                                            severity: 'success',
+                                                            message: 'Interview scheduled',
+                                                        });
+                                                        setOpen(false);
                                                     }
+                                                }, (error) => {
+                                                    setSnackbarData({
+                                                        open: true,
+                                                        severity: 'error',
+                                                        message: 'Error scheduling interview',
+                                                    });
                                                 });
                                             }
+                                        }, (error) => {
+                                            setSnackbarData({
+                                                open: true,
+                                                severity: 'error',
+                                                message: 'Error scheduling interview',
+                                            });
                                         });
                                     }
+                                }, (error) => {
+                                    setSnackbarData({
+                                        open: true,
+                                        severity: 'error',
+                                        message: 'Error scheduling interview',
+                                    });
                                 });
                             }
+                        }, (error) => {
+                            setSnackbarData({
+                                open: true,
+                                severity: 'error',
+                                message: 'Error scheduling interview',
+                            });
                         });
                     }
+                }, (error) => {
+                    setSnackbarData({
+                        open: true,
+                        severity: 'error',
+                        message: 'Error scheduling interview',
+                    });
                 });
             }
+        }, (error) => {
+            setSnackbarData({
+                open: true,
+                severity: 'error',
+                message: 'Error scheduling interview',
+            });
         });
     }
 
