@@ -17,7 +17,7 @@ services:
   server:
     build:
       context: ./server
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     image: lhr-recruiting_server
     container_name: server
     volumes:
@@ -35,7 +35,7 @@ services:
   client:
     build:
       context: ./client
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     image: lhr-recruiting_client
     container_name: client
     volumes:
