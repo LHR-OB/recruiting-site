@@ -11,6 +11,7 @@ import {
 import CenterModal from './CenterModal';
 import availabilitiesApi from '../api/endpoints/availabilities';
 import eventsApi from '../api/endpoints/events';
+import usersApi from '../api/endpoints/users';
 import { applicationsApi, applicationCyclesApi } from '../api/endpoints/applications';
 import ScheduleInterviewForm from './ScheduleInterviewForm';
 
@@ -51,13 +52,17 @@ export default function InterviewAvailabilityList({ user, setSnackbarData }) {
                                                         }
                                                     }
                                                     if (!conflict) {
-                                                        interviewTimes.push({
-                                                            start_time: new Date(start_time),
-                                                            end_time: new Date(end_time),
-                                                            offset: availability.offset,
-                                                            interviewer_id: availability.user_id,
-                                                            application_id: application.id,
-                                                            location: availability.user.interview_location || application.system.interview_default_location,
+                                                        usersApi.getUserById(availability.user_id).then((res) => {
+                                                            if (res.status === 200) {
+                                                                interviewTimes.push({
+                                                                    start_time: new Date(start_time),
+                                                                    end_time: new Date(end_time),
+                                                                    offset: availability.offset,
+                                                                    interviewer_id: availability.user_id,
+                                                                    application_id: application.id,
+                                                                    location: res.data.interview_location || application.system.interview_default_location,
+                                                                });
+                                                            }
                                                         });
                                                     }
                                                 }
