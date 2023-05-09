@@ -46,7 +46,6 @@ async def get_availability(id: int, user=Depends(required_interviewer), db: Sess
 
 @router.get('/user/{id}')
 async def get_availabilities_by_user(id: int, user=Depends(required_interviewer), db: Session = Depends(get_db)):
-    print("HERE ROUTES")
     return utils.get_availabilities_by_user(db, user_id=id)
 
 
