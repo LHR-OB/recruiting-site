@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+import os
 
 from routes import users, applications, events, teams, availabilities, interviews, messages
 from database.database import Base, engine
@@ -14,9 +15,13 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 # Middleware
+origins = [
+    'http://localhost:3000',
+    os.environ.get('CLIENT_URL'),
+]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['*'],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*'],
