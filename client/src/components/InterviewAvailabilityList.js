@@ -31,47 +31,49 @@ export default function InterviewAvailabilityList({ user, setSnackbarData }) {
                         if (application.status === "INTERVIEW") {
                             availabilitiesApi.getAvailabilitiesBySystem(application.system.id).then((res) => {
                                 if (res.status === 200) {
-                                    const availabilities = res.data;
                                     const interviewTimes = [];
-                                    for (let availability of availabilities) {
+                                    for (let availability of res.data) {
                                         const start = new Date(availability.start_time).getTime() - availability.offset * 60 * 60 * 1000;
                                         const end = new Date(availability.end_time).getTime() - availability.offset * 60 * 60 * 1000;
-                                        eventsApi.getEventsByUser(availability.user_id).then((res) => {
+                                        usersApi.getUserById(availability.user_id).then((res) => {
                                             if (res.status === 200) {
-                                                for (let i = start; i + (application.team.interview_time_duration * 60 * 1000) <= end + (30 * 60 * 1000); i += application.team.interview_time_duration * 60 * 1000) {
-                                                    const start_time = i;
-                                                    const end_time = i + application.team.interview_time_duration * 60 * 1000;
-                                                    const events = res.data;
-                                                    let conflict = false;
-                                                    for (let event of events) {
-                                                        const event_start_time = new Date(event.start_time).getTime() - event.offset * 60 * 60 * 1000;
-                                                        const event_end_time = new Date (event.end_time).getTime() - event.offset * 60 * 60 * 1000;
-                                                        if ((event_start_time < end_time && event_end_time > start_time) || (start_time < event_end_time && end_time > event_start_time)) {
-                                                            conflict = true;
-                                                            break;
-                                                        }
-                                                    }
-                                                    if (!conflict) {
-                                                        usersApi.getUserById(availability.user_id).then((res) => {
-                                                            if (res.status === 200) {
+                                                const interviewer = res.data;
+                                                eventsApi.getEventsByUser(interviewer.id).then((res) => {
+                                                    if (res.status === 200) {
+                                                        for (let i = start; i + (application.team.interview_time_duration * 60 * 1000) <= end + (30 * 60 * 1000); i += application.team.interview_time_duration * 60 * 1000) {
+                                                            const start_time = i;
+                                                            const end_time = i + application.team.interview_time_duration * 60 * 1000;
+                                                            const events = res.data;
+                                                            let conflict = false;
+                                                            for (let event of events) {
+                                                                const event_start_time = new Date(event.start_time).getTime() - event.offset * 60 * 60 * 1000;
+                                                                const event_end_time = new Date (event.end_time).getTime() - event.offset * 60 * 60 * 1000;
+                                                                if ((event_start_time < end_time && event_end_time > start_time) || (start_time < event_end_time && end_time > event_start_time)) {
+                                                                    conflict = true;
+                                                                    break;
+                                                                }
+                                                            }
+                                                            if (!conflict) {
                                                                 interviewTimes.push({
                                                                     start_time: new Date(start_time),
                                                                     end_time: new Date(end_time),
                                                                     offset: availability.offset,
                                                                     interviewer_id: availability.user_id,
                                                                     application_id: application.id,
-                                                                    location: res.data.interview_location || application.system.interview_default_location,
+                                                                    location: interviewer.interview_location || application.system.interview_default_location,
                                                                 });
+                                                                console.log(interviewTimes);
                                                             }
-                                                        });
+                                                        }
                                                     }
-                                                }
+                                                    interviewTimes.sort((a, b) => a.start_time - b.start_time);
+                                                    console.log(interviewTimes);
+                                                    setAvailabilities((oldAvailabilities) => ({
+                                                        ...oldAvailabilities,
+                                                        [application.team.name + " " + application.system.name]: interviewTimes,
+                                                    }));
+                                                });
                                             }
-                                            interviewTimes.sort((a, b) => a.start_time - b.start_time);
-                                            setAvailabilities((oldAvailabilities) => ({
-                                                ...oldAvailabilities,
-                                                [application.team.name + " " + application.system.name]: interviewTimes,
-                                            }));
                                         });
                                     }
                                 }
@@ -115,7 +117,8 @@ export default function InterviewAvailabilityList({ user, setSnackbarData }) {
                 }}
             >
                 {
-                    availabilities.length ? Object.keys(availabilities).map((systemNameFull) => (
+                    Object.keys(availabilities).length ? 
+                    Object.keys(availabilities).map((systemNameFull) => (
                         <Box key={systemNameFull}>
                             <Typography variant="h6" component="h2">
                                 {systemNameFull}
