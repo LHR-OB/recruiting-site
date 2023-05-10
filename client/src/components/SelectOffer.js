@@ -79,7 +79,7 @@ export default function SelectOffer({ applications, setApplications, setSnackbar
                                 key={application.id}
                                 value={application || ''}
                             >
-                                {application.team.name}
+                                {application.team.name} {application.system.name}
                             </MenuItem>
                         ))}
                     </Select>
