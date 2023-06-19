@@ -20,7 +20,6 @@ export default function NewApplicationForm({ setApplications, setSnackbarData, s
   // States
   const [team, setTeam] = useState(null);
   const [selectedSystems, setSelectedSystems] = useState([]);
-  const [subsystems, setSubsystems] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [major, setMajor] = useState('');
   const [yearEntering, setYearEntering] = useState('');
@@ -34,7 +33,6 @@ export default function NewApplicationForm({ setApplications, setSnackbarData, s
       applicationsApi.createApplication({
         team_id: team.id,
         system_id: system.id,
-        subsystems: subsystems,
         phone_number: phoneNumber,
         major: major,
         year_entering: yearEntering,
@@ -133,13 +131,6 @@ export default function NewApplicationForm({ setApplications, setSnackbarData, s
             </Grid>
           ))}
         </Grid>
-        <TextField
-          label="Subsystems (separated by semicolon)"
-          variant="standard"
-          value={subsystems}
-          onChange={(e) => setSubsystems(e.target.value)}
-          sx={{ width: '100%' }}
-        />
         <TextField
           label="Phone Number"
           variant="standard"

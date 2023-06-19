@@ -96,9 +96,6 @@ export default function ViewApplication({ user, application, setApplication, set
         System: {application?.system?.name}
       </Typography>
       <Typography variant="h6" mt={2}>
-        Subsystems: {application?.subsystems}
-      </Typography>
-      <Typography variant="h6" mt={2}>
         Email: {application?.user?.email}
       </Typography>
       <Typography variant="h6" mt={2}>

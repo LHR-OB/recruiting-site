@@ -36,7 +36,6 @@ class ApplicationCycleUpdate(BaseModel):
 class ApplicationBase(BaseModel):
     team_id: int
     system_id: int
-    subsystems: str
     phone_number: str
     major: str
     year_entering: str
@@ -60,7 +59,6 @@ class ApplicationUpdate(BaseModel):
     year_entering: Optional[str] = None
     team_id: Optional[int] = None
     system_id: Optional[int] = None
-    subsystems: Optional[str] = None
     short_answer: Optional[str] = None
     resume_link: Optional[str] = None
     status: Optional[str] = None

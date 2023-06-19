@@ -62,12 +62,10 @@ export default function InterviewAvailabilityList({ user, setSnackbarData }) {
                                                                     application_id: application.id,
                                                                     location: interviewer.interview_location || application.system.interview_default_location,
                                                                 });
-                                                                console.log(interviewTimes);
                                                             }
                                                         }
                                                     }
                                                     interviewTimes.sort((a, b) => a.start_time - b.start_time);
-                                                    console.log(interviewTimes);
                                                     setAvailabilities((oldAvailabilities) => ({
                                                         ...oldAvailabilities,
                                                         [application.team.name + " " + application.system.name]: interviewTimes,

@@ -29,7 +29,6 @@ class Application(Base):
     phone_number = Column(String)
     major = Column(String, index=True)
     year_entering = Column(String, index=True)
-    subsystems = Column(String)
     short_answer = Column(String)
     resume_link = Column(String)
     status = Column(Enum("SUBMITTED", "INTERVIEW", "INTERVIEW_SCHEDULED", "INTERVIEW_COMPLETE", "TRIAL", "OFFER", "ACCEPTED", "REJECTED", name="application_status_enum"), index=True)
