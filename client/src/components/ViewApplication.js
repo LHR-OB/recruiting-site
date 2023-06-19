@@ -93,7 +93,7 @@ export default function ViewApplication({ user, application, setApplication, set
         Team: {application?.team?.name}
       </Typography>
       <Typography variant="h6" mt={2}>
-        Systems: {application?.systems?.map(s => s.name).join(', ')}
+        System: {application?.system?.name}
       </Typography>
       <Typography variant="h6" mt={2}>
         Subsystems: {application?.subsystems}
