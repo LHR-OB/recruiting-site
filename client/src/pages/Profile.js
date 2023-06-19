@@ -58,7 +58,7 @@ export default function Profile({ user, setUser, setSnackbarData }) {
           Email: {user?.email}
         </Typography>
         <Typography variant="h6" mt={2}>
-          Role: {user?.type}
+          Role: {user?.type?.replace('_', ' ')}
         </Typography>
         <Typography variant="h6" mt={2}>
           Team: {user?.team?.name}

@@ -51,6 +51,8 @@ def approve_user(db: Session, user_id: int) -> models.User:
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
+    db_user.team
+    db_user.systems
     return db_user
 
 
