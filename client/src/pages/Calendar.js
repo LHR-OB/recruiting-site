@@ -13,8 +13,9 @@ import 'react-calendar/dist/Calendar.css';
 import CenterModal from '../components/CenterModal';
 import EventView from '../components/EventView';
 import eventsApi from '../api/endpoints/events';
+import { interviewsApi } from '../api/endpoints/interviews';
 
-export default function Calendar() {
+export default function Calendar({ user }) {
   // States
   const [value, onChange] = useState(new Date());
   const [events, setEvents] = useState([]);
@@ -23,10 +24,24 @@ export default function Calendar() {
   const [selectedEvent, setSelectedEvent] = useState(null);
 
   useEffect(() => {
-    eventsApi.getEventsCurrentUser().then((res) => {
-      setEvents(res.data);
-    });
-  }, []);
+    if (user) {
+      eventsApi.getEventsCurrentUser().then((res) => {
+        const events = res.data;
+        if (user.type === 'ADMIN') {
+          interviewsApi.getInterviews().then((res) => {
+            events.push(...res.data.map((interview) => (interview.event)));
+            // Remove duplicates
+            const uniqueEvents = events.filter((event, index, self) => (
+              index === self.findIndex((e) => (
+                e.id === event.id
+              ))
+            ));
+            setEvents(uniqueEvents);
+          });
+        }
+      });
+    }
+  }, [user]);
 
   useEffect(() => {
     const dayEvents = events.filter((event) => {

@@ -17,7 +17,10 @@ def create_interview(db: Session, interview: schemas.InterviewCreate) -> models.
 
 
 def get_interviews(db: Session, limit: int = 100) -> List[models.Interview]:
-    return db.query(models.Interview).limit(limit).all()
+    interviews = db.query(models.Interview).limit(limit).all()
+    for interview in interviews:
+        interview.event
+    return interviews
 
 
 def get_interviews_by_user(db: Session, user_id: int) -> List[models.Interview]:

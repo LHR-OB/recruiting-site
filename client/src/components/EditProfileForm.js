@@ -20,7 +20,7 @@ export default function EditProfileForm({ user, setUser, setSnackbarData, setOpe
     const [lastName, setLastName] = useState(user?.last_name);
     const [email, setEmail] = useState(user?.email);
     const [interviewLocation, setInterviewLocation] = useState(user?.interview_location);
-    const [type, setType] = useState(consts.USER_ROLES.find((role) => role.toLowerCase() === user?.type.toLowerCase()));
+    const [type, setType] = useState(consts.USER_ROLES.find((role) => role.toLowerCase() === user?.type.toLowerCase().replace('_', ' ')));
     const [team, setTeam] = useState({});
     const [teams, setTeams] = useState([]);
 
