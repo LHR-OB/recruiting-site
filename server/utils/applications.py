@@ -77,7 +77,7 @@ def advance_application_cycle(db: Session, application_cycle_id: int) -> models.
 
                 # Send a message to the user
                 message = message_models.Message(
-                    title="Application Update",
+                    title="Application Update: " + application.team.name + " " + application.system.name,
                     message=message_body,
                     timestamp=datetime.datetime.now(),
                     is_read=False,
