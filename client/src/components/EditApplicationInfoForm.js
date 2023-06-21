@@ -41,6 +41,7 @@ export default function EditApplicationInfoForm({ team, setTeam, setTeams, setSn
                         location: trialWorkdayLocation,
                     }).then((res) => {
                         if (res.status === 200) {
+                            updatedTeam.trial_workday_event = res.data;
                             setTeams((curr) => {
                                 const index = curr.findIndex((team) => team.id === updatedTeam.id);
                                 curr[index] = updatedTeam;
@@ -138,7 +139,7 @@ export default function EditApplicationInfoForm({ team, setTeam, setTeams, setSn
                         onChange={(date) => {setTrialWorkdayEndTime(date)}}
                         renderInput={(params) => <TextField {...params} sx={{ mt: 2 }} />}
                     />
-                    </LocalizationProvider>
+                </LocalizationProvider>
                 <TextField
                     label="Trial Workday Location"
                     variant="standard"
