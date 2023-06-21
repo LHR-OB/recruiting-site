@@ -42,6 +42,13 @@ export default function Messages({ user }) {
                         <Typography variant="h5" mt={2}>
                             Inbox
                         </Typography>
+                        {
+                            messages.length === 0 &&
+
+                            <Typography variant="body1" mt={2} sx={{ fontStyle: "italic" }}>
+                                You have no messages
+                            </Typography>
+                        }
                         <MessagesList
                             messages={messages}
                             selectedMessage={selectedMessage}
@@ -49,6 +56,15 @@ export default function Messages({ user }) {
                         />
                     </Grid>
                     <Grid item xs={8}>
+                        <Typography variant="h5" mt={2}>
+                            Message
+                        </Typography>
+                        {
+                            !selectedMessage.id &&
+                            <Typography variant="body1" mt={2} sx={{ fontStyle: "italic" }}>
+                                Select a message to view
+                            </Typography>
+                        }
                         <MessageView message={selectedMessage} />
                     </Grid>
                 </Grid>
