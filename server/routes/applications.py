@@ -64,7 +64,7 @@ applications_router = APIRouter(
 @applications_router.post('')
 async def create_application(application: schemas.ApplicationCreate, user=Depends(required_applicant), db: Session = Depends(get_db)):
     curr_cycle = utils.get_application_cycle_active(db=db)
-    existing_applications = utils.get_applications(db=db, user_id=user.id, application_cycle_id=curr_cycle.id, team_id=application.team_id)
+    existing_applications = utils.get_applications(db=db, user_id=user.id, application_cycle_id=curr_cycle.id, team_id=application.team_id, system_id=application.system_id)
     if len(existing_applications) > 0:
         raise HTTPException(status_code=400, detail="Application already exists")
     return utils.create_application(db=db, user=user, application=application)
