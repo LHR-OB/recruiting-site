@@ -19,6 +19,7 @@ export default function EditApplicationCycleForm({ applicationCycle, setApplicat
   const [closeDate, setCloseDate] = useState(applicationCycle?.application_close_date);
   const [interviewStartDate, setInterviewStartDate] = useState(applicationCycle?.interview_start_date);
   const [interviewEndDate, setInterviewEndDate] = useState(applicationCycle?.interview_end_date);
+  const [confirm, setConfirm] = useState(false);
 
   const applicationCycleStages = [
     "APPLICATION",
@@ -84,6 +85,10 @@ export default function EditApplicationCycleForm({ applicationCycle, setApplicat
   };
 
   const handleAdvanceStage = () => {
+    if (!confirm) {
+      setConfirm(true);
+      return;
+    }
     applicationCyclesApi.advanceApplicationCycle(applicationCycle.id).then((res) => {
       if (res.status === 200) {
         setApplicationCycles((curr) => {
@@ -179,7 +184,9 @@ export default function EditApplicationCycleForm({ applicationCycle, setApplicat
           onClick={handleAdvanceStage}
           sx={{ marginTop: 2 }}
         >
-          Advance to { applicationCycleStages[applicationCycleStages.indexOf(applicationCycle.stage) + 1] }
+          {
+            confirm ? 'Confirm (This Will Notify All Applicants)' : 'Advance to ' + applicationCycleStages[applicationCycleStages.indexOf(applicationCycle.stage) + 1]
+          }
         </Button> : null}
         <Button
           variant="outlined"
