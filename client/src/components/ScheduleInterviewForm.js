@@ -8,10 +8,21 @@ import {
 import eventApi from '../api/endpoints/events';
 import { applicationsApi } from '../api/endpoints/applications';
 import { interviewsApi } from '../api/endpoints/interviews';
+import consts from '../config/consts';
 
 export default function ScheduleInterviewForm({ interview, setSnackbarData, setOpen }) {
 
     const handleScheduleInterview = () => {
+        // Check if the interview is within the buffer
+        const now = new Date();
+        if (new Date(interview.start_time).getTime() - now.getTime() < consts.INTERVIEW_SCHEDULE_BUFFER * 60 * 60 * 1000) {
+            setSnackbarData({
+                open: true,
+                severity: 'error',
+                message: `Interview must be scheduled at least ${consts.INTERVIEW_SCHEDULE_BUFFER} hour(s) in advance`,
+            });
+            return;
+        }
         eventApi.createEvent({
             title: interview.system + " Interview",
             start_time: interview.start_time,

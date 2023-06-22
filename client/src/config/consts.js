@@ -20,7 +20,8 @@ const consts = {
         "CNS",
         "Business",
         "Other",
-    ]
+    ],
+    INTERVIEW_SCHEDULE_BUFFER: 24, // Hours
 }
 
 export default consts;
