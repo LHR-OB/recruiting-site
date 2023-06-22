@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import { applicationsApi } from '../api/endpoints/applications';
 import { teamsApi, systemsApi } from '../api/endpoints/teams';
+import consts from '../config/consts';
 
 export default function NewApplicationForm({ setApplications, setSnackbarData, setOpen }) {
   // States
@@ -22,6 +23,7 @@ export default function NewApplicationForm({ setApplications, setSnackbarData, s
   const [selectedSystems, setSelectedSystems] = useState([]);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [major, setMajor] = useState('');
+  const [otherMajor, setOtherMajor] = useState('');
   const [yearEntering, setYearEntering] = useState('');
   const [shortAnswer, setShortAnswer] = useState('');
   const [resume, setResume] = useState('');
@@ -34,7 +36,7 @@ export default function NewApplicationForm({ setApplications, setSnackbarData, s
         team_id: team.id,
         system_id: system.id,
         phone_number: phoneNumber,
-        major: major,
+        major: major || otherMajor,
         year_entering: yearEntering,
         short_answer: shortAnswer,
         resume_link: resume,
@@ -131,18 +133,36 @@ export default function NewApplicationForm({ setApplications, setSnackbarData, s
             </Grid>
           ))}
         </Grid>
+        <FormControl
+          fullWidth
+          variant="standard"
+        >
+          <InputLabel>Major</InputLabel>
+          <Select
+            value={major || ''}
+            label="Major"
+            onChange={(e) => setMajor(e.target.value)}
+          >
+            {consts.MAJORS.map(major => (
+              <MenuItem key={major} value={major}>{major}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        {
+          major === 'Other' &&
+          <TextField
+            label="Other Major"
+            variant="standard"
+            value={otherMajor}
+            onChange={(e) => setOtherMajor(e.target.value)}
+            sx={{ width: '100%' }}
+          />
+        }
         <TextField
           label="Phone Number"
           variant="standard"
           value={phoneNumber}
           onChange={(e) => setPhoneNumber(e.target.value)}
-          sx={{ width: '100%' }}
-        />
-        <TextField
-          label="Major"
-          variant="standard"
-          value={major}
-          onChange={(e) => setMajor(e.target.value)}
           sx={{ width: '100%' }}
         />
         <TextField
