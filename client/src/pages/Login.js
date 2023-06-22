@@ -75,7 +75,7 @@ export default function Login({ user, setSnackbarData }) {
           New Applicant? Sign Up
         </Link>
         <Link href="/member-signup" variant="body2">
-          Existing Member? Sign Up
+          Existing LHR Member? Sign Up
         </Link>
       </Box>
     </Container>

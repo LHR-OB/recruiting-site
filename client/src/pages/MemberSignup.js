@@ -59,7 +59,7 @@ export default function MemberSignup() {
         }}
       >
         <Typography variant="h4" mt={2}>
-          Member Signup
+          LHR Member Signup
         </Typography>
         <TextField
           required
