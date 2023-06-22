@@ -1,11 +1,25 @@
-import { React } from 'react';
+import { React, useState, useEffect } from 'react';
 import {
     Box,
     Container,
     Typography,
 } from '@mui/material';
+import usersApi from '../api/endpoints/users';
 
 export default function EventView({ event }) {
+    // States
+    const [invitees, setInvitees] = useState([]);
+
+    useEffect(() => {
+        if (event) {
+            usersApi.getUsersByEvent(event.id).then((res) => {
+                if (res.status === 200) {
+                    setInvitees(res.data);
+                }
+            });
+        }
+    }, [event]);
+
     return (
         <Container>
             <Box
@@ -31,6 +45,17 @@ export default function EventView({ event }) {
                     {new Date(new Date(event?.start_time).getTime() - (event.offset * 60 * 60 * 1000)).toLocaleTimeString() + " - " + new Date(new Date(event?.end_time).getTime() - (event.offset * 60 * 60 * 1000)).toLocaleTimeString()}
                 </Typography>
                 <br />
+                {
+                    !event?.is_global && 
+                    <Typography variant="h6" mt={2}>
+                        Invitees
+                    </Typography>
+                }
+                {invitees.map((invitee, index) => (
+                    <Typography key={index} variant="body1" mt={2}>
+                        {invitee.first_name + " " + invitee.last_name}
+                    </Typography>
+                ))}
             </Box>
         </Container>
     );

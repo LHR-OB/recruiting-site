@@ -37,6 +37,10 @@ const usersApi = {
     const url = `/users/team/${teamId}`;
     return axiosClient.get(url);
   },
+  getUsersByEvent: (eventId) => {
+    const url = `/users/event/${eventId}`;
+    return axiosClient.get(url);
+  },
   approveUser: (id) => {
     const url = `/users/approve/${id}`;
     return axiosClient.put(url);

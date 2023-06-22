@@ -53,6 +53,11 @@ async def get_current_user(curr_user=Depends(get_current_user)):
     return curr_user
 
 
+@router.get('/event/{id}')
+async def get_users_by_event(id: int, limit: int = 100, db: Session = Depends(get_db)):
+    return utils.get_users(db=db, event_id=id, limit=limit)
+
+
 @router.put('/approve/{id}')
 async def approve_user(id: int, curr_user=Depends(required_team_management), db: Session = Depends(get_db)):
     db_user = utils.get_user(db=db, user_id=id)

@@ -114,12 +114,14 @@ def create_user(db: Session, user: schemas.UserCreate) -> models.User:
     return db_user
 
 
-def get_users(db: Session, limit: int = 100, members: bool = False, team_id: int = None) -> List[models.User]:
+def get_users(db: Session, limit: int = 100, members: bool = False, team_id: int = None, event_id: int = None) -> List[models.User]:
     query = db.query(models.User)
     if members:
         query = query.filter(models.User.type != "APPLICANT")
     if team_id is not None:
         query = query.filter(models.User.team_id == team_id)
+    if event_id is not None:
+        query = query.filter(models.User.events.any(id=event_id))
     users = query.limit(limit).all()
     for user in users:
         try:
