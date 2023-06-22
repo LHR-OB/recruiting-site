@@ -19,6 +19,7 @@ export default function Applications({ user, setSnackbarData }) {
   const [application, setApplication] = useState(null);
   const [open, setOpen] = useState(false);
   const [modalMode, setModalMode] = useState('');
+  const [acceptingApplications, setAcceptingApplications] = useState(false);
 
   useEffect(() => {
     // Get active application cycle
@@ -32,7 +33,22 @@ export default function Applications({ user, setSnackbarData }) {
     setModalMode('NEW');
   }
 
-  if (!applicationCycle) return (
+  useEffect(() => {
+    if (applicationCycle) {
+      const today = new Date().setHours(0, 0, 0, 0);
+      const openDate = new Date(applicationCycle.application_open_date).setHours(0, 0, 0, 0);
+      const closeDate = new Date(applicationCycle.application_close_date).setHours(0, 0, 0, 0);
+      if (openDate <= today && today <= closeDate) {
+        setAcceptingApplications(true);
+      } else {
+        setAcceptingApplications(false);
+      }
+    } else {
+      setAcceptingApplications(false);
+    }
+  }, [applicationCycle]);
+
+  if (!acceptingApplications) return (
     <ApplicationCycleClosed />
   )
 
