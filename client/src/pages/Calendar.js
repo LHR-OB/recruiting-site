@@ -38,6 +38,9 @@ export default function Calendar({ user }) {
             ));
             setEvents(uniqueEvents);
           });
+        } else {
+          console.log(events);
+          setEvents(events);
         }
       });
     }
