@@ -32,7 +32,7 @@ async def get_team(id: int, user=Depends(required_applicant), db: Session = Depe
 
 
 @teams_router.put('/{id}')
-async def update_team(id: int, team: schemas.TeamUpdate, user=Depends(required_admin), db: Session = Depends(get_db)):
+async def update_team(id: int, team: schemas.TeamUpdate, user=Depends(required_team_management), db: Session = Depends(get_db)):
     db_team = utils.update_team(
         db=db, team_id=id, team=team)
     if db_team is None:
