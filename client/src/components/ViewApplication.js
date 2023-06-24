@@ -13,14 +13,14 @@ export default function ViewApplication({ user, application, setApplication, set
   const [interviewNotes, setInterviewNotes] = useState([]);
 
   useEffect(() => {
-    if (application) {
+    if (application && user?.type !== 'APPLICANT') {
       interviewNotesApi.getInterviewNotesByInterview(application.interview_id).then(res => {
         if (res.status === 200) {
           setInterviewNotes(res.data);
         }
       });
     }
-  }, [application]);
+  }, [application, user]);
 
   const handleAccept = () => {
     applicationsApi.updateApplication(application.id, { stage_decision: 'ACCEPT' }).then(res => {
@@ -100,7 +100,7 @@ export default function ViewApplication({ user, application, setApplication, set
   return (
     <Container>
       <Grid container spacing={1}>
-        <Grid item xs={6}>
+        <Grid item xs>
           <Typography variant="h4" mt={2}>
             {application?.user?.first_name + ' ' + application?.user?.last_name}
           </Typography>
@@ -132,24 +132,27 @@ export default function ViewApplication({ user, application, setApplication, set
             Resume: {application?.resume_link}
           </Typography>
         </Grid>
-        <Grid item xs={6}>
-          <Typography variant="h4" mt={2}>
-            Interview Notes
-          </Typography>
-          {
-            interviewNotes.length === 0 && 
-            <Typography variant="body1" mt={2} sx={{ fontStyle: "italic" }}>
-              No interview notes
+        {
+          user.type !== 'APPLICANT' &&
+          <Grid item xs>
+            <Typography variant="h4" mt={2}>
+              Interview Notes
             </Typography>
-          }
-          {
-            interviewNotes.map((note, index) => (
-              <Typography variant="body1" mt={2} key={index}>
-                {note.note}
+            {
+              interviewNotes.length === 0 && 
+              <Typography variant="body1" mt={2} sx={{ fontStyle: "italic" }}>
+                No interview notes
               </Typography>
-            ))
-          }
-        </Grid>
+            }
+            {
+              interviewNotes.map((note, index) => (
+                <Typography variant="body1" mt={2} key={index}>
+                  {note.note}
+                </Typography>
+              ))
+            }
+          </Grid>
+        }
       </Grid>
 
       {user.type !== 'APPLICANT' && application?.status !== 'OFFER' && application?.status !== 'ACCEPTED' && application?.status !== 'REJECTED' && <Grid container spacing={1}>
