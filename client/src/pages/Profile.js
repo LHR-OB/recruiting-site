@@ -1,4 +1,5 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import {
     Box,
     Button,
@@ -9,12 +10,28 @@ import CenterModal from '../components/CenterModal';
 import JoinSystemForm from '../components/JoinSystemForm';
 import LeaveSystemForm from '../components/LeaveSystemForm';
 import EditProfileForm from '../components/EditProfileForm';
+import usersApi from '../api/endpoints/users';
 
 
 export default function Profile({ user, setUser, setSnackbarData }) {
   // States
   const [open, setOpen] = useState(false);
   const [modalMode, setModalMode] = useState(false);
+  const [profileUser, setProfileUser] = useState(null);
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (user && parseInt(id) !== user.id) {
+      usersApi.getUserById(id).then((res) => {
+        if (res.status === 200) {
+          setProfileUser(res.data);
+        }
+      });
+    } else {
+      setProfileUser(user);
+    }
+  }, [user, id]);
 
   const handleJoinSystem = () => {
     setOpen(true);
@@ -55,54 +72,71 @@ export default function Profile({ user, setUser, setSnackbarData }) {
         }}
       >
         <Typography variant="h6" mt={2}>
-          Email: {user?.email}
+          Email: {profileUser?.email}
         </Typography>
         <Typography variant="h6" mt={2}>
-          Role: {user?.type?.replace('_', ' ')}
+          Role: {profileUser?.type?.replace('_', ' ')}
         </Typography>
-        <Typography variant="h6" mt={2}>
-          Team: {user?.team?.name}
-        </Typography>
-        <Typography variant="h6" mt={2}>
-          Status: {user?.status}
-        </Typography>
-        <Typography variant="h6" mt={2}>
-          Interview Location: {user?.interview_location}
-        </Typography>
-        <Typography variant="h6" mt={2}>
-          Systems: {user?.systems?.map((system) => system.name).join(', ')}
-        </Typography>
-        <Button
-          variant="outlined"
-          onClick={handleUpdateProfile}
-          sx={{
-            marginTop: 2,
-            width: "25%",
-          }}
-        >
-          Update Profile
-        </Button>
-        <Button
-          variant="outlined"
-          onClick={handleJoinSystem}
-          sx={{
-            marginTop: 2,
-            width: "25%",
-          }}
-        >
-          Join System
-        </Button>
-        <Button
-          variant="outlined"
-          color="error"
-          onClick={handleLeaveSystem}
-          sx={{
-            marginTop: 2,
-            width: "25%",
-          }}
-        >
-          Leave System
-        </Button>
+        {
+          profileUser?.type !== "APPLICANT" &&
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <Typography variant="h6" mt={2}>
+              Team: {profileUser?.team?.name}
+            </Typography>
+            <Typography variant="h6" mt={2}>
+              Interview Location: {profileUser?.interview_location}
+            </Typography>
+            <Typography variant="h6" mt={2}>
+              Systems: {profileUser?.systems?.map((system) => system.name).join(', ')}
+            </Typography>
+          </Box>
+        }
+        {
+          user?.id === profileUser?.id &&
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <Button
+              variant="outlined"
+              onClick={handleUpdateProfile}
+              sx={{
+                marginTop: 2,
+                width: "25%",
+              }}
+            >
+              Update Profile
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={handleJoinSystem}
+              sx={{
+                marginTop: 2,
+                width: "25%",
+              }}
+            >
+              Join System
+            </Button>
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={handleLeaveSystem}
+              sx={{
+                marginTop: 2,
+                width: "25%",
+              }}
+            >
+              Leave System
+            </Button>
+          </Box>
+        }
       </Box>
       <CenterModal
         open={open}

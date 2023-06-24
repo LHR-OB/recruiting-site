@@ -70,7 +70,7 @@ export default function Navbar({ user, setOpen }) {
             <IconButton
               size="large"
               color="inherit"
-              onClick={() => window.location.href = '/profile'}
+              onClick={() => window.location.href = `/profile/${user.id}`}
             >
               <AccountCircleIcon />
             </IconButton>

@@ -97,7 +97,7 @@ export default function App() {
       element: <TeamManagement user={user} setSnackbarData={setSnackbarData} />
     },
     {
-      path: "/profile",
+      path: "/profile/:id",
       element: <Profile user={user} setUser={setUser} setSnackbarData={setSnackbarData} />
     },
     {

@@ -2,6 +2,10 @@ import { React, useState, useEffect } from 'react';
 import {
     Box,
     Container,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemText,
     Typography,
 } from '@mui/material';
 import usersApi from '../api/endpoints/users';
@@ -51,11 +55,19 @@ export default function EventView({ event }) {
                         Invitees
                     </Typography>
                 }
-                {invitees.map((invitee, index) => (
-                    <Typography key={index} variant="body1" mt={2}>
-                        {invitee.first_name + " " + invitee.last_name}
-                    </Typography>
-                ))}
+                <List>
+                    {invitees.map((invitee, index) => (
+                        <ListItem key={index}>
+                            <ListItemButton
+                                onClick={() => {window.location.href = `/profile/${invitee.id}`}}
+                            >
+                                <ListItemText
+                                    primary={invitee.first_name + ' ' + invitee.last_name}
+                                />
+                            </ListItemButton>
+                        </ListItem>
+                    ))}
+                </List>
             </Box>
         </Container>
     );
