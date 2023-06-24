@@ -31,6 +31,15 @@ export default function NewApplicationForm({ setApplications, setSnackbarData, s
   const [teams, setTeams] = useState([]);
 
   const handleSubmitApplication = () => {
+    // Verify phone number
+    if (!phoneNumber.match(/^\d{10}$/)) {
+      setSnackbarData({
+        open: true,
+        severity: 'error',
+        message: 'Invalid phone number (must be 10 digits without dashes)',
+      });
+      return;
+    }
     for (let system of selectedSystems) {
       applicationsApi.createApplication({
         team_id: team.id,
