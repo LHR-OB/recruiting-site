@@ -140,7 +140,7 @@ def get_user(db: Session, user_id: int = None, team_id: int = None, email: str =
     elif team_id is not None:
         user = db.query(models.User).filter(models.User.team_id == team_id).first()
     elif email is not None:
-        user = db.query(models.User).filter(models.User.email == email).first()
+        user = db.query(models.User).filter(models.User.email.ilike(email)).first()
     else:
         return None
     try:
