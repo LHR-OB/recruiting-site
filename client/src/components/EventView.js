@@ -7,6 +7,7 @@ import {
     ListItem,
     ListItemButton,
     ListItemText,
+    TextField,
     Typography,
 } from '@mui/material';
 import usersApi from '../api/endpoints/users';
@@ -17,6 +18,7 @@ import { applicationsApi } from '../api/endpoints/applications';
 export default function EventView({ user, event, setSnackbarData }) {
     // States
     const [invitees, setInvitees] = useState([]);
+    const [addInvitee, setAddInvitee] = useState("");
 
     useEffect(() => {
         if (event) {
@@ -67,6 +69,38 @@ export default function EventView({ user, event, setSnackbarData }) {
                     severity: 'error',
                 });
             }
+        });
+    }
+
+    const handleAddInvitee = () => {
+        usersApi.getUserByEmail(addInvitee).then((res) => {
+            const invitee = res.data;
+            if (res.status === 200) {
+                eventsApi.addUserToEvent(event.id, invitee.id).then((res) => {
+                    if (res.status === 200) {
+                        setSnackbarData({
+                            open: true,
+                            message: 'Invitee added',
+                            severity: 'success',
+                        });
+                        setInvitees((curr) => {
+                            return [...curr, invitee];
+                        });
+                    }
+                }, (err) => {
+                    setSnackbarData({
+                        open: true,
+                        message: 'Error adding invitee',
+                        severity: 'error',
+                    });
+                });
+            }
+        }, (err) => {
+            setSnackbarData({
+                open: true,
+                message: 'Error adding invitee',
+                severity: 'error',
+            });
         });
     }
 
@@ -126,6 +160,25 @@ export default function EventView({ user, event, setSnackbarData }) {
                     >
                         Cancel Interview
                     </Button>
+                }
+                {
+                    user?.type !== "APPLICANT" && !event?.is_global &&
+                    <Container>
+                        <TextField
+                            label="Add Invitee"
+                            variant="standard"
+                            value={addInvitee}
+                            onChange={(e) => setAddInvitee(e.target.value)}
+                            sx={{ width: '100%' }}
+                        />
+                        <Button
+                            variant="outlined"
+                            onClick={handleAddInvitee}
+                            sx={{ marginTop: 2 }}
+                        >
+                            Add Invitee
+                        </Button>
+                    </Container>
                 }
             </Box>
         </Container>

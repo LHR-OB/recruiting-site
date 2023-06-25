@@ -33,7 +33,7 @@ export default function Calendar({ user, setSnackbarData }) {
             // Remove duplicates
             const uniqueEvents = events.filter((event, index, self) => (
               index === self.findIndex((e) => (
-                e.id === event.id
+                e && event && e.id === event.id
               ))
             ));
             setEvents(uniqueEvents);
