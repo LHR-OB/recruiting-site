@@ -60,7 +60,7 @@ export default function Profile({ user, setUser, setSnackbarData }) {
         }}
       >
         <Typography variant="h4" mt={2}>
-          {user?.first_name} {user?.last_name}
+          {profileUser?.first_name} {profileUser?.last_name}
         </Typography>
       </Box>
       <Box
