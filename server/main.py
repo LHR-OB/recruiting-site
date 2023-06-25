@@ -48,12 +48,6 @@ async def token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
     return {'access_token': access_token, 'token_type': 'bearer'}
 
 
-# TODO: Remove this route after dev
-@app.get('/protected')
-async def protected(user=Depends(required_interviewer)):
-    return user
-
-
 @app.post('/dummy-data')
 async def dummy_data(db: Session = Depends(get_db)):
     create_dummy_data(db)

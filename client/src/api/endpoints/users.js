@@ -57,11 +57,6 @@ const usersApi = {
     const url = `/users/${id}`;
     return axiosClient.put(url, data);
   },
-  // TODO: Remove after dev
-  protected: () => {
-    const url = "/protected";
-    return axiosClient.get(url);
-  }
 };
 
 export default usersApi;
