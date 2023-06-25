@@ -142,7 +142,9 @@ export default function InterviewView({ interview, setInterview, setInterviews, 
                         variant="body1"
                         mt={2}
                     >
-                        {note.note}
+                        {note.note.split('\n').map((item, i) => (
+                            <p key={i}>{item}<br /></p>
+                        ))}
                     </Typography>
                 ))}
                 <TextField

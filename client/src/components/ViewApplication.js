@@ -147,7 +147,9 @@ export default function ViewApplication({ user, application, setApplication, set
             {
               interviewNotes.map((note, index) => (
                 <Typography variant="body1" mt={2} key={index}>
-                  {note.note}
+                  {note.note.split('\n').map((item, i) => (
+                      <p key={i}>{item}<br /></p>
+                  ))}
                 </Typography>
               ))
             }
