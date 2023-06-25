@@ -18,7 +18,7 @@ const interviewsApi = {
         return axiosClient.get(url);
     },
     getInterview: (id) => {
-        const url = `/interviews/${id}`;
+        const url = `/interviews/id/${id}`;
         return axiosClient.get(url);
     },
     updateInterview: (id, data) => {

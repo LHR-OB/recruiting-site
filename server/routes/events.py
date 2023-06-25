@@ -100,7 +100,7 @@ async def remove_user_from_event(id: int, user_id: int, user=Depends(required_ap
 
 
 @router.delete('/{id}')
-async def delete_event(id: int, user=Depends(required_interviewer), db: Session = Depends(get_db)):
+async def delete_event(id: int, user=Depends(required_applicant), db: Session = Depends(get_db)):
     if not utils.delete_event(db=db, event_id=id):
         raise HTTPException(
             status_code=404, detail="Event not found")

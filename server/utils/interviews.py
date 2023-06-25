@@ -38,6 +38,7 @@ def get_interview(db: Session, interview_id: int) -> models.Interview:
     if interview is not None:
         interview.event
         interview.notes
+        interview.application
     return interview
 
 

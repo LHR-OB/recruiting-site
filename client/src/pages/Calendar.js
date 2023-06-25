@@ -15,7 +15,7 @@ import EventView from '../components/EventView';
 import eventsApi from '../api/endpoints/events';
 import { interviewsApi } from '../api/endpoints/interviews';
 
-export default function Calendar({ user }) {
+export default function Calendar({ user, setSnackbarData }) {
   // States
   const [value, onChange] = useState(new Date());
   const [events, setEvents] = useState([]);
@@ -39,7 +39,6 @@ export default function Calendar({ user }) {
             setEvents(uniqueEvents);
           });
         } else {
-          console.log(events);
           setEvents(events);
         }
       });
@@ -105,7 +104,7 @@ export default function Calendar({ user }) {
         open={open}
         handleClose={() => setOpen(false)}
       >
-        <EventView event={selectedEvent} />
+        <EventView user={user} event={selectedEvent} setSnackbarData={setSnackbarData} />
       </CenterModal>
     </Container>
   );

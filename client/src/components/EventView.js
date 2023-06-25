@@ -1,6 +1,7 @@
 import { React, useState, useEffect } from 'react';
 import {
     Box,
+    Button,
     Container,
     List,
     ListItem,
@@ -9,13 +10,17 @@ import {
     Typography,
 } from '@mui/material';
 import usersApi from '../api/endpoints/users';
+import eventsApi from '../api/endpoints/events';
+import { interviewsApi } from '../api/endpoints/interviews';
+import { applicationsApi } from '../api/endpoints/applications';
 
-export default function EventView({ event }) {
+export default function EventView({ user, event, setSnackbarData }) {
     // States
     const [invitees, setInvitees] = useState([]);
 
     useEffect(() => {
         if (event) {
+            console.log(event);
             usersApi.getUsersByEvent(event.id).then((res) => {
                 if (res.status === 200) {
                     setInvitees(res.data);
@@ -23,6 +28,47 @@ export default function EventView({ event }) {
             });
         }
     }, [event]);
+
+    const handleCancelInterview = () => {
+        eventsApi.deleteEvent(event.id).then((res) => {
+            if (res.status === 200) {
+                interviewsApi.getInterview(event.interview_id).then((res) => {
+                    console.log(res.data);
+                    if (res.status === 200) {
+                        applicationsApi.updateApplication(res.data.application.id, {
+                            status: 'INTERVIEW'
+                        }).then((res) => {
+                            if (res.status === 200) {
+                                setSnackbarData({
+                                    open: true,
+                                    message: 'Interview cancelled',
+                                    severity: 'success',
+                                });
+                            } else {
+                                setSnackbarData({
+                                    open: true,
+                                    message: 'Error cancelling interview',
+                                    severity: 'error',
+                                });
+                            }
+                        });
+                    } else {
+                        setSnackbarData({
+                            open: true,
+                            message: 'Error cancelling interview',
+                            severity: 'error',
+                        });
+                    }
+                });
+            } else {
+                setSnackbarData({
+                    open: true,
+                    message: 'Error cancelling interview',
+                    severity: 'error',
+                });
+            }
+        });
+    }
 
     return (
         <Container>
@@ -68,6 +114,19 @@ export default function EventView({ event }) {
                         </ListItem>
                     ))}
                 </List>
+                {
+                    event?.interview_id && user?.type === "APPLICANT" &&
+                    <Button
+                        variant="outlined"
+                        color="error"
+                        onClick={handleCancelInterview}
+                        sx={{
+                            marginTop: 2,
+                        }}
+                    >
+                        Cancel Interview
+                    </Button>
+                }
             </Box>
         </Container>
     );
