@@ -181,8 +181,16 @@ export default function NewApplicationForm({ setApplications, setSnackbarData, s
           onChange={(e) => setYearEntering(e.target.value)}
           sx={{ width: '100%' }}
         />
+        <Typography variant="h6" mt={2}>
+          Short Answer Questions
+        </Typography>
+        {team?.application_questions.split('\n').map((question, index) => (
+          <Typography key={index} variant="body2" mt={1}>
+            {question}
+          </Typography>
+        ))}
         <TextField
-          label="Short Answer"
+          label={"Short Answer"}
           variant="standard"
           value={shortAnswer}
           onChange={(e) => setShortAnswer(e.target.value)}

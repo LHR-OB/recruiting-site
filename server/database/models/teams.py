@@ -9,10 +9,12 @@ class Team(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
+    application_questions = Column(String)
     interview_time_duration = Column(Integer, default=30)
     interview_message = Column(String)
     trial_workday_message = Column(String)
     offer_message = Column(String)
+    rejection_message = Column(String)
 
     # Relationships
     users = relationship("User", back_populates="team")

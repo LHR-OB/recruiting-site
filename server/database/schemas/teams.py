@@ -16,18 +16,22 @@ class Team(TeamBase):
     users: List[int] = []
     systems: List[int] = []
     interview_time_duration: int
+    application_questions: str
     interview_message: str
     trial_workday_message: str
     offer_message: str
+    rejection_message: str
     trial_workday_event_id: int
 
 
 class TeamUpdate(BaseModel):
     name: Optional[str] = None
     interview_time_duration: Optional[int] = None
+    application_questions: Optional[str] = None
     interview_message: Optional[str] = None
     trial_workday_message: Optional[str] = None
     offer_message: Optional[str] = None
+    rejection_message: Optional[str] = None
     trial_workday_event_id: Optional[int] = None
 
 

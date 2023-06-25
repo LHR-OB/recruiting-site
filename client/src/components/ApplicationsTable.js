@@ -94,7 +94,7 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
               <TableCell align="right">System</TableCell>
               <TableCell align="right">Major</TableCell>
               <TableCell align="right">Resume</TableCell>
-              <TableCell align="right">Status</TableCell>
+              {user?.type !== "APPLICANT" && <TableCell align="right">Status</TableCell>}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -132,9 +132,12 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
                     Resume
                   </a>
                 </TableCell>
-                <TableCell align="right">
-                  {application?.status}
-                </TableCell>
+                {
+                  user?.type !== "APPLICANT" &&
+                  <TableCell align="right">
+                    {application?.status}
+                  </TableCell>
+                }
               </TableRow>
             ))}
           </TableBody>

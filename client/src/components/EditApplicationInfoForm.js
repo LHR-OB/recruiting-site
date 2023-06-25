@@ -16,19 +16,23 @@ import eventsApi from '../api/endpoints/events';
 export default function EditApplicationInfoForm({ team, setTeam, setTeams, setSnackbarData, setOpen }) {
     // States
     const [interviewTimeDuration, setInterviewTimeDuration] = useState(team?.interview_time_duration);
+    const [applicationQuestions, setApplicationQuestions] = useState(team?.application_questions);
     const [interviewMessage, setInterviewMessage] = useState(team?.interview_message);
     const [trialWorkdayStartTime, setTrialWorkdayStartTime] = useState(dayjs(new Date(new Date(team?.trial_workday_event?.start_time).getTime() - team?.trial_workday_event?.offset * 60 * 60 * 1000)));
     const [trialWorkdayEndTime, setTrialWorkdayEndTime] = useState(dayjs(new Date(new Date(team?.trial_workday_event?.end_time).getTime() - team?.trial_workday_event?.offset * 60 * 60 * 1000)));
     const [trialWorkdayLocation, setTrialWorkdayLocation] = useState(team?.trial_workday_event?.location);
     const [trialWorkdayMessage, setTrialWorkdayMessage] = useState(team?.trial_workday_message);
     const [offerMessage, setOfferMessage] = useState(team?.offer_message);
+    const [rejectionMessage, setRejectionMessage] = useState(team?.rejection_message);
 
     const handleUpdateApplicationInfo = () => {
         teamsApi.updateTeam(team.id, {
             interview_time_duration: interviewTimeDuration,
+            application_questions: applicationQuestions,
             interview_message: interviewMessage,
             trial_workday_message: trialWorkdayMessage,
             offer_message: offerMessage,
+            rejection_message: rejectionMessage,
         }).then((res) => {
             if (res.status === 200) {
                 const updatedTeam = res.data;
@@ -74,6 +78,7 @@ export default function EditApplicationInfoForm({ team, setTeam, setTeams, setSn
                         is_global: true,
                     }).then((res) => {
                         if (res.status === 200) {
+                            updatedTeam.trial_workday_event = res.data;
                             setTeams((curr) => {
                                 const index = curr.findIndex((team) => team.id === updatedTeam.id);
                                 curr[index] = updatedTeam;
@@ -119,6 +124,14 @@ export default function EditApplicationInfoForm({ team, setTeam, setTeams, setSn
                     sx={{width: '100%' }}
                 />
                 <TextField
+                    label="Application Questions"
+                    variant="standard"
+                    multiline
+                    value={applicationQuestions || ''}
+                    onChange={(e) => setApplicationQuestions(e.target.value)}
+                    sx={{ width: '100%' }}
+                />
+                <TextField
                     label="Interview Message"
                     variant="standard"
                     multiline
@@ -161,6 +174,14 @@ export default function EditApplicationInfoForm({ team, setTeam, setTeams, setSn
                     multiline
                     value={offerMessage || ''}
                     onChange={(e) => setOfferMessage(e.target.value)}
+                    sx={{ width: '100%' }}
+                />
+                <TextField
+                    label="Rejection Message"
+                    variant="standard"
+                    multiline
+                    value={rejectionMessage || ''}
+                    onChange={(e) => setRejectionMessage(e.target.value)}
                     sx={{ width: '100%' }}
                 />
                 <Button
