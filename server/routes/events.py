@@ -1,9 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from datetime import datetime
 
 from dependencies import get_db, required_admin, required_interviewer, required_applicant, get_current_user
 from database.schemas import events as schemas
+from database.schemas.messages import MessageCreate
 from utils import events as utils
+from utils import messages as message_utils
 
 
 router = APIRouter(
@@ -84,6 +87,16 @@ async def add_user_to_event(id: int, user_id: int, user=Depends(required_applica
     if db_event == False:
         raise HTTPException(
             status_code=409, detail="User has conflicting event")
+    # Notify user
+    message_utils.send_message(
+        db=db,
+        message=MessageCreate(
+            title="You have been added to an event",
+            message=f"You have been added to the event {db_event.title} by {user.first_name} {user.last_name}",
+            timestamp=datetime.now(),
+            user_id=user_id
+        )
+    )
     return db_event
 
 

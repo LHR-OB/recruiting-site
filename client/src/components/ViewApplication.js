@@ -13,7 +13,7 @@ export default function ViewApplication({ user, application, setApplication, set
   const [interviewNotes, setInterviewNotes] = useState([]);
 
   useEffect(() => {
-    if (application && user?.type !== 'APPLICANT') {
+    if (application && application.interview_id && user?.type !== 'APPLICANT') {
       interviewNotesApi.getInterviewNotesByInterview(application.interview_id).then(res => {
         if (res.status === 200) {
           setInterviewNotes(res.data);

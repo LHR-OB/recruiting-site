@@ -184,7 +184,7 @@ export default function NewApplicationForm({ setApplications, setSnackbarData, s
         <Typography variant="h6" mt={2}>
           Short Answer Questions
         </Typography>
-        {team?.application_questions.split('\n').map((question, index) => (
+        {team?.application_questions?.split('\n').map((question, index) => (
           <Typography key={index} variant="body2" mt={1}>
             {question}
           </Typography>
