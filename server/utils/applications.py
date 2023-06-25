@@ -4,8 +4,9 @@ import datetime
 
 from database.models import applications as models
 from database.models import teams as team_models
-from database.models import messages as message_models
 from database.schemas import applications as schemas
+from database.schemas import messages as message_schemas
+from utils.messages import send_message
 
 
 ### CRUD ###
@@ -76,14 +77,13 @@ def advance_application_cycle(db: Session, application_cycle_id: int) -> models.
                 application.stage_decision = 'NEUTRAL'
 
                 # Send a message to the user
-                message = message_models.Message(
+                message = message_schemas.MessageCreate(
                     title="Application Update: " + application.team.name + " " + application.system.name,
                     message=message_body,
                     timestamp=datetime.datetime.now(),
-                    is_read=False,
                     user_id=application.user_id
                 )
-                db.add(message)
+                send_message(db=db, message=message)
 
             else:
                 # Reject the application

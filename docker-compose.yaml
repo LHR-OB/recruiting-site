@@ -27,6 +27,8 @@ services:
     environment:
       - PORT=8000
       - JWT_SECRET_KEY=e49ee075c0c754507cb9c9ab1b93ffd780e7e325e3914733ee342b35aa18bb5c
+    env_file:
+      - ./server/.env
     networks:
       - app-network
     depends_on:
