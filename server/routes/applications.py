@@ -82,8 +82,8 @@ async def get_applications_by_cycle(cycle_id: int, user=Depends(required_admin),
 
 @applications_router.get('/{cycle_id}/{team_id}')
 async def get_applications_by_team(cycle_id: int, team_id: int, user=Depends(required_team_management), db: Session = Depends(get_db)):
-    if user.type == "TEAM_MANAGEMENT" and user.team.id != team_id:
-        raise HTTPException(status_code=401, detail="User not authorized for this operation")
+    # if user.type == "TEAM_MANAGEMENT" and user.team.id != team_id:
+    #     raise HTTPException(status_code=401, detail="User not authorized for this operation")
     return utils.get_applications(db=db, application_cycle_id=cycle_id, team_id=team_id)
 
 
