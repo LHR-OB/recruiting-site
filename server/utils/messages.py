@@ -32,12 +32,7 @@ def send_message(db: Session, message: schemas.MessageCreate) -> models.Message:
         server.sendmail(sender_email, receiver_email, email.as_string())
 
     # Save message to database
-    db_message = models.Message(**message.dict(), is_read=False)
-    db.add(db_message)
-    db.commit()
-    db.refresh(db_message)
-
-    return db_message
+    return create_message(db, message)
 
 
 ### CRUD ###
