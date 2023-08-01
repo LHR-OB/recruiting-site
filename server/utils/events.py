@@ -13,6 +13,8 @@ def events_conflict(event1: models.Event, event2: models.Event) -> bool:
 
 ### CRUD ###
 def create_event(db: Session, event: schemas.EventCreate) -> models.Event:
+    if event.trial_workday_team_id is not None:
+        return None
     db_event = models.Event(**event.dict())
     db.add(db_event)
     db.commit()
