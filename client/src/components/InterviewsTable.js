@@ -65,7 +65,7 @@ export default function InterviewsTable({ setOpen, setInterview, interviews, set
                                 <TableCell align="right">{interview?.event.title}</TableCell>
                                 <TableCell align="right">{new Date(interview?.event.start_time).toLocaleString()}</TableCell>
                                 <TableCell align="right">{interview?.event.location}</TableCell>
-                                <TableCell align="right">{interview?.application.status}</TableCell>
+                                <TableCell align="right">{interview?.application?.status}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
