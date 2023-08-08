@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from dependencies import get_db, required_admin, required_applicant, required_team_management, required_interviewer
 from database.schemas import applications as schemas
 from utils import applications as utils
+from utils import users as user_utils
 
 
 application_cycles_router = APIRouter(
