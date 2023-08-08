@@ -34,7 +34,7 @@ async def get_users(limit: int = 100, user=Depends(required_admin), db: Session 
 
 
 @router.get('/team/{id}')
-async def get_users_by_team(id: int, limit: int = 100, db: Session = Depends(get_db)):
+async def get_users_by_team(id: str, limit: int = 100, db: Session = Depends(get_db)):
     return utils.get_users(db=db, team_id=id, limit=limit)
 
 
@@ -44,7 +44,7 @@ async def get_users_members(limit: int = 100, db: Session = Depends(get_db)):
 
 
 @router.get('/id/{id}')
-async def get_user_by_id(id: int, db: Session = Depends(get_db)):
+async def get_user_by_id(id: str, db: Session = Depends(get_db)):
     db_user = utils.get_user(db=db, user_id=id)
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
@@ -65,12 +65,12 @@ async def get_current_user(curr_user=Depends(get_current_user)):
 
 
 @router.get('/event/{id}')
-async def get_users_by_event(id: int, limit: int = 100, db: Session = Depends(get_db)):
+async def get_users_by_event(id: str, limit: int = 100, db: Session = Depends(get_db)):
     return utils.get_users(db=db, event_id=id, limit=limit)
 
 
 @router.put('/approve/{id}')
-async def approve_user(id: int, curr_user=Depends(required_team_management), db: Session = Depends(get_db)):
+async def approve_user(id: str, curr_user=Depends(required_team_management), db: Session = Depends(get_db)):
     db_user = utils.get_user(db=db, user_id=id)
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
@@ -83,7 +83,7 @@ async def approve_user(id: int, curr_user=Depends(required_team_management), db:
 
 
 @router.put('/join-system/{id}/{system_id}')
-async def join_system(id: int, system_id: int, db: Session = Depends(get_db)):
+async def join_system(id: str, system_id: str, db: Session = Depends(get_db)):
     db_user = utils.get_user(db=db, user_id=id)
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
@@ -91,7 +91,7 @@ async def join_system(id: int, system_id: int, db: Session = Depends(get_db)):
 
 
 @router.put('/leave-system/{id}/{system_id}')
-async def leave_system(id: int, system_id: int, db: Session = Depends(get_db)):
+async def leave_system(id: str, system_id: str, db: Session = Depends(get_db)):
     db_user = utils.get_user(db=db, user_id=id)
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
@@ -99,12 +99,12 @@ async def leave_system(id: int, system_id: int, db: Session = Depends(get_db)):
 
 
 @router.put('/{id}')
-async def update_user(id: int, user: schemas.MemberUpdate, curr_user=Depends(required_member), db: Session = Depends(get_db)):
+async def update_user(id: str, user: schemas.MemberUpdate, curr_user=Depends(required_member), db: Session = Depends(get_db)):
     db_user = utils.get_user(db=db, user_id=id)
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
     unauthorized_exception = HTTPException(status_code=401, detail="User not authorized to perform this action")
-    if not db_user.id == curr_user.id:
+    if not str(db_user.id) == str(curr_user.id):
         if utils.user_is_at_least(user=curr_user, type="TEAM_MANAGEMENT"):
             # Team Management can update <= Team Management on their own team
             if (utils.user_is_at_least(user=db_user, type="ADMIN") or db_user.team != curr_user.team) and curr_user.type != "ADMIN":
@@ -112,5 +112,5 @@ async def update_user(id: int, user: schemas.MemberUpdate, curr_user=Depends(req
     return utils.update_user(db=db, user_id=id, user=user)
 
 @router.delete('/{id}')
-async def delete_user(id: int, db: Session = Depends(get_db)):
+async def delete_user(id: str, db: Session = Depends(get_db)):
     return utils.delete_user(db=db, user_id=id)

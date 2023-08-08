@@ -11,6 +11,7 @@ from utils.messages import send_message
 
 ### CRUD ###
 def create_application_cycle(db: Session, application_cycle: schemas.ApplicationCycleCreate) -> models.ApplicationCycle:
+    print(application_cycle.dict())
     db_application_cycle = models.ApplicationCycle(**application_cycle.dict(), stage="APPLICATION")
     db.add(db_application_cycle)
     db.commit()
@@ -26,7 +27,7 @@ def get_application_cycle_active(db: Session) -> models.ApplicationCycle:
     return db.query(models.ApplicationCycle).filter(models.ApplicationCycle.is_active == True).first()
 
 
-def update_application_cycle(db: Session, application_cycle_id: int, application_cycle: schemas.ApplicationCycleUpdate) -> models.ApplicationCycle:
+def update_application_cycle(db: Session, application_cycle_id: str, application_cycle: schemas.ApplicationCycleUpdate) -> models.ApplicationCycle:
     db_application_cycle = db.query(models.ApplicationCycle).filter(
         models.ApplicationCycle.id == application_cycle_id).first()
     if db_application_cycle is None:
@@ -40,11 +41,13 @@ def update_application_cycle(db: Session, application_cycle_id: int, application
     return db_application_cycle
 
 
-def advance_application_cycle(db: Session, application_cycle_id: int) -> models.ApplicationCycle:
+def advance_application_cycle(db: Session, application_cycle_id: str) -> models.ApplicationCycle:
     db_application_cycle = db.query(models.ApplicationCycle).filter(
         models.ApplicationCycle.id == application_cycle_id).first()
     if db_application_cycle is None:
         return None
+
+    # Advance the application cycle stage
     if db_application_cycle.stage == 'APPLICATION':
         db_application_cycle.stage = 'INTERVIEW'
     elif db_application_cycle.stage == 'INTERVIEW':
@@ -57,6 +60,7 @@ def advance_application_cycle(db: Session, application_cycle_id: int) -> models.
     db.add(db_application_cycle)
     db.commit()
     db.refresh(db_application_cycle)
+
     # Update all applications to the new stage if it isn't complete yet
     if db_application_cycle.stage != 'COMPLETE':
         applications = get_applications(db=db, application_cycle_id=application_cycle_id)
@@ -81,7 +85,7 @@ def advance_application_cycle(db: Session, application_cycle_id: int) -> models.
                     title="Application Update: " + application.team.name + " " + application.system.name,
                     message=message_body,
                     timestamp=datetime.datetime.now(),
-                    user_id=application.user_id
+                    user_id=str(application.user_id)
                 )
                 send_message(db=db, message=message)
 
@@ -92,10 +96,11 @@ def advance_application_cycle(db: Session, application_cycle_id: int) -> models.
             db.add(application)
         db.commit()
         db.refresh(db_application_cycle)
+
     return db_application_cycle
 
 
-def delete_application_cycle(db: Session, application_cycle_id: int) -> bool:
+def delete_application_cycle(db: Session, application_cycle_id: str) -> bool:
     db_application_cycle = db.query(models.ApplicationCycle).filter(
         models.ApplicationCycle.id == application_cycle_id).first()
     if db_application_cycle is None:
@@ -125,7 +130,7 @@ def create_application(db: Session, user, application: schemas.Application) -> m
     return db_application
 
 
-def get_applications(db: Session, application_cycle_id: int = None, team_id: int = None, system_id: int = None, user_id: int = None) -> List[models.Application]:
+def get_applications(db: Session, application_cycle_id: str = None, team_id: str = None, system_id: str = None, user_id: str = None) -> List[models.Application]:
     query = db.query(models.Application)
     if application_cycle_id:
         query = query.filter(
@@ -145,7 +150,7 @@ def get_applications(db: Session, application_cycle_id: int = None, team_id: int
     return applications
 
 
-def get_application(db: Session, application_id: int) -> models.Application:
+def get_application(db: Session, application_id: str) -> models.Application:
     db_application = db.query(models.Application).filter(
         models.Application.id == application_id).first()
     if db_application is None:
@@ -157,7 +162,7 @@ def get_application(db: Session, application_id: int) -> models.Application:
     return db_application
 
 
-def update_application(db: Session, application_id: int, application: schemas.ApplicationUpdate) -> models.Application:
+def update_application(db: Session, application_id: str, application: schemas.ApplicationUpdate) -> models.Application:
     db_application = db.query(models.Application).filter(
         models.Application.id == application_id).first()
     if db_application is None:
@@ -184,7 +189,7 @@ def update_application(db: Session, application_id: int, application: schemas.Ap
     return db_application
 
 
-def delete_application(db: Session, application_id: int) -> bool:
+def delete_application(db: Session, application_id: str) -> bool:
     db_application = db.query(models.Application).filter(
         models.Application.id == application_id).first()
     if db_application is None:

@@ -14,12 +14,12 @@ class AvailabilityCreate(AvailabilityBase):
 
 
 class Availability(AvailabilityBase):
-    id: int
-    user_id: int
+    id: str
+    user_id: str
 
 
 class AvailabilityUpdate(BaseModel):
     start_time: Optional[datetime] = None
     end_time: Optional[datetime] = None
     offset: Optional[int] = None
-    user_id: Optional[int] = None
+    user_id: Optional[str] = None

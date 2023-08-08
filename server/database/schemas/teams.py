@@ -12,7 +12,7 @@ class TeamCreate(TeamBase):
 
 
 class Team(TeamBase):
-    id: int
+    id: str
     users: List[int] = []
     systems: List[int] = []
     interview_time_duration: int
@@ -21,7 +21,7 @@ class Team(TeamBase):
     trial_workday_message: str
     offer_message: str
     rejection_message: str
-    trial_workday_event_id: int
+    trial_workday_event_id: str
 
 
 class TeamUpdate(BaseModel):
@@ -32,12 +32,12 @@ class TeamUpdate(BaseModel):
     trial_workday_message: Optional[str] = None
     offer_message: Optional[str] = None
     rejection_message: Optional[str] = None
-    trial_workday_event_id: Optional[int] = None
+    trial_workday_event_id: Optional[str] = None
 
 
 class SystemBase(BaseModel):
     name: str
-    team_id: int
+    team_id: str
 
 
 class SystemCreate(SystemBase):
@@ -45,10 +45,10 @@ class SystemCreate(SystemBase):
 
 
 class System(SystemBase):
-    id: int
+    id: str
 
 
 class SystemUpdate(BaseModel):
     name: Optional[str] = None
-    team_id: Optional[int] = None
+    team_id: Optional[str] = None
     interview_default_location: Optional[str] = None

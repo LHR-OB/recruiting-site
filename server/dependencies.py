@@ -6,6 +6,7 @@ from jose import JWTError, jwt
 from database.database import SessionLocal
 from database.models.users import User
 from utils.users import ALGORITHM, SECRET_KEY, get_user, user_is_at_least
+import uuid
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
@@ -27,7 +28,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        user_id: int = int(payload.get('sub'))
+        user_id: str = str(payload.get('sub'))
         if user_id is None:
             raise credentials_exception
     except JWTError as e:

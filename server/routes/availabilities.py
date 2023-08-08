@@ -36,7 +36,7 @@ async def get_availabilities(user=Depends(required_interviewer), db: Session = D
 
 
 @router.get('/id/{id}')
-async def get_availability(id: int, user=Depends(required_interviewer), db: Session = Depends(get_db)):
+async def get_availability(id: str, user=Depends(required_interviewer), db: Session = Depends(get_db)):
     db_availability = utils.get_availability(db, availability_id=id)
     if db_availability is None:
         raise HTTPException(
@@ -45,7 +45,7 @@ async def get_availability(id: int, user=Depends(required_interviewer), db: Sess
 
 
 @router.get('/user/{id}')
-async def get_availabilities_by_user(id: int, user=Depends(required_interviewer), db: Session = Depends(get_db)):
+async def get_availabilities_by_user(id: str, user=Depends(required_interviewer), db: Session = Depends(get_db)):
     return utils.get_availabilities_by_user(db, user_id=id)
 
 
@@ -55,12 +55,12 @@ async def get_availabilities_current_user(user=Depends(required_interviewer), db
 
 
 @router.get('/system/{system_id}')
-async def get_availabilities_by_system(system_id: int, user=Depends(required_applicant), db: Session = Depends(get_db)):
+async def get_availabilities_by_system(system_id: str, user=Depends(required_applicant), db: Session = Depends(get_db)):
     return utils.get_availabilities_by_system(db, system_id=system_id)
 
 
 @router.put('/{id}')
-async def update_availability(id: int, availability: schemas.AvailabilityUpdate, user=Depends(required_interviewer), db: Session = Depends(get_db)):
+async def update_availability(id: str, availability: schemas.AvailabilityUpdate, user=Depends(required_interviewer), db: Session = Depends(get_db)):
     db_availability = utils.update_availability(
         db=db, availability_id=id, availability=availability)
     if db_availability is None:
@@ -70,7 +70,7 @@ async def update_availability(id: int, availability: schemas.AvailabilityUpdate,
 
 
 @router.delete('/{id}')
-async def delete_availability(id: int, user=Depends(required_interviewer), db: Session = Depends(get_db)):
+async def delete_availability(id: str, user=Depends(required_interviewer), db: Session = Depends(get_db)):
     db_availability = utils.delete_availability(db=db, availability_id=id)
     if db_availability is None:
         raise HTTPException(

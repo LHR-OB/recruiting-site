@@ -23,7 +23,7 @@ async def get_teams(db: Session = Depends(get_db)):
 
 
 @teams_router.get('/id/{id}')
-async def get_team(id: int, user=Depends(required_applicant), db: Session = Depends(get_db)):
+async def get_team(id: str, user=Depends(required_applicant), db: Session = Depends(get_db)):
     db_team = utils.get_team(db, team_id=id)
     if db_team is None:
         raise HTTPException(
@@ -32,7 +32,7 @@ async def get_team(id: int, user=Depends(required_applicant), db: Session = Depe
 
 
 @teams_router.put('/{id}')
-async def update_team(id: int, team: schemas.TeamUpdate, user=Depends(required_team_management), db: Session = Depends(get_db)):
+async def update_team(id: str, team: schemas.TeamUpdate, user=Depends(required_team_management), db: Session = Depends(get_db)):
     db_team = utils.update_team(
         db=db, team_id=id, team=team)
     if db_team is None:
@@ -42,7 +42,7 @@ async def update_team(id: int, team: schemas.TeamUpdate, user=Depends(required_t
 
 
 @teams_router.delete('/{id}')
-async def delete_team(id: int, user=Depends(required_admin), db: Session = Depends(get_db)):
+async def delete_team(id: str, user=Depends(required_admin), db: Session = Depends(get_db)):
     db_team = utils.delete_team(db=db, team_id=id)
     if db_team is None:
         raise HTTPException(
@@ -72,12 +72,12 @@ async def get_systems(user=Depends(required_applicant), db: Session = Depends(ge
 
 
 @systems_router.get('/team/{id}')
-async def get_systems_by_team(id: int, user=Depends(required_applicant), db: Session = Depends(get_db)):
+async def get_systems_by_team(id: str, user=Depends(required_applicant), db: Session = Depends(get_db)):
     return utils.get_systems_by_team(db, team_id=id)
 
 
 @systems_router.get('/id/{id}')
-async def get_system(id: int, user=Depends(required_applicant), db: Session = Depends(get_db)):
+async def get_system(id: str, user=Depends(required_applicant), db: Session = Depends(get_db)):
     db_system = utils.get_system(db, system_id=id)
     if db_system is None:
         raise HTTPException(
@@ -86,7 +86,7 @@ async def get_system(id: int, user=Depends(required_applicant), db: Session = De
 
 
 @systems_router.put('/{id}')
-async def update_system(id: int, system: schemas.SystemUpdate, user=Depends(required_team_management), db: Session = Depends(get_db)):
+async def update_system(id: str, system: schemas.SystemUpdate, user=Depends(required_team_management), db: Session = Depends(get_db)):
     db_system = utils.update_system(
         db=db, system_id=id, system=system)
     if db_system is None:
@@ -96,7 +96,7 @@ async def update_system(id: int, system: schemas.SystemUpdate, user=Depends(requ
 
 
 @systems_router.delete('/{id}')
-async def delete_system(id: int, user=Depends(required_team_management), db: Session = Depends(get_db)):
+async def delete_system(id: str, user=Depends(required_team_management), db: Session = Depends(get_db)):
     db_system = utils.delete_system(db=db, system_id=id)
     if db_system is None:
         raise HTTPException(

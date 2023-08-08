@@ -18,7 +18,7 @@ class ApplicantCreate(UserCreate):
 
 
 class MemberCreate(UserCreate):
-    team_id: int
+    team_id: str
 
 
 class MemberUpdate(BaseModel):
@@ -27,11 +27,11 @@ class MemberUpdate(BaseModel):
     email: Optional[str] = None
     interview_location: Optional[str] = None
     type: Optional[str] = None
-    team_id: Optional[int] = None
+    team_id: Optional[str] = None
 
 
 class User(UserBase):
-    id: int
+    id: str
 
     class Config:
         orm_mode = True

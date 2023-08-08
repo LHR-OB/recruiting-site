@@ -23,7 +23,7 @@ async def get_messages(user=Depends(required_admin), db: Session = Depends(get_d
 
 
 @router.get('/id/{id}')
-async def get_message(id: int, user=Depends(required_applicant), db: Session = Depends(get_db)):
+async def get_message(id: str, user=Depends(required_applicant), db: Session = Depends(get_db)):
     db_message = utils.get_message(db, message_id=id)
     if db_message is None:
         raise HTTPException(
@@ -32,7 +32,7 @@ async def get_message(id: int, user=Depends(required_applicant), db: Session = D
 
 
 @router.get('/user/{id}')
-async def get_messages_by_user(id: int, user=Depends(required_applicant), db: Session = Depends(get_db)):
+async def get_messages_by_user(id: str, user=Depends(required_applicant), db: Session = Depends(get_db)):
     return utils.get_messages_by_user(db, user_id=id)
 
 
@@ -42,7 +42,7 @@ async def get_messages_current_user(user=Depends(get_current_user), db: Session 
 
 
 @router.put('/{id}')
-async def update_message(id: int, message: schemas.MessageUpdate, user=Depends(required_applicant), db: Session = Depends(get_db)):
+async def update_message(id: str, message: schemas.MessageUpdate, user=Depends(required_applicant), db: Session = Depends(get_db)):
     db_message = utils.update_message(
         db=db, message_id=id, message=message)
     if db_message is None:
@@ -52,7 +52,7 @@ async def update_message(id: int, message: schemas.MessageUpdate, user=Depends(r
 
 
 @router.put('/read/{id}')
-async def read_message(id: int, user=Depends(required_applicant), db: Session = Depends(get_db)):
+async def read_message(id: str, user=Depends(required_applicant), db: Session = Depends(get_db)):
     db_message = utils.read_message(db=db, message_id=id)
     if db_message is None:
         raise HTTPException(
@@ -61,7 +61,7 @@ async def read_message(id: int, user=Depends(required_applicant), db: Session = 
 
 
 @router.delete('/{id}')
-async def delete_message(id: int, user=Depends(required_applicant), db: Session = Depends(get_db)):
+async def delete_message(id: str, user=Depends(required_applicant), db: Session = Depends(get_db)):
     db_message = utils.delete_message(db=db, message_id=id)
     if db_message is None:
         raise HTTPException(

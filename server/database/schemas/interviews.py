@@ -11,7 +11,7 @@ class InterviewCreate(InterviewBase):
 
 
 class Interview(InterviewBase):
-    id: int
+    id: str
     notes: List[int] = []
 
 
@@ -21,7 +21,7 @@ class InterviewUpdate(BaseModel):
 
 class InterviewNoteBase(BaseModel):
     note: str
-    interview_id: int
+    interview_id: str
 
 
 class InterviewNoteCreate(InterviewNoteBase):
@@ -29,9 +29,9 @@ class InterviewNoteCreate(InterviewNoteBase):
 
 
 class InterviewNote(InterviewNoteBase):
-    id: int
+    id: str
 
 
 class InterviewNoteUpdate(BaseModel):
     note: Optional[str] = None
-    interview_id: Optional[int] = None
+    interview_id: Optional[str] = None

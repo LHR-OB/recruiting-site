@@ -1,5 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
+from sqlalchemy.dialects.postgresql import UUID
+import uuid
 
 from ..database import Base
 
@@ -7,7 +9,7 @@ from ..database import Base
 class Team(Base):
     __tablename__ = 'teams'
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = Column(String)
     application_questions = Column(String)
     interview_time_duration = Column(Integer, default=30)
@@ -26,12 +28,12 @@ class Team(Base):
 class System(Base):
     __tablename__ = 'systems'
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = Column(String)
     interview_default_location = Column(String, default="ETC")
 
     # Relationships
-    team_id = Column(Integer, ForeignKey("teams.id"), index=True)
+    team_id = Column(UUID(as_uuid=True), ForeignKey("teams.id"), index=True)
     team = relationship("Team", back_populates="systems")
 
     applications = relationship("Application", back_populates="system")

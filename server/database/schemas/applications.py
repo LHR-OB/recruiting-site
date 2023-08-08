@@ -18,7 +18,7 @@ class ApplicationCycleCreate(ApplicationCycleBase):
 
 
 class ApplicationCycle(ApplicationCycleBase):
-    id: int
+    id: str
     stage: str
 
 
@@ -34,8 +34,8 @@ class ApplicationCycleUpdate(BaseModel):
 
 
 class ApplicationBase(BaseModel):
-    team_id: int
-    system_id: int
+    team_id: str
+    system_id: str
     phone_number: str
     major: str
     year_entering: str
@@ -48,7 +48,7 @@ class ApplicationCreate(ApplicationBase):
 
 
 class Application(ApplicationBase):
-    id: int
+    id: str
     status: str
     stage_decision: str
 
@@ -57,10 +57,10 @@ class ApplicationUpdate(BaseModel):
     phone_number: Optional[str] = None
     major: Optional[str] = None
     year_entering: Optional[str] = None
-    team_id: Optional[int] = None
-    system_id: Optional[int] = None
+    team_id: Optional[str] = None
+    system_id: Optional[str] = None
     short_answer: Optional[str] = None
     resume_link: Optional[str] = None
     status: Optional[str] = None
     stage_decision: Optional[str] = None
-    interview_id: Optional[int] = None
+    interview_id: Optional[str] = None

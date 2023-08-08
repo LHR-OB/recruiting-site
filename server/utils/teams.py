@@ -21,13 +21,13 @@ def get_teams(db: Session, limit: int = 100) -> List[models.Team]:
     return teams
 
 
-def get_team(db: Session, team_id: int) -> models.Team:
+def get_team(db: Session, team_id: str) -> models.Team:
     team = db.query(models.Team).filter(models.Team.id == team_id).first()
     team.trial_workday_event
     return team
 
 
-def update_team(db: Session, team_id: int, team: schemas.TeamUpdate) -> models.Team:
+def update_team(db: Session, team_id: str, team: schemas.TeamUpdate) -> models.Team:
     db_team = db.query(models.Team).filter(
         models.Team.id == team_id).first()
     if db_team is None:
@@ -42,7 +42,7 @@ def update_team(db: Session, team_id: int, team: schemas.TeamUpdate) -> models.T
     return db_team
 
 
-def delete_team(db: Session, team_id: int) -> bool:
+def delete_team(db: Session, team_id: str) -> bool:
     db_team = db.query(models.Team).filter(
         models.Team.id == team_id).first()
     if db_team is None:
@@ -65,15 +65,15 @@ def get_systems(db: Session, limit: int = 100) -> List[models.System]:
     return db.query(models.System).limit(limit).all()
 
 
-def get_systems_by_team(db: Session, team_id: int) -> List[models.System]:
+def get_systems_by_team(db: Session, team_id: str) -> List[models.System]:
     return db.query(models.System).filter(models.System.team_id == team_id).all()
 
 
-def get_system(db: Session, system_id: int) -> models.System:
+def get_system(db: Session, system_id: str) -> models.System:
     return db.query(models.System).filter(models.System.id == system_id).first()
 
 
-def update_system(db: Session, system_id: int, system: schemas.SystemUpdate) -> models.System:
+def update_system(db: Session, system_id: str, system: schemas.SystemUpdate) -> models.System:
     db_system = db.query(models.System).filter(
         models.System.id == system_id).first()
     if db_system is None:
@@ -87,7 +87,7 @@ def update_system(db: Session, system_id: int, system: schemas.SystemUpdate) -> 
     return db_system
 
 
-def delete_system(db: Session, system_id: int) -> bool:
+def delete_system(db: Session, system_id: str) -> bool:
     db_system = db.query(models.System).filter(
         models.System.id == system_id).first()
     if db_system is None:

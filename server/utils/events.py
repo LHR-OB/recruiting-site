@@ -31,18 +31,18 @@ def get_events(db: Session, limit: int = 100) -> List[models.Event]:
     return db.query(models.Event).limit(limit).all()
 
 
-def get_event(db: Session, event_id: int) -> models.Event:
+def get_event(db: Session, event_id: str) -> models.Event:
     return db.query(models.Event).filter(models.Event.id == event_id).first()
 
 
-def get_events_by_user(db: Session, user_id: int) -> List[models.Event]:
+def get_events_by_user(db: Session, user_id: str) -> List[models.Event]:
     user_events = db.query(User).filter(User.id == user_id).first().events
     # Add global events
     global_events = db.query(models.Event).filter(models.Event.is_global == True).all()
     return user_events + global_events
 
 
-def update_event(db: Session, event_id: int, event: schemas.EventUpdate) -> models.Event:
+def update_event(db: Session, event_id: str, event: schemas.EventUpdate) -> models.Event:
     db_event = db.query(models.Event).filter(
         models.Event.id == event_id).first()
     if db_event is None:
@@ -56,7 +56,7 @@ def update_event(db: Session, event_id: int, event: schemas.EventUpdate) -> mode
     return db_event
 
 
-def join_event(db: Session, event_id: int, user_id: int) -> models.Event:
+def join_event(db: Session, event_id: str, user_id: str) -> models.Event:
     db_event = db.query(models.Event).filter(
         models.Event.id == event_id).first()
     if db_event is None:
@@ -73,7 +73,7 @@ def join_event(db: Session, event_id: int, user_id: int) -> models.Event:
     return db_event
 
 
-def leave_event(db: Session, event_id: int, user_id: int) -> models.Event:
+def leave_event(db: Session, event_id: str, user_id: str) -> models.Event:
     db_event = db.query(models.Event).filter(
         models.Event.id == event_id).first()
     if db_event is None:
@@ -90,7 +90,7 @@ def leave_event(db: Session, event_id: int, user_id: int) -> models.Event:
     return db_event
 
 
-def delete_event(db: Session, event_id: int) -> bool:
+def delete_event(db: Session, event_id: str) -> bool:
     db_event = db.query(models.Event).filter(
         models.Event.id == event_id).first()
     if db_event is None:

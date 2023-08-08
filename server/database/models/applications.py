@@ -1,5 +1,7 @@
 from sqlalchemy import Column, DateTime, Integer, String, Boolean, Enum, ForeignKey
 from sqlalchemy.orm import relationship
+from sqlalchemy.dialects.postgresql import UUID
+import uuid
 
 from ..database import Base
 
@@ -7,7 +9,7 @@ from ..database import Base
 class ApplicationCycle(Base):
     __tablename__ = 'application_cycles'
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     year = Column(Integer, index=True)
     semester = Column(String, index=True)
     application_open_date = Column(DateTime, index=True)
@@ -24,7 +26,7 @@ class ApplicationCycle(Base):
 class Application(Base):
     __tablename__ = 'applications'
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     # Application Details
     phone_number = Column(String)
     major = Column(String, index=True)
@@ -35,11 +37,11 @@ class Application(Base):
     stage_decision = Column(Enum("ACCEPT", "REJECT", "NEUTRAL", name="application_stage_decision_enum"), index=True)
 
     # Relationships
-    application_cycle_id = Column(Integer, ForeignKey("application_cycles.id"))
-    user_id = Column(Integer, ForeignKey("users.id"))
-    team_id = Column(Integer, ForeignKey("teams.id"))
-    system_id = Column(Integer, ForeignKey("systems.id"))
-    interview_id = Column(Integer, ForeignKey('interviews.id'))
+    application_cycle_id = Column(UUID(as_uuid=True), ForeignKey("application_cycles.id"))
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"))
+    team_id = Column(UUID(as_uuid=True), ForeignKey("teams.id"))
+    system_id = Column(UUID(as_uuid=True), ForeignKey("systems.id"))
+    interview_id = Column(UUID(as_uuid=True), ForeignKey('interviews.id'))
 
     application_cycle = relationship(
         "ApplicationCycle", back_populates="applications")

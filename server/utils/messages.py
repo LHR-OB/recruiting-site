@@ -37,6 +37,7 @@ def send_message(db: Session, message: schemas.MessageCreate) -> models.Message:
 
 ### CRUD ###
 def create_message(db: Session, message: schemas.MessageCreate) -> models.Message:
+    print("HERE")
     db_user = db.query(User).filter(User.id == message.user_id).first()
     message_dict = message.dict()
     db_message = models.Message(**message_dict, is_read=False)
@@ -51,15 +52,15 @@ def get_messages(db: Session) -> List[models.Message]:
     return db.query(models.Message).all()
 
 
-def get_message(db: Session, message_id: int) -> models.Message:
+def get_message(db: Session, message_id: str) -> models.Message:
     return db.query(models.Message).filter(models.Message.id == message_id).first()
 
 
-def get_messages_by_user(db: Session, user_id: int) -> List[models.Message]:
+def get_messages_by_user(db: Session, user_id: str) -> List[models.Message]:
     return db.query(User).filter(User.id == user_id).first().messages
 
 
-def update_message(db: Session, message_id: int, message: schemas.MessageUpdate) -> models.Message:
+def update_message(db: Session, message_id: str, message: schemas.MessageUpdate) -> models.Message:
     db_message = db.query(models.Message).filter(
         models.Message.id == message_id).first()
     if db_message is None:
@@ -73,7 +74,7 @@ def update_message(db: Session, message_id: int, message: schemas.MessageUpdate)
     return db_message
 
 
-def read_message(db: Session, message_id: int) -> models.Message:
+def read_message(db: Session, message_id: str) -> models.Message:
     db_message = db.query(models.Message).filter(
         models.Message.id == message_id).first()
     if db_message is None:
@@ -85,7 +86,7 @@ def read_message(db: Session, message_id: int) -> models.Message:
     return db_message
 
 
-def delete_message(db: Session, message_id: int) -> models.Message:
+def delete_message(db: Session, message_id: str) -> models.Message:
     db_message = db.query(models.Message).filter(
         models.Message.id == message_id).first()
     if db_message is None:

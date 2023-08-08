@@ -23,7 +23,7 @@ async def get_interviews(user=Depends(required_admin), db: Session = Depends(get
 
 
 @interview_router.get('/id/{id}')
-async def get_interview(id: int, user=Depends(required_applicant), db: Session = Depends(get_db)):
+async def get_interview(id: str, user=Depends(required_applicant), db: Session = Depends(get_db)):
     db_interview = utils.get_interview(db, interview_id=id)
     if db_interview is None:
         raise HTTPException(
@@ -32,7 +32,7 @@ async def get_interview(id: int, user=Depends(required_applicant), db: Session =
 
 
 @interview_router.get('/user/{id}')
-async def get_interviews_by_user(id: int, user=Depends(required_applicant), db: Session = Depends(get_db)):
+async def get_interviews_by_user(id: str, user=Depends(required_applicant), db: Session = Depends(get_db)):
     return utils.get_interviews_by_user(db, user_id=id)
 
 
@@ -42,7 +42,7 @@ async def get_interviews_current_user(user=Depends(get_current_user), db: Sessio
 
 
 @interview_router.put('/{id}')
-async def update_interview(id: int, interview: schemas.InterviewUpdate, user=Depends(required_interviewer), db: Session = Depends(get_db)):
+async def update_interview(id: str, interview: schemas.InterviewUpdate, user=Depends(required_interviewer), db: Session = Depends(get_db)):
     db_interview = utils.update_interview(
         db=db, interview_id=id, interview=interview)
     if db_interview is None:
@@ -52,7 +52,7 @@ async def update_interview(id: int, interview: schemas.InterviewUpdate, user=Dep
 
 
 @interview_router.delete('/{id}')
-async def delete_interview(id: int, user=Depends(required_admin), db: Session = Depends(get_db)):
+async def delete_interview(id: str, user=Depends(required_admin), db: Session = Depends(get_db)):
     db_interview = utils.delete_interview(db=db, interview_id=id)
     if db_interview is None:
         raise HTTPException(
@@ -78,7 +78,7 @@ async def get_interview_notes(user=Depends(required_admin), db: Session = Depend
 
 
 @interview_note_router.get('/id/{id}')
-async def get_interview_note(id: int, user=Depends(required_interviewer), db: Session = Depends(get_db)):
+async def get_interview_note(id: str, user=Depends(required_interviewer), db: Session = Depends(get_db)):
     db_interview_note = utils.get_interview_note(
         db, interview_note_id=id)
     if db_interview_note is None:
@@ -88,12 +88,12 @@ async def get_interview_note(id: int, user=Depends(required_interviewer), db: Se
 
 
 @interview_note_router.get('/interview/{id}')
-async def get_interview_notes_by_interview(id: int, user=Depends(required_interviewer), db: Session = Depends(get_db)):
+async def get_interview_notes_by_interview(id: str, user=Depends(required_interviewer), db: Session = Depends(get_db)):
     return utils.get_interview_notes(db, interview_id=id)
 
 
 @interview_note_router.put('/{id}')
-async def update_interview_note(id: int, interview_note: schemas.InterviewNoteUpdate, user=Depends(required_interviewer), db: Session = Depends(get_db)):
+async def update_interview_note(id: str, interview_note: schemas.InterviewNoteUpdate, user=Depends(required_interviewer), db: Session = Depends(get_db)):
     db_interview_note = utils.update_interview_note(
         db=db, interview_note_id=id, interview_note=interview_note)
     if db_interview_note is None:
@@ -103,7 +103,7 @@ async def update_interview_note(id: int, interview_note: schemas.InterviewNoteUp
 
 
 @interview_note_router.delete('/{id}')
-async def delete_interview_note(id: int, user=Depends(required_admin), db: Session = Depends(get_db)):
+async def delete_interview_note(id: str, user=Depends(required_admin), db: Session = Depends(get_db)):
     db_interview_note = utils.delete_interview_note(
         db=db, interview_note_id=id)
     if db_interview_note is None:

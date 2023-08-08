@@ -23,7 +23,7 @@ def get_interviews(db: Session, limit: int = 100) -> List[models.Interview]:
     return interviews
 
 
-def get_interviews_by_user(db: Session, user_id: int) -> List[models.Interview]:
+def get_interviews_by_user(db: Session, user_id: str) -> List[models.Interview]:
     interviews = db.query(models.Interview).join(Event).filter(Event.users.any(User.id == user_id)).all()
     for interview in interviews:
         interview.event
@@ -33,7 +33,7 @@ def get_interviews_by_user(db: Session, user_id: int) -> List[models.Interview]:
     return interviews
 
 
-def get_interview(db: Session, interview_id: int) -> models.Interview:
+def get_interview(db: Session, interview_id: str) -> models.Interview:
     interview = db.query(models.Interview).filter(models.Interview.id == interview_id).first()
     if interview is not None:
         interview.event
@@ -42,7 +42,7 @@ def get_interview(db: Session, interview_id: int) -> models.Interview:
     return interview
 
 
-def update_interview(db: Session, interview_id: int, interview: schemas.InterviewUpdate) -> models.Interview:
+def update_interview(db: Session, interview_id: str, interview: schemas.InterviewUpdate) -> models.Interview:
     db_interview = db.query(models.Interview).filter(
         models.Interview.id == interview_id).first()
     if db_interview is None:
@@ -56,7 +56,7 @@ def update_interview(db: Session, interview_id: int, interview: schemas.Intervie
     return db_interview
 
 
-def delete_interview(db: Session, interview_id: int) -> models.Interview:
+def delete_interview(db: Session, interview_id: str) -> models.Interview:
     db_interview = db.query(models.Interview).filter(
         models.Interview.id == interview_id).first()
     if db_interview is None:
@@ -74,18 +74,18 @@ def create_interview_note(db: Session, interview_note: schemas.InterviewNoteCrea
     return db_interview_note
 
 
-def get_interview_notes(db: Session, interview_id: int = None, limit: int = 100) -> List[models.InterviewNote]:
+def get_interview_notes(db: Session, interview_id: str = None, limit: int = 100) -> List[models.InterviewNote]:
     query = db.query(models.InterviewNote)
     if interview_id is not None:
         query = query.filter(models.InterviewNote.interview_id == interview_id)
     return query.limit(limit).all()
 
 
-def get_interview_note(db: Session, interview_note_id: int) -> models.InterviewNote:
+def get_interview_note(db: Session, interview_note_id: str) -> models.InterviewNote:
     return db.query(models.InterviewNote).filter(models.InterviewNote.id == interview_note_id).first()
 
 
-def update_interview_note(db: Session, interview_note_id: int, interview_note: schemas.InterviewNoteUpdate) -> models.InterviewNote:
+def update_interview_note(db: Session, interview_note_id: str, interview_note: schemas.InterviewNoteUpdate) -> models.InterviewNote:
     db_interview_note = db.query(models.InterviewNote).filter(
         models.InterviewNote.id == interview_note_id).first()
     if db_interview_note is None:
@@ -99,7 +99,7 @@ def update_interview_note(db: Session, interview_note_id: int, interview_note: s
     return db_interview_note
 
 
-def delete_interview_note(db: Session, interview_note_id: int) -> models.InterviewNote:
+def delete_interview_note(db: Session, interview_note_id: str) -> models.InterviewNote:
     db_interview_note = db.query(models.InterviewNote).filter(
         models.InterviewNote.id == interview_note_id).first()
     if db_interview_note is None:
