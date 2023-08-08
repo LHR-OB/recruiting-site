@@ -166,6 +166,7 @@ export default function ViewApplication({ user, application, setApplication, set
             sx={{
               marginTop: 2,
               backgroundColor: application.stage_decision === 'ACCEPT' ? 'green' : 'white',
+              color: application.stage_decision === 'ACCEPT' ? 'white' : 'green',
             }}
           >
             Mark Accepted
@@ -179,6 +180,7 @@ export default function ViewApplication({ user, application, setApplication, set
             sx={{
               marginTop: 2,
               backgroundColor: application.stage_decision === 'NEUTRAL' ? 'primary.main' : 'white',
+              color: application.stage_decision === 'NEUTRAL' ? 'white' : 'primary.main',
             }}
           >
             Mark Neutral
@@ -192,6 +194,7 @@ export default function ViewApplication({ user, application, setApplication, set
             sx={{
               marginTop: 2,
               backgroundColor: application.stage_decision === 'REJECT' ? 'red' : 'white',
+              color: application.stage_decision === 'REJECT' ? 'white' : 'red',
             }}
           >
             Mark Rejected
