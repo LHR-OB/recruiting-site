@@ -78,7 +78,7 @@ async def get_interview_notes(user=Depends(required_admin), db: Session = Depend
 
 
 @interview_note_router.get('/id/{id}')
-async def get_interview_note(id: int, user=Depends(required_admin), db: Session = Depends(get_db)):
+async def get_interview_note(id: int, user=Depends(required_interviewer), db: Session = Depends(get_db)):
     db_interview_note = utils.get_interview_note(
         db, interview_note_id=id)
     if db_interview_note is None:
@@ -88,7 +88,7 @@ async def get_interview_note(id: int, user=Depends(required_admin), db: Session 
 
 
 @interview_note_router.get('/interview/{id}')
-async def get_interview_notes_by_interview(id: int, user=Depends(required_admin), db: Session = Depends(get_db)):
+async def get_interview_notes_by_interview(id: int, user=Depends(required_interviewer), db: Session = Depends(get_db)):
     return utils.get_interview_notes(db, interview_id=id)
 
 
