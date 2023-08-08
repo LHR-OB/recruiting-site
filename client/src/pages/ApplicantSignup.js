@@ -10,7 +10,7 @@ import {
 import usersApi from '../api/endpoints/users';
 
 
-export default function ApplicantSignup() {
+export default function ApplicantSignup({ setSnackbarData }) {
   // States
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -29,6 +29,12 @@ export default function ApplicantSignup() {
       if (res.status === 200) {
         window.location.href = '/login';
       }
+    }, (error) => {
+      setSnackbarData({
+        open: true,
+        message: 'Error creating account. ' + error.response?.data?.detail,
+        severity: 'error'
+      });
     });
   }
 

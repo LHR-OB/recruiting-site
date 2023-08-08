@@ -15,7 +15,7 @@ import usersApi from '../api/endpoints/users';
 import { teamsApi } from '../api/endpoints/teams';
 import consts from '../config/consts';
 
-export default function MemberSignup() {
+export default function MemberSignup({ setSnackbarData }) {
   // States
   const [teams, setTeams] = useState([]);
   const [firstName, setFirstName] = useState('');
@@ -45,6 +45,12 @@ export default function MemberSignup() {
       if (res.status === 200) {
         window.location.href = '/login';
       }
+    }, (error) => {
+      setSnackbarData({
+        open: true,
+        message: 'Error creating account. ' + error.response?.data?.detail,
+        severity: 'error'
+        });
     });
   }
 
