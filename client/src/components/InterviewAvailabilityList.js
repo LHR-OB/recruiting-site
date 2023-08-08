@@ -140,7 +140,7 @@ export default function InterviewAvailabilityList({ user, setSnackbarData }) {
                             No Remaining Interview Availabilities
                         </Typography>
                         <Typography variant="body1">
-                            If you still need to schedule an interview, please contact an administrator to ask for more times to be made available.
+                            If you have already scheduled an interview, verify that it shows up on your calendar. If you still need to schedule an interview, please contact an administrator to ask for more times to be made available.
                         </Typography>
                     </Container>
                 }

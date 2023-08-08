@@ -57,6 +57,8 @@ export default function ScheduleInterviewForm({ interview, setSnackbarData, setO
                                                             message: 'Interview scheduled',
                                                         });
                                                         setOpen(false);
+                                                        // Refresh the page so they can't see other options
+                                                        window.location.reload();
                                                     }
                                                 }, (error) => {
                                                     setSnackbarData({
