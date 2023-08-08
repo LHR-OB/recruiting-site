@@ -137,6 +137,11 @@ export default function App() {
       icon: <CalendarMonthIcon />
     },
     {
+      name: "Applications",
+      path: "/applications",
+      icon: <DescriptionIcon />
+    },
+    {
       name: "Interview Availability",
       path: "/interview-availability",
       icon: <AccessTimeIcon />
@@ -149,11 +154,6 @@ export default function App() {
   ]
 
   const leadDrawerItems = [
-    {
-      name: "Applications",
-      path: "/applications",
-      icon: <DescriptionIcon />
-    },
     ...interviewerDrawerItems,
   ]
 
