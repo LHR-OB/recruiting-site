@@ -29,8 +29,14 @@ export default function NewApplicationForm({ setApplications, setSnackbarData, s
   const [resume, setResume] = useState('');
   const [systems, setSystems] = useState([]);
   const [teams, setTeams] = useState([]);
+  const [confirm, setConfirm] = useState(false);
 
   const handleSubmitApplication = () => {
+    // Confirmation
+    if (!confirm) {
+      setConfirm(true);
+      return;
+    }
     // Verify phone number
     if (!phoneNumber.match(/^\d{10}$/)) {
       setSnackbarData({
@@ -209,7 +215,11 @@ export default function NewApplicationForm({ setApplications, setSnackbarData, s
           onClick={handleSubmitApplication}
           sx={{ marginTop: 2 }}
         >
-          Submit Application
+          {
+            confirm ?
+              "Confirm Submission (cannot be undone)" :
+              "Submit Application"
+          }
         </Button>
       </Box>
     </Container>

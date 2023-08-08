@@ -82,6 +82,10 @@ export default function Applications({ user, setSnackbarData }) {
           setSnackbarData={setSnackbarData}
         />
         {user?.type === 'APPLICANT' && applicationCycle?.stage === 'APPLICATION' && !applicationCycleClosed &&
+        <>
+          <Typography variant="body1" mt={2}>
+            You may submit up to one application for each system on each team. If you would like to apply for multiple systems within the same team at the same time, please select all the desired systems in your application. Once you submit an application, you will not be able to make any changes, so make sure to double check your application before submitting.
+          </Typography>
           <Button
             variant="outlined"
             onClick={handleNewApplication}
@@ -89,6 +93,7 @@ export default function Applications({ user, setSnackbarData }) {
           >
             New Application
           </Button>
+        </>
         }
         <CenterModal
           open={open}
