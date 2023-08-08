@@ -96,41 +96,46 @@ export default function EditProfileForm({ user, setUser, setSnackbarData, setOpe
                     onChange={(e) => setEmail(e.target.value)}
                     sx={{ width: '100%' }}
                 />
-                <TextField
-                    label="Interview Location"
-                    variant="standard"
-                    value={interviewLocation}
-                    onChange={(e) => setInterviewLocation(e.target.value)}
-                    sx={{ width: '100%' }}
-                />
-                <FormControl variant="standard" fullWidth>
-                    <InputLabel id="type-label">Role</InputLabel>
-                    <Select
-                        fullWidth
-                        id="role"
-                        label="role"
-                        value={type}
-                        onChange={(e) => setType(e.target.value)}
-                    >
-                        {consts.USER_ROLES.map((r, i) => (
-                            <MenuItem key={i} value={r}>{r}</MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-                <FormControl variant="standard" fullWidth>
-                    <InputLabel id="team-label">Team</InputLabel>
-                    <Select
-                        fullWidth
-                        id="team"
-                        label="team"
-                        value={team}
-                        onChange={(e) => setTeam(e.target.value)}
-                    >
-                        {teams.map((t, i) => (
-                            <MenuItem key={i} value={t}>{t.name}</MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
+                {
+                    user?.type !== 'APPLICANT' &&
+                    <>
+                        <TextField
+                            label="Interview Location"
+                            variant="standard"
+                            value={interviewLocation}
+                            onChange={(e) => setInterviewLocation(e.target.value)}
+                            sx={{ width: '100%' }}
+                        />
+                        <FormControl variant="standard" fullWidth>
+                            <InputLabel id="type-label">Role</InputLabel>
+                            <Select
+                                fullWidth
+                                id="role"
+                                label="role"
+                                value={type}
+                                onChange={(e) => setType(e.target.value)}
+                            >
+                                {consts.USER_ROLES.map((r, i) => (
+                                    <MenuItem key={i} value={r}>{r}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                        <FormControl variant="standard" fullWidth>
+                            <InputLabel id="team-label">Team</InputLabel>
+                            <Select
+                                fullWidth
+                                id="team"
+                                label="team"
+                                value={team}
+                                onChange={(e) => setTeam(e.target.value)}
+                            >
+                                {teams.map((t, i) => (
+                                    <MenuItem key={i} value={t}>{t.name}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </>
+                }
                 <Button
                     fullWidth
                     variant="contained"

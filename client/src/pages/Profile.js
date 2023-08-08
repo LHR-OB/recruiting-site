@@ -114,6 +114,16 @@ export default function Profile({ user, setUser, setSnackbarData }) {
             >
               Update Profile
             </Button>
+          </Box>
+        }
+        {
+          profileUser?.type !== "APPLICANT" &&
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
             <Button
               variant="outlined"
               onClick={handleJoinSystem}
