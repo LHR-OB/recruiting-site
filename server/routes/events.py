@@ -17,7 +17,11 @@ router = APIRouter(
 
 @router.post('')
 async def create_event(event: schemas.EventCreate, user=Depends(required_applicant), db: Session = Depends(get_db)):
-    return utils.create_event(db=db, event=event)
+    ret = utils.create_event(db=db, event=event)
+    if ret is None:
+        raise HTTPException(
+            status_code=409, detail="Event conflict")
+    return ret
 
 
 @router.get('')

@@ -3,6 +3,7 @@ from typing import List
 
 from database.models import events as models
 from database.models.users import User
+from database.models.teams import Team
 from database.schemas import events as schemas
 
 
@@ -14,7 +15,11 @@ def events_conflict(event1: models.Event, event2: models.Event) -> bool:
 ### CRUD ###
 def create_event(db: Session, event: schemas.EventCreate) -> models.Event:
     if event.trial_workday_team_id is not None:
-        return None
+        db_team = db.query(Team).filter(Team.id == event.trial_workday_team_id).first()
+        if db_team is None:
+            return None
+        if db_team.trial_workday_event is not None:
+            return None
     db_event = models.Event(**event.dict())
     db.add(db_event)
     db.commit()
