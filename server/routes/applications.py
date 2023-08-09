@@ -90,10 +90,10 @@ async def get_applications_by_team(cycle_id: str, team_id: str, user=Depends(req
 
 @applications_router.get('/{cycle_id}/{team_id}/{system_id}')
 async def get_applications_by_system(cycle_id: str, team_id: str, system_id: str, user=Depends(required_interviewer), db: Session = Depends(get_db)):
-    if user.type != "ADMIN" and user.team.id != team_id:
+    if user.type != "ADMIN" and str(user.team.id) != team_id:
         raise HTTPException(status_code=401, detail="User not authorized for this operation")
-    # if user.type in {"INTERVIEWER", "SYSTEM_LEAD"} and not user_utils.user_in_system(db=db, user_id=user.id, system_id=system_id):
-    #     raise HTTPException(status_code=401, detail="User not authorized for this operation")
+    if user.type in {"INTERVIEWER", "SYSTEM_LEAD"} and not user_utils.user_in_system(db=db, user_id=user.id, system_id=system_id):
+        raise HTTPException(status_code=401, detail="User not authorized for this operation")
     return utils.get_applications(db=db, application_cycle_id=cycle_id, team_id=team_id, system_id=system_id)
 
 
