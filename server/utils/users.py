@@ -62,8 +62,6 @@ def join_system(db: Session, user_id: str, system_id: str) -> models.User:
     if db_user is None:
         return None
     db_user.systems.append(db_system)
-    if not user_is_at_least(db_user, "TEAM_MANAGEMENT"):
-        setattr(db_user, "status", "UNAPPROVED")
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
