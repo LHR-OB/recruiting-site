@@ -22,6 +22,7 @@ export default function Calendar({ user, setSnackbarData }) {
   const [dayEvents, setDayEvents] = useState([]);
   const [open, setOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [highlightedDays, setHighlightedDays] = useState(new Set());
 
   useEffect(() => {
     if (user) {
@@ -44,6 +45,19 @@ export default function Calendar({ user, setSnackbarData }) {
       });
     }
   }, [user]);
+
+  useEffect(() => {
+    if (events) {
+      const newHighlightedDays = new Set();
+      console.log(events);
+      events.forEach((event) => {
+        const eventDate = new Date(event.start_time);
+        newHighlightedDays.add(new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate()).toDateString());
+      });
+      console.log(newHighlightedDays);
+      setHighlightedDays(newHighlightedDays);
+    }
+  }, [events]);
 
   useEffect(() => {
     const dayEvents = events.filter((event) => {
@@ -79,6 +93,15 @@ export default function Calendar({ user, setSnackbarData }) {
         <ReactCalendar 
           value={value}
           onChange={onChange}
+          tileContent={({ date }) => {
+            if (highlightedDays.has(new Date(date.getFullYear(), date.getMonth(), date.getDate()).toDateString())) {
+              return (
+                <b>
+                  {'*'}
+                </b>
+              );
+            }
+          }}
         />
         <Typography variant="h6" mt={2}>
           {value.toDateString()}
