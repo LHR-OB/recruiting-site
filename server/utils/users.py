@@ -155,7 +155,7 @@ def update_user(db: Session, user_id: str, user: schemas.MemberUpdate) -> models
     if db_user is None:
         return None
     update_data = user.dict(exclude_unset=True)
-    if update_data.get("type") != db_user.type or update_data.get("team_id") != db_user.team_id:
+    if update_data.get("type") != db_user.type or update_data.get("team_id") != str(db_user.team_id):
         update_data["status"] = "UNAPPROVED"
     for key, value in update_data.items():
         setattr(db_user, key, value)
