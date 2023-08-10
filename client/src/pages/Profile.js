@@ -117,7 +117,7 @@ export default function Profile({ user, setUser, setSnackbarData }) {
           </Box>
         }
         {
-          profileUser?.type !== "APPLICANT" &&
+          profileUser?.type !== "APPLICANT" && user?.id === profileUser?.id &&
           <Box
             sx={{
               display: 'flex',
