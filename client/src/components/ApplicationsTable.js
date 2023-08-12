@@ -67,9 +67,9 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
     setModalMode('VIEW')
   }
 
-  const getBackgroundColor = (stage_decision) => {
-    if (user.type !== 'APPLICANT') {
-      switch (stage_decision) {
+  const getBackgroundColor = (application) => {
+    if (user.type !== 'APPLICANT' && !application.status.includes("REJECTED")) {
+      switch (application.stage_decision) {
         case 'ACCEPT':
           return 'green';
         case 'REJECT':
@@ -110,7 +110,7 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
                   component="th"
                   scope="row" 
                   sx={{
-                    backgroundColor: getBackgroundColor(application.stage_decision)
+                    backgroundColor: getBackgroundColor(application)
                   }}
                 >
                   {application.id}
