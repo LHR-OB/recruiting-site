@@ -32,6 +32,9 @@ export default function PersonSummary({ person, setPeople, setSnackbarData, setO
         {person?.first_name + ' ' + person?.last_name}
       </Typography>
       <Typography variant="h6" mt={2}>
+        Email: {person?.email}
+      </Typography>
+      <Typography variant="h6" mt={2}>
         Role: {person?.type}
       </Typography>
       <Typography variant="h6" mt={2}>
