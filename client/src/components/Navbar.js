@@ -66,7 +66,7 @@ export default function Navbar({ user, setOpen }) {
             </IconButton>
           }
           {
-            user && user.type !== 'APPLICANT' &&
+            user &&
             <IconButton
               size="large"
               color="inherit"
