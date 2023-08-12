@@ -9,19 +9,28 @@ import {
 import TeamOverview from '../components/TeamOverview';
 import { teamsApi } from '../api/endpoints/teams';
 
-export default function TeamManagement({ setSnackbarData }) {
+export default function TeamManagement({ user, setSnackbarData }) {
   // States
   const [teams, setTeams] = useState([]);
   const [selectedTeam, setSelectedTeam] = useState(null);
 
   useEffect(() => {
-    teamsApi.getTeams().then((res) => {
-      if (res.status === 200) {
-        setTeams(res.data);
-        setSelectedTeam(res.data[0]);
-      }
-    });
-  }, []);
+    if (user) {
+      teamsApi.getTeams().then((res) => {
+        if (res.status === 200) {
+          const allTeams = res.data;
+          if (user?.type !== 'ADMIN') {
+            const userTeams = allTeams.filter((team) => team.id === user.team_id);
+            setTeams(userTeams);
+            setSelectedTeam(userTeams[0]);
+          } else {
+            setTeams(allTeams);
+            setSelectedTeam(allTeams[0]);
+          }
+        }
+      });
+    }
+  }, [user]);
 
   return (
     <Container>
