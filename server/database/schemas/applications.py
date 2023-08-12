@@ -41,6 +41,7 @@ class ApplicationBase(BaseModel):
     year_entering: str
     short_answer: str
     resume_link: str
+    portfolio_link: str
 
 
 class ApplicationCreate(ApplicationBase):
@@ -61,6 +62,7 @@ class ApplicationUpdate(BaseModel):
     system_id: Optional[str] = None
     short_answer: Optional[str] = None
     resume_link: Optional[str] = None
+    portfolio_link: Optional[str] = None
     status: Optional[str] = None
     stage_decision: Optional[str] = None
     interview_id: Optional[str] = None

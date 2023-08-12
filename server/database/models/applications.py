@@ -33,6 +33,7 @@ class Application(Base):
     year_entering = Column(String, index=True)
     short_answer = Column(String)
     resume_link = Column(String)
+    portfolio_link = Column(String)
     status = Column(Enum("SUBMITTED", "INTERVIEW", "INTERVIEW_SCHEDULED", "INTERVIEW_COMPLETE", "TRIAL", "OFFER", "ACCEPTED", "REJECTED", name="application_status_enum"), index=True)
     stage_decision = Column(Enum("ACCEPT", "REJECT", "NEUTRAL", name="application_stage_decision_enum"), index=True)
 

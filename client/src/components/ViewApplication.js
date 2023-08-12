@@ -131,6 +131,9 @@ export default function ViewApplication({ user, application, setApplication, set
           <Typography variant="h6" mt={2}>
             Resume: {application?.resume_link}
           </Typography>
+          <Typography variant="h6" mt={2}>
+            Portfolio: {application?.portfolio_link}
+          </Typography>
         </Grid>
         {
           user.type !== 'APPLICANT' &&

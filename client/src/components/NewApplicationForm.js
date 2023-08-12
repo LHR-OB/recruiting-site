@@ -27,6 +27,7 @@ export default function NewApplicationForm({ setApplications, setSnackbarData, s
   const [yearEntering, setYearEntering] = useState('');
   const [shortAnswer, setShortAnswer] = useState('');
   const [resume, setResume] = useState('');
+  const [portfolio, setPortfolio] = useState('');
   const [systems, setSystems] = useState([]);
   const [teams, setTeams] = useState([]);
   const [confirm, setConfirm] = useState(false);
@@ -55,6 +56,7 @@ export default function NewApplicationForm({ setApplications, setSnackbarData, s
         year_entering: yearEntering,
         short_answer: shortAnswer,
         resume_link: resume,
+        portfolio_link: portfolio,
         status: "SUBMITTED"
       }).then(res => {
         if (res.status === 200) {
@@ -208,6 +210,13 @@ export default function NewApplicationForm({ setApplications, setSnackbarData, s
           variant="standard"
           value={resume}
           onChange={(e) => setResume(e.target.value)}
+          sx={{ width: '100%' }}
+        />
+        <TextField
+          label="Portfolio Link"
+          variant="standard"
+          value={portfolio}
+          onChange={(e) => setPortfolio(e.target.value)}
           sx={{ width: '100%' }}
         />
         <Button
