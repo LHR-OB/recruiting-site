@@ -6,6 +6,7 @@ import {
   TableCell,
   TableContainer,
   TableHead,
+  TablePagination,
   TableRow,
   TableSortLabel,
   TextField,
@@ -18,6 +19,8 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
   const [unfilteredApplications, setUnfilteredApplications] = useState([]); // For filtering applications
   const [orderBy, setOrderBy] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [page, setPage] = useState(0);
   
   useEffect(() => {
     if (user && setApplications) {
@@ -102,6 +105,15 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
     setSortOrder(newSortOrder);
   }
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   const getBackgroundColor = (application) => {
     if (user.type !== 'APPLICANT' && !application.status.includes("REJECTED")) {
       switch (application.stage_decision) {
@@ -181,7 +193,7 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
             </TableRow>
           </TableHead>
           <TableBody>
-            {applications.map((application, index) => (
+            {applications.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((application, index) => (
               <TableRow
                 key={index}
                 onClick={() => handleApplicationClick(application)}
@@ -223,6 +235,15 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
           </TableBody>
         </Table>
       </TableContainer>
+      <TablePagination
+          rowsPerPageOptions={[10, 25, 50]}
+          component="div"
+          count={applications?.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       {
         user?.type === 'APPLICANT' && applications.some((application) => application.status === 'OFFER') &&
         <SelectOffer applications={applications} setApplications={setApplications} setSnackbarData={setSnackbarData} />
