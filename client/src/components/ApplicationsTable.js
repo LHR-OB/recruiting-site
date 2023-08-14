@@ -1,4 +1,4 @@
-import { React, useEffect } from 'react';
+import { React, useEffect, useState } from 'react';
 import {
   Container,
   Table,
@@ -7,12 +7,15 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   Paper,
 } from '@mui/material';
 import { applicationsApi, applicationCyclesApi } from '../api/endpoints/applications';
 import SelectOffer from './SelectOffer';
 
 export default function ApplicationsTable({ user, setOpen, setModalMode, setApplication, applications, setApplications, setSnackbarData }) {
+  const [unfilteredApplications, setUnfilteredApplications] = useState([]); // For filtering applications
+  
   useEffect(() => {
     if (user && setApplications) {
       // Get application cycle
@@ -24,6 +27,7 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
             applicationsApi.getApplicationsByCycle(applicationCycle.id).then((res) => {
               if (res.status === 200) {
                 setApplications(res.data);
+                setUnfilteredApplications(res.data);
               }
             });
             break;
@@ -31,6 +35,7 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
             applicationsApi.getApplicationsByTeam(applicationCycle.id, user.team.id).then((res) => {
               if (res.status === 200) {
                 setApplications(res.data);
+                setUnfilteredApplications(res.data);
               }
             });
             break;
@@ -41,6 +46,7 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
               if (res.status === 200) {
                 newApplications = [...newApplications, ...res.data];
                 setApplications(newApplications);
+                setUnfilteredApplications(newApplications);
               }
             }
             for (let system of user.systems) {
@@ -51,6 +57,7 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
             applicationsApi.getApplicationsByUser(applicationCycle.id, user.id).then((res) => {
               if (res.status === 200) {
                 setApplications(res.data);
+                setUnfilteredApplications(res.data);
               }
             });
             break;
@@ -65,6 +72,19 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
     setOpen(true);
     setApplication(application);
     setModalMode('VIEW')
+  }
+
+  const handleSearch = (event) => {
+    const search = event.target.value;
+    if (search === '') {
+      setApplications(unfilteredApplications);
+      return;
+    }
+    const filteredApplications = unfilteredApplications.filter((application) => {
+      const searchString = `${application.user.first_name} ${application.user.last_name} ${application.team.name} ${application.system.name} ${application.major} ${application.status}`;
+      return search.split(' ').every((word) => (searchString.toLowerCase().includes(word.toLowerCase())));
+    });
+    setApplications(filteredApplications);
   }
 
   const getBackgroundColor = (application) => {
@@ -84,6 +104,12 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
 
   return (
     <Container>
+      <TextField
+        sx={{ width: '100%', marginBottom: 2, marginTop: 2 }}
+        label="Search"
+        variant="outlined"
+        onChange={handleSearch}
+      />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
