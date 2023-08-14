@@ -29,6 +29,10 @@ export default function InterviewAvailabilityList({ user, setSnackbarData }) {
                 if (res.status === 200) {
                     for (let application of res.data) {
                         if (application.status === "INTERVIEW") {
+                            setAvailabilities((oldAvailabilities) => ({
+                                ...oldAvailabilities,
+                                [application.team.name + " " + application.system.name]: [],
+                            }));
                             availabilitiesApi.getAvailabilitiesBySystem(application.system.id).then((res) => {
                                 if (res.status === 200) {
                                     const interviewTimes = [];
@@ -76,6 +80,11 @@ export default function InterviewAvailabilityList({ user, setSnackbarData }) {
                                     }
                                 }
                             });
+                        } else if (application.status === "INTERVIEW_SCHEDULED") {
+                            setAvailabilities((oldAvailabilities) => ({
+                                ...oldAvailabilities,
+                                [application.team.name + " " + application.system.name]: true,
+                            }));
                         }
                     }
                 }
@@ -109,40 +118,41 @@ export default function InterviewAvailabilityList({ user, setSnackbarData }) {
             <Box
                 sx={{
                     marginTop: 8,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
                 }}
             >
                 {
-                    Object.keys(availabilities).length ? 
                     Object.keys(availabilities).map((systemNameFull) => (
-                        <Box key={systemNameFull}>
-                            <Typography variant="h6" component="h2">
+                        <Box
+                            key={systemNameFull}
+                        >
+                            <Typography variant="h5">
                                 {systemNameFull}
                             </Typography>
                             <List>
-                                {availabilities[systemNameFull].map((availability, idx) => (
-                                    <ListItem key={idx}>
-                                        <ListItemButton
-                                            onClick={() => handleClickAvailability(systemNameFull, availability)}
-                                        >
-                                            <ListItemText primary={new Date(availability.start_time).toLocaleString() + " - " + new Date(availability.end_time).toLocaleString()} />
-                                        </ListItemButton>
+                                {availabilities[systemNameFull] === true ? 
+                                <ListItem>
+                                    <ListItemText primary="Interview Scheduled" secondary="Check calendar for details" />
+                                </ListItem>
+                                :
+                                (
+                                    availabilities[systemNameFull].length === 0 ?
+                                    <ListItem>
+                                        <ListItemText primary="No interview times available" secondary="Contact the system administrators to open more times" />
                                     </ListItem>
-                                ))}
+                                    :
+                                    availabilities[systemNameFull].map((availability, idx) => (
+                                        <ListItem key={idx}>
+                                            <ListItemButton
+                                                onClick={() => handleClickAvailability(systemNameFull, availability)}
+                                            >
+                                                <ListItemText primary={new Date(availability.start_time).toLocaleString() + " - " + new Date(availability.end_time).toLocaleString()} />
+                                            </ListItemButton>
+                                        </ListItem>
+                                    ))
+                                )}
                             </List>
                         </Box>
                     ))
-                    :
-                    <Container>
-                        <Typography variant="h6">
-                            No Remaining Interview Availabilities
-                        </Typography>
-                        <Typography variant="body1">
-                            If you have already scheduled an interview, verify that it shows up on your calendar. If you still need to schedule an interview, please contact an administrator to ask for more times to be made available.
-                        </Typography>
-                    </Container>
                 }
             </Box>
             <CenterModal
