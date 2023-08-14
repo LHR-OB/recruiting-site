@@ -48,14 +48,17 @@ export default function Calendar({ user, setSnackbarData }) {
 
   useEffect(() => {
     if (events) {
+      // Mark days with events
       const newHighlightedDays = new Set();
-      console.log(events);
       events.forEach((event) => {
         const eventDate = new Date(event.start_time);
         newHighlightedDays.add(new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate()).toDateString());
       });
-      console.log(newHighlightedDays);
       setHighlightedDays(newHighlightedDays);
+      // Sort events
+      events.sort((a, b) => {
+        return new Date(a.start_time) - new Date(b.start_time);
+      });
     }
   }, [events]);
 
