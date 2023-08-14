@@ -7,6 +7,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TableSortLabel,
   TextField,
   Paper,
 } from '@mui/material';
@@ -15,6 +16,8 @@ import SelectOffer from './SelectOffer';
 
 export default function ApplicationsTable({ user, setOpen, setModalMode, setApplication, applications, setApplications, setSnackbarData }) {
   const [unfilteredApplications, setUnfilteredApplications] = useState([]); // For filtering applications
+  const [orderBy, setOrderBy] = useState('');
+  const [sortOrder, setSortOrder] = useState('asc');
   
   useEffect(() => {
     if (user && setApplications) {
@@ -86,6 +89,18 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
     });
     setApplications(filteredApplications);
   }
+  
+  const handleSort = (id, compare) => {
+    const newOrderBy = id;
+    const newSortOrder = (orderBy === id && sortOrder === 'asc') ? 'desc' : 'asc';
+    const sortedApplications = [...applications].sort(compare);
+    if (newSortOrder === 'desc') {
+      sortedApplications.reverse();
+    }
+    setApplications(sortedApplications);
+    setOrderBy(newOrderBy);
+    setSortOrder(newSortOrder);
+  }
 
   const getBackgroundColor = (application) => {
     if (user.type !== 'APPLICANT' && !application.status.includes("REJECTED")) {
@@ -102,6 +117,44 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
     }
   }
 
+  const TABLE_HEADERS = [
+    {
+      'id': 'application_id',
+      'label': 'Application Id',
+      'compare': (a, b) => (a.id > b.id) ? 1 : -1,
+    },
+    {
+      'id': 'name',
+      'label': 'Name',
+      'compare': (a, b) => (`${a.user?.first_name} ${a.user?.last_name}` > `${b.user?.first_name} ${b.user?.last_name}`) ? 1 : -1,
+    },
+    {
+      'id': 'team',
+      'label': 'Team',
+      'compare': (a, b) => (a.team?.name > b.team?.name) ? 1 : -1,
+    },
+    {
+      'id': 'system',
+      'label': 'System',
+      'compare': (a, b) => (a.system?.name > b.system?.name) ? 1 : -1,
+    },
+    {
+      'id': 'major',
+      'label': 'Major',
+      'compare': (a, b) => (a.major > b.major) ? 1 : -1,
+    },
+    {
+      'id': 'resume',
+      'label': 'Resume',
+      'compare': (a, b) => (a.resume_link > b.resume_link) ? 1 : -1,
+    },
+    {
+      'id': 'status',
+      'label': 'Status',
+      'compare': (a, b) => (a.status > b.status) ? 1 : -1,
+    },
+  ];
+
   return (
     <Container>
       <TextField
@@ -114,13 +167,17 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Application Id</TableCell>
-              <TableCell align="right">Name</TableCell>
-              <TableCell align="right">Team</TableCell>
-              <TableCell align="right">System</TableCell>
-              <TableCell align="right">Major</TableCell>
-              <TableCell align="right">Resume</TableCell>
-              <TableCell align="right">Status</TableCell>
+              {TABLE_HEADERS.map((header, i) => (
+                <TableCell key={header.id} align={i > 0 ? "right" : "left"}>
+                  <TableSortLabel
+                    active={orderBy === header.id}
+                    direction={orderBy === header.id ? sortOrder : 'asc'}
+                    onClick={() => handleSort(header.id, header['compare'])}
+                  >
+                    {header.label}
+                  </TableSortLabel>
+                </TableCell>
+              ))}
             </TableRow>
           </TableHead>
           <TableBody>
