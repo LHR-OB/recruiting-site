@@ -5,7 +5,6 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
-import DashboardFooter from '../components/DashboardFooter';
 import DashboardTeamSummary from '../components/DashboardTeamSummary';
 
 export default function Dashboard({ user, setSnackbarData }) {
@@ -75,8 +74,6 @@ export default function Dashboard({ user, setSnackbarData }) {
           height="500px"
         />
       </Container>
-      {/* Footer */}
-      <DashboardFooter />
     </>
   );
 }

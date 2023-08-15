@@ -4,6 +4,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import {
   Box,
   Drawer,
@@ -256,38 +257,57 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Navbar user={user} setOpen={setOpen} />
-      <Drawer
-        anchor={'left'}
-        open={open}
-        onClose={() => setOpen(false)}
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: '100vh',
+        }}
       >
-        <Box
+        {/* Navbar */}
+        <Navbar user={user} setOpen={setOpen} />
+        {/* Side drawer */}
+        <Drawer
+          anchor={'left'}
+          open={open}
+          onClose={() => setOpen(false)}
         >
-          <List>
-            {drawerItems.map((item, index) => (
-              <ListItem key={index} disablePadding>
-                <ListItemButton
-                  onClick={() => {window.location.href = item.path;}}
-                >
-                  <ListItemIcon>
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText primary={item.name} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
+          <Box>
+            <List>
+              {drawerItems.map((item, index) => (
+                <ListItem key={index} disablePadding>
+                  <ListItemButton
+                    onClick={() => {window.location.href = item.path;}}
+                  >
+                    <ListItemIcon>
+                      {item.icon}
+                    </ListItemIcon>
+                    <ListItemText primary={item.name} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+        </Drawer>
+        {/* Alerts */}
+        <Snackbar open={snackbarData.open} autoHideDuration={6000} onClose={() => setSnackbarData((curr) => ({...curr, open: false}))}>
+          <Alert onClose={() => setSnackbarData((curr) => ({...curr, open: false}))} severity={snackbarData.severity} sx={{ width: '100%' }}>
+            {snackbarData.message}
+          </Alert>
+        </Snackbar>
+        {/* Main Body */}
+        <Box
+          sx={{
+            flex: 10, // Honestly unsure why 10 here but it makes it look decent
+          }}
+        >
+          <RouterProvider
+            router={router}
+          />
         </Box>
-      </Drawer>
-      <Snackbar open={snackbarData.open} autoHideDuration={6000} onClose={() => setSnackbarData((curr) => ({...curr, open: false}))}>
-        <Alert onClose={() => setSnackbarData((curr) => ({...curr, open: false}))} severity={snackbarData.severity} sx={{ width: '100%' }}>
-          {snackbarData.message}
-        </Alert>
-      </Snackbar>
-      <RouterProvider
-        router={router}
-      />
+        {/* Footer */}
+        <Footer />
+      </Box>
     </ThemeProvider>
   );
 }

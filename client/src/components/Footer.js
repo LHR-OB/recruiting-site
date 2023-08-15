@@ -12,7 +12,7 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import EmailIcon from '@mui/icons-material/Email';
 
-export default function DashboardFooter() {
+export default function Footer() {
     const FOOTER_LINKS = [
         {
             label: 'Website',
@@ -40,7 +40,7 @@ export default function DashboardFooter() {
         <Box
             sx={{
                 marginTop: 8,
-                backgroundColor: '#F5F5F5',
+                backgroundColor: '#F2EFEB',
             }}
         >
             <Grid container justifyContent="center">
