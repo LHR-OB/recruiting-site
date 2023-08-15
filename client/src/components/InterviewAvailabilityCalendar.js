@@ -120,6 +120,7 @@ export default function InterviewAvailabilityCalendar({ user, setSnackbarData })
           minTime={8}
           maxTime={22}
           hourlyChunks={2}
+          timeFormat="h:mm A"
           onChange={(newSchedule) => {
             newSchedule.sort((a, b) => a - b);
             setSchedule(newSchedule);
