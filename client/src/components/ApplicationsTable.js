@@ -154,6 +154,14 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
     }
   }
 
+  const getApplicantStatus = (application) => {
+    if (application.status.includes("REJECTED") && application.status !== "SUBMITTED") {
+      return "REVIEW";
+    } else {
+      return application.status;
+    }
+  }
+
   const TABLE_HEADERS = [
     {
       'id': 'application_id',
@@ -260,7 +268,10 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
                   </a>
                 </TableCell>
                 <TableCell align="right">
-                  {application?.status}
+                  {user?.type === 'APPLICANT' ?
+                    getApplicantStatus(application)
+                  :
+                    application?.status}
                 </TableCell>
               </TableRow>
             ))}

@@ -160,7 +160,7 @@ export default function ViewApplication({ user, application, setApplication, set
         }
       </Grid>
 
-      {user.type !== 'APPLICANT' && application?.status !== 'OFFER' && application?.status !== 'ACCEPTED' && application?.status !== 'REJECTED' && <Grid container spacing={1}>
+      {user.type !== 'APPLICANT' && application?.status !== 'OFFER' && application?.status !== 'ACCEPTED' && !application?.status.includes("REJECTED") && <Grid container spacing={1}>
         <Grid item xs>
           <Button
             variant="outlined"

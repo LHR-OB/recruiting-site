@@ -11,7 +11,6 @@ from utils.messages import send_message
 
 ### CRUD ###
 def create_application_cycle(db: Session, application_cycle: schemas.ApplicationCycleCreate) -> models.ApplicationCycle:
-    print(application_cycle.dict())
     db_application_cycle = models.ApplicationCycle(**application_cycle.dict(), stage="APPLICATION")
     db.add(db_application_cycle)
     db.commit()
@@ -46,9 +45,16 @@ def advance_application_cycle(db: Session, application_cycle_id: str) -> models.
         models.ApplicationCycle.id == application_cycle_id).first()
     if db_application_cycle is None:
         return None
+    
+    # Update all applications to the new stage
+    applications = get_applications(db=db, application_cycle_id=application_cycle_id)
+    for application in applications:
+        advance_application(db=db, application=application)
 
     # Advance the application cycle stage
     if db_application_cycle.stage == 'APPLICATION':
+        db_application_cycle.stage = 'REVIEW'
+    elif db_application_cycle.stage == 'REVIEW':
         db_application_cycle.stage = 'INTERVIEW'
     elif db_application_cycle.stage == 'INTERVIEW':
         db_application_cycle.stage = 'TRIAL'
@@ -57,45 +63,24 @@ def advance_application_cycle(db: Session, application_cycle_id: str) -> models.
     elif db_application_cycle.stage == 'OFFER':
         db_application_cycle.stage = 'COMPLETE'
         db_application_cycle.is_active = False
-    db.add(db_application_cycle)
-    db.commit()
-    db.refresh(db_application_cycle)
-
-    # Update all applications to the new stage if it isn't complete yet
-    if db_application_cycle.stage != 'COMPLETE':
+    
+    # If the application cycle now COMPLETE, send rejection messages
+    if db_application_cycle.stage == 'COMPLETE':
         applications = get_applications(db=db, application_cycle_id=application_cycle_id)
         for application in applications:
-            if application.stage_decision == 'ACCEPT':
-                # Advance the application status
-                message_body = ''
-                application_team = application.team
-                if application.status == 'SUBMITTED':
-                    application.status = 'INTERVIEW'
-                    message_body = application_team.interview_message
-                elif application.status == 'INTERVIEW_COMPLETE':
-                    application.status = 'TRIAL'
-                    message_body = application_team.trial_workday_message
-                elif application.status == 'TRIAL':
-                    application.status = 'OFFER'
-                    message_body = application_team.offer_message
-                application.stage_decision = 'NEUTRAL'
-
+            if "REJECTED" in application.status:
                 # Send a message to the user
                 message = message_schemas.MessageCreate(
                     title="Application Update: " + application.team.name + " " + application.system.name,
-                    message=message_body,
+                    message=application.team.rejection_message,
                     timestamp=datetime.datetime.now(),
                     user_id=str(application.user_id)
                 )
                 send_message(db=db, message=message)
 
-            else:
-                # Reject the application
-                application.status = 'REJECTED'
-                application.stage_decision = 'NEUTRAL'
-            db.add(application)
-        db.commit()
-        db.refresh(db_application_cycle)
+    db.add(db_application_cycle)
+    db.commit()
+    db.refresh(db_application_cycle)
 
     return db_application_cycle
 
@@ -160,6 +145,48 @@ def get_application(db: Session, application_id: str) -> models.Application:
     db_application.user
     db_application.system
     return db_application
+
+
+def advance_application(db: Session, application: models.Application):
+    # Auto accept if it's going from submit -> review
+    if application.status == 'SUBMITTED':
+        application.stage_decision = 'ACCEPT'
+    if application.stage_decision == 'ACCEPT':
+        # Advance the application status
+        message_body = ''
+        application_team = application.team
+        if application.status == 'SUBMITTED':
+            application.status = 'REVIEW'
+            message_body = "Thank you for submitting an application! Your application is now being reviewed by our team. Please keep an eye on your portal for updates."
+        elif application.status == 'REVIEW':
+            application.status = 'INTERVIEW'
+            message_body = application_team.interview_message
+        elif application.status == 'INTERVIEW_COMPLETE':
+            application.status = 'TRIAL'
+            message_body = application_team.trial_workday_message
+        elif application.status == 'TRIAL':
+            application.status = 'OFFER'
+            message_body = application_team.offer_message
+        application.stage_decision = 'NEUTRAL'
+
+        # Send a message to the user
+        message = message_schemas.MessageCreate(
+            title="Application Update: " + application.team.name + " " + application.system.name,
+            message=message_body,
+            timestamp=datetime.datetime.now(),
+            user_id=str(application.user_id)
+        )
+        send_message(db=db, message=message)
+    else:
+        # Reject the application
+        if application.status == 'REVIEW' or application.status == 'REVIEW':
+            application.status = 'REJECTED_REVIEW'
+        elif 'INTERVIEW' in application.status:
+            application.status = 'REJECTED_INTERVIEW'
+        elif application.status == 'TRIAL':
+            application.status = 'REJECTED_TRIAL'
+        application.stage_decision = 'NEUTRAL'
+    db.add(application)
 
 
 def update_application(db: Session, application_id: str, application: schemas.ApplicationUpdate) -> models.Application:

@@ -37,7 +37,6 @@ def send_message(db: Session, message: schemas.MessageCreate) -> models.Message:
 
 ### CRUD ###
 def create_message(db: Session, message: schemas.MessageCreate) -> models.Message:
-    print("HERE")
     db_user = db.query(User).filter(User.id == message.user_id).first()
     message_dict = message.dict()
     db_message = models.Message(**message_dict, is_read=False)

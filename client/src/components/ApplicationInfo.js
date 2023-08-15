@@ -25,7 +25,6 @@ export default function ApplicationInfo({ team, setTeam, setTeams, setSnackbarDa
           applicationsApi.getApplicationsByTeam(res.data.id, team.id).then((res) => {
             if (res.status === 200) {
               setApplications(res.data);
-              console.log(res.data);
             }
           })
         }

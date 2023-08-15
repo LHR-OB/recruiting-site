@@ -17,7 +17,7 @@ class ApplicationCycle(Base):
     interview_start_date = Column(DateTime, index=True)
     interview_end_date = Column(DateTime, index=True)
     is_active = Column(Boolean, index=True)
-    stage = Column(Enum("APPLICATION", "INTERVIEW", "TRIAL", "OFFER", "COMPLETE", name="application_cycle_stage_enum"), index=True)
+    stage = Column(Enum("APPLICATION", "REVIEW", "INTERVIEW", "TRIAL", "OFFER", "COMPLETE", name="application_cycle_stage_enum"), index=True)
 
     applications = relationship(
         "Application", back_populates="application_cycle")
@@ -34,7 +34,7 @@ class Application(Base):
     short_answer = Column(String)
     resume_link = Column(String)
     portfolio_link = Column(String)
-    status = Column(Enum("SUBMITTED", "INTERVIEW", "INTERVIEW_SCHEDULED", "INTERVIEW_COMPLETE", "TRIAL", "OFFER", "ACCEPTED", "REJECTED", name="application_status_enum"), index=True)
+    status = Column(Enum("SUBMITTED", "REVIEW", "REJECTED_REVIEW", "INTERVIEW", "INTERVIEW_SCHEDULED", "INTERVIEW_COMPLETE", "REJECTED_INTERVIEW", "TRIAL", "REJECTED_TRIAL", "OFFER", "ACCEPTED", "REJECTED", name="application_status_enum"), index=True)
     stage_decision = Column(Enum("ACCEPT", "REJECT", "NEUTRAL", name="application_stage_decision_enum"), index=True)
 
     # Relationships

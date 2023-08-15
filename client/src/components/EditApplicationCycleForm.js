@@ -23,6 +23,7 @@ export default function EditApplicationCycleForm({ applicationCycle, setApplicat
 
   const applicationCycleStages = [
     "APPLICATION",
+    "REVIEW",
     "INTERVIEW",
     "TRIAL",
     "OFFER",
