@@ -42,12 +42,15 @@ export default function InterviewAvailability({ user, setSnackbarData }) {
         <Typography variant="h4" mt={2}>
           Interview Availability
         </Typography>
-        <Typography variant="body1" mt={2}>
-          If you are invited to interview for a system, you will see options below. Please select one interview time slot for each system. If you do not see any options below and believe this is a mistake, please contact a system administrator.
-        </Typography>
         {
           user?.type === 'APPLICANT' ?
-            <InterviewAvailabilityList user={user} setSnackbarData={setSnackbarData} /> :
+          <>
+            <Typography variant="body1" mt={2}>
+              If you are invited to interview for a system, you will see options below. Please select one interview time slot for each system. If you do not see any options below and believe this is a mistake, please contact a system administrator.
+            </Typography>
+            <InterviewAvailabilityList user={user} setSnackbarData={setSnackbarData} />
+          </>
+            :
             <InterviewAvailabilityCalendar user={user} setSnackbarData={setSnackbarData} />
         }
 
