@@ -12,7 +12,9 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  ThemeProvider,
 } from '@mui/material';
+import createTheme from '@mui/material/styles/createTheme';
 import HomeIcon from '@mui/icons-material/Home';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -217,8 +219,43 @@ export default function App() {
   }
   drawerItems = [...commonDrawerItems, ...drawerItems];
 
+  // Theme
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#045F85',
+      }
+    },
+    typography: {
+      h1: {
+        fontFamily: "'Montserrat', sans-serif",
+      },
+      h2: {
+        fontFamily: "'Montserrat', sans-serif",
+      },
+      h3: {
+        fontFamily: "'Montserrat', sans-serif",
+      },
+      h4: {
+        fontFamily: "'Montserrat', sans-serif",
+      },
+      h5: {
+        fontFamily: "'Montserrat', sans-serif",
+      },
+      h6: {
+        fontFamily: "'Montserrat', sans-serif",
+      },
+      body1: {
+        fontFamily: "'Urbanist', sans-serif",
+      },
+      body2: {
+        fontFamily: "'Urbanist', sans-serif",
+      }
+    }
+  });
+
   return (
-    <div>
+    <ThemeProvider theme={theme}>
       <Navbar user={user} setOpen={setOpen} />
       <Drawer
         anchor={'left'}
@@ -251,6 +288,6 @@ export default function App() {
       <RouterProvider
         router={router}
       />
-    </div>
+    </ThemeProvider>
   );
 }
