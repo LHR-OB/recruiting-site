@@ -21,6 +21,14 @@ const consts = {
         "Business",
         "Other",
     ],
+    YEARS: [
+        "First",
+        "Second",
+        "Third",
+        "Fourth",
+        "Fifth+",
+        "Graduate",
+    ],
     INTERVIEW_SCHEDULE_BUFFER: 24, // Hours
 }
 

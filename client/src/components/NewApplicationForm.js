@@ -52,7 +52,7 @@ export default function NewApplicationForm({ setApplications, setSnackbarData, s
         team_id: team.id,
         system_id: system.id,
         phone_number: phoneNumber,
-        major: major || otherMajor,
+        major: major === 'Other' ? otherMajor : major,
         year_entering: yearEntering,
         short_answer: shortAnswer,
         resume_link: resume,
@@ -175,6 +175,21 @@ export default function NewApplicationForm({ setApplications, setSnackbarData, s
             sx={{ width: '100%' }}
           />
         }
+        <FormControl
+          fullWidth
+          variant="standard"
+        >
+          <InputLabel>Year Entering</InputLabel>
+          <Select
+            value={yearEntering || ''}
+            label="Year Entering"
+            onChange={(e) => setYearEntering(e.target.value)}
+          >
+            {consts.YEARS.map(year => (
+              <MenuItem key={year} value={year}>{year}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <TextField
           label="Phone Number"
           variant="standard"
@@ -183,10 +198,17 @@ export default function NewApplicationForm({ setApplications, setSnackbarData, s
           sx={{ width: '100%' }}
         />
         <TextField
-          label="Year Entering"
+          label="Resume Link"
           variant="standard"
-          value={yearEntering}
-          onChange={(e) => setYearEntering(e.target.value)}
+          value={resume}
+          onChange={(e) => setResume(e.target.value)}
+          sx={{ width: '100%' }}
+        />
+        <TextField
+          label="Portfolio Link"
+          variant="standard"
+          value={portfolio}
+          onChange={(e) => setPortfolio(e.target.value)}
           sx={{ width: '100%' }}
         />
         <Typography variant="h6" mt={2}>
@@ -203,20 +225,6 @@ export default function NewApplicationForm({ setApplications, setSnackbarData, s
           value={shortAnswer}
           onChange={(e) => setShortAnswer(e.target.value)}
           multiline
-          sx={{ width: '100%' }}
-        />
-        <TextField
-          label="Resume Link"
-          variant="standard"
-          value={resume}
-          onChange={(e) => setResume(e.target.value)}
-          sx={{ width: '100%' }}
-        />
-        <TextField
-          label="Portfolio Link"
-          variant="standard"
-          value={portfolio}
-          onChange={(e) => setPortfolio(e.target.value)}
           sx={{ width: '100%' }}
         />
         <Button
