@@ -68,6 +68,8 @@ async def create_application(application: schemas.ApplicationCreate, user=Depend
     existing_applications = utils.get_applications(db=db, user_id=user.id, application_cycle_id=curr_cycle.id, team_id=application.team_id, system_id=application.system_id)
     if len(existing_applications) > 0:
         raise HTTPException(status_code=400, detail="Application already exists")
+    if curr_cycle.stage != "APPLICATION":
+        raise HTTPException(status_code=400, detail="No longer accepting applications for this cycle")
     return utils.create_application(db=db, user=user, application=application)
 
 
@@ -83,7 +85,7 @@ async def get_applications_by_cycle(cycle_id: str, user=Depends(required_admin),
 
 @applications_router.get('/{cycle_id}/{team_id}')
 async def get_applications_by_team(cycle_id: str, team_id: str, user=Depends(required_team_management), db: Session = Depends(get_db)):
-    if user.type == "TEAM_MANAGEMENT" and user.team.id != team_id:
+    if user.type == "TEAM_MANAGEMENT" and str(user.team.id) != str(team_id):
         raise HTTPException(status_code=401, detail="User not authorized for this operation")
     return utils.get_applications(db=db, application_cycle_id=cycle_id, team_id=team_id)
 
