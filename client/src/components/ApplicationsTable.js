@@ -1,5 +1,6 @@
 import { React, useEffect, useState } from 'react';
 import {
+  Button,
   Container,
   Table,
   TableBody,
@@ -114,6 +115,30 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
     setPage(0);
   };
 
+  const handleDownload = () => {
+    const csv = applications.map((application) => {
+      const row = [];
+      row.push(application.id);
+      row.push(`${application.user.first_name} ${application.user.last_name}`);
+      row.push(application.user.email);
+      row.push(application.phone_number);
+      row.push(application.team.name);
+      row.push(application.system.name);
+      row.push(application.major);
+      row.push(application.resume_link);
+      row.push(application.status);
+      return row.join(',');
+    });
+    csv.unshift('Application Id,Name,Email,Phone Number,Team,System,Major,Resume,Status');
+    const csvString = csv.join('\n');
+    const csvData = new Blob([csvString], {type: 'text/csv;charset=utf-8;'});
+    const csvURL =  window.URL.createObjectURL(csvData);
+    const tempLink = document.createElement('a');
+    tempLink.href = csvURL;
+    tempLink.setAttribute('download', 'applications.csv');
+    tempLink.click();
+  }
+
   const getBackgroundColor = (application) => {
     if (user.type !== 'APPLICANT' && !application.status.includes("REJECTED")) {
       switch (application.stage_decision) {
@@ -175,6 +200,13 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
         variant="outlined"
         onChange={handleSearch}
       />
+      <Button
+        sx={{ marginBottom: 2 }}
+        variant="outlined"
+        onClick={handleDownload}
+      >
+        Export to CSV
+      </Button>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -236,14 +268,14 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
         </Table>
       </TableContainer>
       <TablePagination
-          rowsPerPageOptions={[10, 25, 50]}
-          component="div"
-          count={applications?.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        rowsPerPageOptions={[10, 25, 50]}
+        component="div"
+        count={applications?.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
       {
         user?.type === 'APPLICANT' && applications.some((application) => application.status === 'OFFER') &&
         <SelectOffer applications={applications} setApplications={setApplications} setSnackbarData={setSnackbarData} />
