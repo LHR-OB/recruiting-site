@@ -50,6 +50,11 @@ export default function Navbar({ user, setOpen }) {
           >
             <MenuIcon />
           </IconButton> : null}
+          <img
+            src="/lhrnew.gif"
+            alt="Longhorn Racing Logo"
+            style={{ height: '50px', width: '75px', marginRight: '10px' }}
+          />
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Longhorn Racing Recruiting Portal
           </Typography>

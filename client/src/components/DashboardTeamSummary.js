@@ -7,6 +7,7 @@ import {
 export default function DashboardTeamSummary({ name }) {
     const TEAM_DATA = {
         'Combustion': {
+            logo: 'lhrCnobackground.png',
             description: 'Combustion team description',
             workday_time: 'Combustion workday time',
             systems: [
@@ -16,6 +17,7 @@ export default function DashboardTeamSummary({ name }) {
             quote: 'Combustion quote',
         },
         'Electric': {
+            logo: 'lhrEnobackground.png',
             description: 'Electric team description',
             workday_time: 'Electric workday time',
             systems: [
@@ -25,6 +27,7 @@ export default function DashboardTeamSummary({ name }) {
             quote: 'Electric quote',
         },
         'Solar': {
+            logo: 'lhrSnobackground.png',
             description: 'Solar team description',
             workday_time: 'Solar workday time',
             systems: [
@@ -43,6 +46,11 @@ export default function DashboardTeamSummary({ name }) {
                 alignItems: 'center',
             }}
         >
+            <img
+                src={TEAM_DATA[name].logo}
+                alt={name}
+                style={{ width: '100%', maxWidth: '300px' }}
+            />
             <Typography variant="h4" mt={2}>
                 {name}
             </Typography>

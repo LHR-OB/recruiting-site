@@ -43,7 +43,7 @@ export default function DashboardFooter() {
                 backgroundColor: '#F5F5F5',
             }}
         >
-            <Grid container>
+            <Grid container justifyContent="center">
                 <Grid item xs={2}>
                     <Box
                         sx={{
@@ -71,7 +71,13 @@ export default function DashboardFooter() {
                         </List>
                     </Box>
                 </Grid>
-                <Grid item xs={8} />
+                <Grid container item xs={8} justifyContent="center">
+                    <img
+                        src="/LHRutaustin.png"
+                        alt="Longhorn Racing Logo"
+                        width="35%"
+                    />
+                </Grid>
                 <Grid item xs={2}>
                     <Box
                         sx={{
