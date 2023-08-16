@@ -41,7 +41,7 @@ class ApplicationBase(BaseModel):
     year_entering: str
     short_answer: str
     resume_link: str
-    portfolio_link: str
+    portfolio_link: Optional[str] = None
 
 
 class ApplicationCreate(ApplicationBase):

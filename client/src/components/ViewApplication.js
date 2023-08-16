@@ -169,9 +169,13 @@ export default function ViewApplication({ user, application, setApplication, set
           <Typography variant="subtitle1" mt={2}>
             <a href={application?.resume_link} target='_blank' rel='noreferrer'>Resume</a>
           </Typography>
-          <Typography variant="subtitle1" mt={2}>
-            <a href={application?.portfolio_link} target='_blank' rel='noreferrer'>Portfolio</a>
-          </Typography>
+          {/* Portfolio */}
+          {
+            application?.portfolio_link &&
+            <Typography variant="subtitle1" mt={2}>
+              <a href={application} target='_blank' rel='noreferrer'>Portfolio</a>
+            </Typography>
+          }
         </Grid>
         {
           user.type !== 'APPLICANT' &&
