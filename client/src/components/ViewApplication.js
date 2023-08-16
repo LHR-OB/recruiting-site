@@ -185,6 +185,7 @@ export default function ViewApplication({ user, application, setApplication, set
                   return curr;
                 })}
                 sx={{ cursor: 'pointer' }}
+                noWrap={!qWraps[index]}
               >
                 {shortAnswers[index]}
               </Typography>
