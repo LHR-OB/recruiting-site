@@ -170,7 +170,7 @@ export default function ViewApplication({ user, application, setApplication, set
             Short Answers (click to expand):
           </Typography>
           {consts.APPLICATION_QUESTIONS.map((question, index) => (
-            <>
+            <div key={index}>
               <Typography
                 variant="subtitle1"
                 mt={2}
@@ -180,16 +180,17 @@ export default function ViewApplication({ user, application, setApplication, set
               <Typography
                 variant="body1"
                 mt={2}
-                onClick={() => setQWraps((curr) => {
-                  curr[index] = !curr[index];
-                  return curr;
-                })}
+                onClick={() => {
+                  const newQWraps = [...qWraps];
+                  newQWraps[index] = !newQWraps[index];
+                  setQWraps(newQWraps);
+                }}
                 sx={{ cursor: 'pointer' }}
                 noWrap={!qWraps[index]}
               >
                 {shortAnswers[index]}
               </Typography>
-            </>
+            </div>
           ))}
           {/* Resume */}
           <Typography variant="subtitle1" mt={2}>
