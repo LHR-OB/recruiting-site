@@ -1,29 +1,18 @@
 import { React } from 'react';
 import {
-  Box,
-  Modal,
+  Dialog,
 } from '@mui/material';
 
 export default function CenterModal(props) {
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-  };
-
   return (
-    <Modal
+    <Dialog
       open={props.open}
       onClose={props.handleClose}
+      fullWidth={true}
     >
-      <Box sx={style}>
-        {props.children}
-      </Box>
-    </Modal>
+      <br />
+      {props.children}
+      <br />
+    </Dialog>
   );
 }

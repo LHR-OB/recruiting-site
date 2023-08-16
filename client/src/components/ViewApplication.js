@@ -11,6 +11,7 @@ import { interviewNotesApi } from '../api/endpoints/interviews';
 export default function ViewApplication({ user, application, setApplication, setApplications, setSnackbarData, setOpen }) {
   // States
   const [interviewNotes, setInterviewNotes] = useState([]);
+  const [q1Wrap, setQ1Wrap] = useState(false);
 
   useEffect(() => {
     if (application && application.interview_id && user?.type !== 'APPLICANT') {
@@ -100,44 +101,81 @@ export default function ViewApplication({ user, application, setApplication, set
   return (
     <Container>
       <Grid container spacing={1}>
-        <Grid item xs>
+        <Grid item xs={8}>
+          {/* Name */}
           <Typography variant="h4" mt={2}>
             {application?.user?.first_name + ' ' + application?.user?.last_name}
           </Typography>
-          <Typography variant="h6" mt={2}>
-            Team: {application?.team?.name}
+          {/* Team */}
+          <Typography display="inline" variant="h6" mt={2}>
+            Team:
           </Typography>
-          <Typography variant="h6" mt={2}>
-            System: {application?.system?.name}
+          <Typography display="inline" variant="subtitle1" mt={2}>
+            {' ' + application?.team?.name}
           </Typography>
-          <Typography variant="h6" mt={2}>
-            Email: {application?.user?.email}
+          <br />
+          {/* System */}
+          <Typography display="inline" variant="h6" mt={2}>
+            System:
           </Typography>
-          <Typography variant="h6" mt={2}>
-            Phone: {application?.phone_number}
+          <Typography display="inline" variant="subtitle1" mt={2}>
+            {' ' + application?.system?.name}
           </Typography>
-          <Typography variant="h6" mt={2}>
-            Major: {application?.major}
+          <br />
+          {/* Email */}
+          <Typography display="inline" variant="h6" mt={2}>
+            Email:
           </Typography>
-          <Typography variant="h6" mt={2}>
-            Year Entering: {application?.year_entering}
+          <Typography display="inline" variant="subtitle1" mt={2}>
+            {' ' + application?.user?.email}
           </Typography>
-          <Typography variant="h6" mt={2}>
-            Short Answer
+          <br />
+          {/* Phone Number */}
+          <Typography display="inline" variant="h6" mt={2}>
+            Phone Number:
           </Typography>
-          <Typography variant="body1" mt={2}>
-            {application?.short_answer}
+          <Typography display="inline" variant="subtitle1" mt={2}>
+            {' ' + application?.phone_number}
           </Typography>
-          <Typography variant="h6" mt={2}>
-            Resume: {application?.resume_link}
+          <br />
+          {/* Year Entering */}
+          <Typography display="inline" variant="h6" mt={2}>
+            Year Entering:
           </Typography>
+          <Typography display="inline" variant="subtitle1" mt={2}>
+            {' ' + application?.year_entering}
+          </Typography>
+          {/* Major */}
           <Typography variant="h6" mt={2}>
-            Portfolio: {application?.portfolio_link}
+            Major:
+          </Typography>
+          <Typography variant="subtitle1" mt={2} noWrap>
+            {' ' + application?.major}
+          </Typography>
+          {/* Short Answers */}
+          <Typography variant="h6" mt={2}>
+            Short Answers (click to expand):
+          </Typography>
+          <Typography
+            variant="body1"
+            mt={2}
+            noWrap={!q1Wrap}
+            onClick={() => setQ1Wrap(!q1Wrap)}
+            sx={{ cursor: 'pointer' }}
+          >
+            {' ' + application?.short_answer}
+          </Typography>
+          {/* Resume */}
+          <Typography variant="subtitle1" mt={2}>
+            <a href={application?.resume_link} target='_blank' rel='noreferrer'>Resume</a>
+          </Typography>
+          <Typography variant="subtitle1" mt={2}>
+            <a href={application?.portfolio_link} target='_blank' rel='noreferrer'>Portfolio</a>
           </Typography>
         </Grid>
         {
           user.type !== 'APPLICANT' &&
-          <Grid item xs>
+          <Grid item xs={4}>
             <Typography variant="h4" mt={2}>
               Interview Notes
             </Typography>

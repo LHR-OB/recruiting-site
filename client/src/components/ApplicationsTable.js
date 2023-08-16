@@ -11,6 +11,7 @@ import {
   TableRow,
   TableSortLabel,
   TextField,
+  Typography,
   Paper,
 } from '@mui/material';
 import { applicationsApi, applicationCyclesApi } from '../api/endpoints/applications';
@@ -260,7 +261,17 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
                   {application?.system?.name}
                 </TableCell>
                 <TableCell align="right">
-                  {application?.major}
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      maxWidth: 200, // percentage also works
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                    }}
+                  >
+                    {application?.major}
+                  </Typography>
                 </TableCell>
                 <TableCell align="right">
                   <a href={`//${application?.resume_link}`} target="_blank" rel="noreferrer">
