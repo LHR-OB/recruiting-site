@@ -2,6 +2,10 @@ import { React, useEffect, useState } from 'react';
 import {
   Button,
   Container,
+  FormControl,
+  FormGroup,
+  FormControlLabel,
+  Paper,
   Table,
   TableBody,
   TableCell,
@@ -12,7 +16,7 @@ import {
   TableSortLabel,
   TextField,
   Typography,
-  Paper,
+  Switch,
 } from '@mui/material';
 import { applicationsApi, applicationCyclesApi } from '../api/endpoints/applications';
 import SelectOffer from './SelectOffer';
@@ -23,6 +27,7 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
   const [sortOrder, setSortOrder] = useState('asc');
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
+  const [hideRejected, setHideRejected] = useState(false); // For hiding rejected applications
   
   useEffect(() => {
     if (user && setApplications) {
@@ -216,6 +221,19 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
       >
         Export to CSV
       </Button>
+      <br />
+      {/* Hide Rejected */}
+      {
+        user?.type !== 'APPLICANT' &&
+        <FormControl>
+          <FormGroup>
+            <FormControlLabel
+              control={<Switch checked={hideRejected} onChange={() => setHideRejected(!hideRejected)} />}
+              label="Hide Rejected"
+            />
+          </FormGroup>
+        </FormControl>
+      }
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -234,7 +252,7 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
             </TableRow>
           </TableHead>
           <TableBody>
-            {applications.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((application, index) => (
+            {applications.filter(application => (!(hideRejected && application.status.includes("REJECTED")))).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((application, index) => (
               <TableRow
                 key={index}
                 onClick={() => handleApplicationClick(application)}
@@ -242,7 +260,7 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
                   '&:hover': {cursor: 'pointer', backgroundColor: 'grey.100'},
                 }}
               >
-                <TableCell 
+                <TableCell
                   component="th"
                   scope="row" 
                   sx={{
@@ -292,7 +310,7 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
       <TablePagination
         rowsPerPageOptions={[10, 25, 50]}
         component="div"
-        count={applications?.length}
+        count={applications?.filter(application => (!(hideRejected && application.status.includes("REJECTED")))).length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
