@@ -200,7 +200,7 @@ export default function ViewApplication({ user, application, setApplication, set
           {
             application?.portfolio_link &&
             <Typography variant="subtitle1" mt={2}>
-              <a href={application} target='_blank' rel='noreferrer'>Portfolio</a>
+              <a href={application?.portfolio_link} target='_blank' rel='noreferrer'>Portfolio</a>
             </Typography>
           }
         </Grid>
