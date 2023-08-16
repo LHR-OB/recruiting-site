@@ -7,11 +7,13 @@ import {
 } from '@mui/material';
 import { applicationsApi } from '../api/endpoints/applications';
 import { interviewNotesApi } from '../api/endpoints/interviews';
+import consts from '../config/consts';
 
 export default function ViewApplication({ user, application, setApplication, setApplications, setSnackbarData, setOpen }) {
   // States
   const [interviewNotes, setInterviewNotes] = useState([]);
-  const [q1Wrap, setQ1Wrap] = useState(false);
+  const [qWraps, setQWraps] = useState([false, false, false, false]);
+  const [shortAnswers, setShortAnswers] = useState(['', '', '', '']); // [shortAnswer1, shortAnswer2, shortAnswer3, shortAnswer4
 
   useEffect(() => {
     if (application && application.interview_id && user?.type !== 'APPLICANT') {
@@ -22,6 +24,17 @@ export default function ViewApplication({ user, application, setApplication, set
       });
     }
   }, [application, user]);
+
+  useEffect(() => {
+    if (application) {
+      setShortAnswers([
+        application.short_answer1,
+        application.short_answer2,
+        application.short_answer3,
+        application.short_answer4,
+      ]);
+    }
+  }, [application]);
 
   const handleAccept = () => {
     applicationsApi.updateApplication(application.id, { stage_decision: 'ACCEPT' }).then(res => {
@@ -156,15 +169,27 @@ export default function ViewApplication({ user, application, setApplication, set
           <Typography variant="h6" mt={2}>
             Short Answers (click to expand):
           </Typography>
-          <Typography
-            variant="body1"
-            mt={2}
-            noWrap={!q1Wrap}
-            onClick={() => setQ1Wrap(!q1Wrap)}
-            sx={{ cursor: 'pointer' }}
-          >
-            {' ' + application?.short_answer}
-          </Typography>
+          {consts.APPLICATION_QUESTIONS.map((question, index) => (
+            <>
+              <Typography
+                variant="subtitle1"
+                mt={2}
+              >
+                {question.question}
+              </Typography>
+              <Typography
+                variant="body1"
+                mt={2}
+                onClick={() => setQWraps((curr) => {
+                  curr[index] = !curr[index];
+                  return curr;
+                })}
+                sx={{ cursor: 'pointer' }}
+              >
+                {shortAnswers[index]}
+              </Typography>
+            </>
+          ))}
           {/* Resume */}
           <Typography variant="subtitle1" mt={2}>
             <a href={application?.resume_link} target='_blank' rel='noreferrer'>Resume</a>

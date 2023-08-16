@@ -39,7 +39,10 @@ class ApplicationBase(BaseModel):
     phone_number: str
     major: str
     year_entering: str
-    short_answer: str
+    short_answer1: str
+    short_answer2: str
+    short_answer3: str
+    short_answer4: str
     resume_link: str
     portfolio_link: Optional[str] = None
 
@@ -60,7 +63,10 @@ class ApplicationUpdate(BaseModel):
     year_entering: Optional[str] = None
     team_id: Optional[str] = None
     system_id: Optional[str] = None
-    short_answer: Optional[str] = None
+    short_answer1: Optional[str] = None
+    short_answer2: Optional[str] = None
+    short_answer3: Optional[str] = None
+    short_answer4: Optional[str] = None
     resume_link: Optional[str] = None
     portfolio_link: Optional[str] = None
     status: Optional[str] = None

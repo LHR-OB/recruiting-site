@@ -25,7 +25,8 @@ export default function NewApplicationForm({ setApplications, setSnackbarData, s
   const [major, setMajor] = useState('');
   const [otherMajor, setOtherMajor] = useState('');
   const [yearEntering, setYearEntering] = useState('');
-  const [shortAnswer, setShortAnswer] = useState('');
+  const [shortAnswers, setShortAnswers] = useState(['', '', [], '']); // [shortAnswer1, shortAnswer2, shortAnswer3, shortAnswer4
+  const [otherShortAnswerChoice, setOtherShortAnswerChoice] = useState('');
   const [resume, setResume] = useState('');
   const [portfolio, setPortfolio] = useState('');
   const [systems, setSystems] = useState([]);
@@ -54,7 +55,10 @@ export default function NewApplicationForm({ setApplications, setSnackbarData, s
         phone_number: phoneNumber,
         major: major === 'Other' ? otherMajor : major,
         year_entering: yearEntering,
-        short_answer: shortAnswer,
+        short_answer1: shortAnswers[0],
+        short_answer2: shortAnswers[1],
+        short_answer3: shortAnswers[2].join(', ') + (otherShortAnswerChoice ? ', ' + otherShortAnswerChoice : ''),
+        short_answer4: shortAnswers[3],
         resume_link: resume,
         portfolio_link: portfolio,
         status: "SUBMITTED"
@@ -214,19 +218,70 @@ export default function NewApplicationForm({ setApplications, setSnackbarData, s
         <Typography variant="h6" mt={2}>
           Short Answer Questions
         </Typography>
-        {team?.application_questions?.split('\n').map((question, index) => (
-          <Typography key={index} variant="body2" mt={1}>
-            {question}
-          </Typography>
+        {consts.APPLICATION_QUESTIONS.map((question, index) => (
+          <>
+            <Typography variant="subtitle1" mt={2} key={index}>
+              {question.question}
+            </Typography>
+            {question.options && (
+              <>
+                <Grid
+                  container
+                  direction="row"
+                >
+                  {question.options.map(option => (
+                    <Grid item key={option} xs>
+                      <FormControlLabel
+                        control={<Checkbox
+                          checked={shortAnswers[index].includes(option)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setShortAnswers(prev => {
+                                let newAnswers = [...prev];
+                                newAnswers[index] = [...newAnswers[index], option];
+                                return newAnswers;
+                              });
+                            } else {
+                              setShortAnswers(prev => {
+                                let newAnswers = [...prev];
+                                newAnswers[index] = newAnswers[index].filter(a => a !== option);
+                                return newAnswers;
+                              });
+                            }
+                          }} 
+                        />}
+                        label={option}
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
+                {shortAnswers[index].includes("Other") && (
+                  <TextField
+                    label={"Other"}
+                    variant="standard"
+                    value={otherShortAnswerChoice}
+                    onChange={(e) => setOtherShortAnswerChoice(e.target.value)}
+                    sx={{ width: '100%' }}
+                  />
+                )}
+              </>
+            )}
+            {!question.options && (
+              <TextField
+                label={"Short Answer"}
+                variant="standard"
+                value={shortAnswers[index]}
+                onChange={(e) => setShortAnswers(prev => {
+                  let newAnswers = [...prev];
+                  newAnswers[index] = e.target.value;
+                  return newAnswers;
+                })}
+                multiline
+                sx={{ width: '100%' }}
+              />
+            )}
+          </>
         ))}
-        <TextField
-          label={"Short Answer"}
-          variant="standard"
-          value={shortAnswer}
-          onChange={(e) => setShortAnswer(e.target.value)}
-          multiline
-          sx={{ width: '100%' }}
-        />
         <Button
           variant="outlined"
           onClick={handleSubmitApplication}

@@ -31,7 +31,10 @@ class Application(Base):
     phone_number = Column(String)
     major = Column(String, index=True)
     year_entering = Column(String, index=True)
-    short_answer = Column(String)
+    short_answer1 = Column(String)  # Why are you interested in LHR?
+    short_answer2 = Column(String)  # Why are you applying for these systems?
+    short_answer3 = Column(String)  # What general interests do you have and what experience would you like to gain by joining LHR?
+    short_answer4 = Column(String)  # What specific engineering and/or operations experience would you like to gain?
     resume_link = Column(String)
     portfolio_link = Column(String)
     status = Column(Enum("SUBMITTED", "REVIEW", "REJECTED_REVIEW", "INTERVIEW", "INTERVIEW_SCHEDULED", "INTERVIEW_COMPLETE", "REJECTED_INTERVIEW", "TRIAL", "REJECTED_TRIAL", "OFFER", "ACCEPTED", "REJECTED", name="application_status_enum"), index=True)

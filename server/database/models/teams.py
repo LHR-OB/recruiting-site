@@ -11,7 +11,6 @@ class Team(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = Column(String)
-    application_questions = Column(String)
     interview_time_duration = Column(Integer, default=30)
     interview_message = Column(String)
     trial_workday_message = Column(String)

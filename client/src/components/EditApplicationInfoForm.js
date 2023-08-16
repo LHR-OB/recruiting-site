@@ -16,7 +16,6 @@ import eventsApi from '../api/endpoints/events';
 export default function EditApplicationInfoForm({ team, setTeam, setTeams, setSnackbarData, setOpen }) {
     // States
     const [interviewTimeDuration, setInterviewTimeDuration] = useState(team?.interview_time_duration);
-    const [applicationQuestions, setApplicationQuestions] = useState(team?.application_questions);
     const [interviewMessage, setInterviewMessage] = useState(team?.interview_message);
     const [trialWorkdayStartTime, setTrialWorkdayStartTime] = useState(dayjs(new Date(new Date(team?.trial_workday_event?.start_time).getTime() - team?.trial_workday_event?.offset * 60 * 60 * 1000)));
     const [trialWorkdayEndTime, setTrialWorkdayEndTime] = useState(dayjs(new Date(new Date(team?.trial_workday_event?.end_time).getTime() - team?.trial_workday_event?.offset * 60 * 60 * 1000)));
@@ -28,7 +27,6 @@ export default function EditApplicationInfoForm({ team, setTeam, setTeams, setSn
     const handleUpdateApplicationInfo = () => {
         teamsApi.updateTeam(team.id, {
             interview_time_duration: interviewTimeDuration,
-            application_questions: applicationQuestions,
             interview_message: interviewMessage,
             trial_workday_message: trialWorkdayMessage,
             offer_message: offerMessage,
@@ -122,14 +120,6 @@ export default function EditApplicationInfoForm({ team, setTeam, setTeams, setSn
                     value={interviewTimeDuration || ''}
                     onChange={(e) => setInterviewTimeDuration(e.target.value)}
                     sx={{width: '100%' }}
-                />
-                <TextField
-                    label="Application Questions"
-                    variant="standard"
-                    multiline
-                    value={applicationQuestions || ''}
-                    onChange={(e) => setApplicationQuestions(e.target.value)}
-                    sx={{ width: '100%' }}
                 />
                 <TextField
                     label="Interview Message"
