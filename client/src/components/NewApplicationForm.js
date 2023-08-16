@@ -25,7 +25,7 @@ export default function NewApplicationForm({ setApplications, setSnackbarData, s
   const [major, setMajor] = useState('');
   const [otherMajor, setOtherMajor] = useState('');
   const [yearEntering, setYearEntering] = useState('');
-  const [shortAnswers, setShortAnswers] = useState(['', '', [], '']); // [shortAnswer1, shortAnswer2, shortAnswer3, shortAnswer4
+  const [shortAnswers, setShortAnswers] = useState(['', '', '', []]); // [shortAnswer1, shortAnswer2, shortAnswer3, shortAnswer4
   const [otherShortAnswerChoice, setOtherShortAnswerChoice] = useState('');
   const [resume, setResume] = useState('');
   const [portfolio, setPortfolio] = useState('');
@@ -57,8 +57,8 @@ export default function NewApplicationForm({ setApplications, setSnackbarData, s
         year_entering: yearEntering,
         short_answer1: shortAnswers[0],
         short_answer2: shortAnswers[1],
-        short_answer3: shortAnswers[2].join(', ') + (otherShortAnswerChoice ? ', ' + otherShortAnswerChoice : ''),
-        short_answer4: shortAnswers[3],
+        short_answer4: shortAnswers[2],
+        short_answer3: shortAnswers[3].join(', ') + (otherShortAnswerChoice ? ', ' + otherShortAnswerChoice : ''),
         resume_link: resume,
         portfolio_link: portfolio,
         status: "SUBMITTED"

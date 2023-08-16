@@ -39,7 +39,11 @@ const consts = {
             options: null,
         },
         {
-            question: "What general interests do you have and what experience would you like to gain by joining LHR? Select all that apply.",
+            question: "What general interests do you have and what experience would you like to gain by joining LHR?",
+            options: null,
+        },
+        {
+            question: "What specific engineering and/or operations experience would you like to gain? Select all that apply.",
             options: [
                 "CFD (Computational Fluid Dynamics)",
                 "Embedded systems programming",
@@ -60,10 +64,6 @@ const consts = {
                 "Public relations",
                 "Other",
             ]
-        },
-        {
-            question: "What specific engineering and/or operations experience would you like to gain?",
-            options: null,
         },
     ],
     INTERVIEW_SCHEDULE_BUFFER: 24, // Hours
