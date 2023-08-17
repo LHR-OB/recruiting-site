@@ -33,11 +33,11 @@ export default function ScheduleInterviewForm({ interview, setSnackbarData, setO
             is_global: false,
         }).then((res) => {
             if (res.status === 200) {
-                // Add the event to user's and interviewer's calendars
+                // Add the event to interviewer's and user's calendars (order here important so if it fails, it fails before adding the user to the event)
                 const event = res.data;
-                eventApi.joinEvent(event.id).then((res) => {
+                eventApi.addUserToEvent(event.id, interview.interviewer_id).then((res) => {
                     if (res.status === 200) {
-                        eventApi.addUserToEvent(event.id, interview.interviewer_id).then((res) => {
+                        eventApi.joinEvent(event.id).then((res) => {
                             if (res.status === 200) {
                                 interviewsApi.createInterview({}).then((res) => {
                                     if (res.status === 200) {
@@ -88,7 +88,7 @@ export default function ScheduleInterviewForm({ interview, setSnackbarData, setO
                             setSnackbarData({
                                 open: true,
                                 severity: 'error',
-                                message: 'Error scheduling interview',
+                                message: 'Error scheduling interview. There may be a conflict. Please try a different time',
                             });
                         });
                     }
@@ -96,7 +96,7 @@ export default function ScheduleInterviewForm({ interview, setSnackbarData, setO
                     setSnackbarData({
                         open: true,
                         severity: 'error',
-                        message: 'Error scheduling interview',
+                        message: 'Error scheduling interview. There may be a conflict. Please try a different time',
                     });
                 });
             }
