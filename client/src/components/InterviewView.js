@@ -127,7 +127,7 @@ export default function InterviewView({ interview, setInterview, setInterviews, 
                 sx={{
                     display: 'flex',
                     flexDirection: 'column',
-                    alignItems: 'center',
+                    // alignItems: 'center',
                 }}
             >
                 <Typography variant="h4" mt={2}>
