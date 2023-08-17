@@ -79,10 +79,6 @@ def leave_event(db: Session, event_id: str, user_id: str) -> models.Event:
     if db_event is None:
         return None
     db_user = db.query(User).filter(User.id == user_id).first()
-    user_events = db_user.events
-    for user_event in user_events:
-        if events_conflict(user_event, db_event):
-            return False
     db_event.users.remove(db_user)
     db.add(db_event)
     db.commit()
