@@ -148,17 +148,15 @@ def get_application(db: Session, application_id: str) -> models.Application:
 
 
 def advance_application(db: Session, application: models.Application):
+    message_body = ''
     # Auto accept if it's going from submit -> review
     if application.status == 'SUBMITTED':
-        application.stage_decision = 'ACCEPT'
-    if application.stage_decision == 'ACCEPT':
+        application.status = 'REVIEW'
+        message_body = "Thank you for submitting an application! Your application is now being reviewed by our team. Please keep an eye on your portal for updates."
+    elif application.stage_decision == 'ACCEPT':
         # Advance the application status
-        message_body = ''
         application_team = application.team
-        if application.status == 'SUBMITTED':
-            application.status = 'REVIEW'
-            message_body = "Thank you for submitting an application! Your application is now being reviewed by our team. Please keep an eye on your portal for updates."
-        elif application.status == 'REVIEW':
+        if application.status == 'REVIEW':
             application.status = 'INTERVIEW'
             message_body = application_team.interview_message
         elif application.status == 'INTERVIEW_COMPLETE':
@@ -168,15 +166,6 @@ def advance_application(db: Session, application: models.Application):
             application.status = 'OFFER'
             message_body = application_team.offer_message
         application.stage_decision = 'NEUTRAL'
-
-        # Send a message to the user
-        message = message_schemas.MessageCreate(
-            title="Application Update: " + application.team.name + " " + application.system.name,
-            message=message_body,
-            timestamp=datetime.datetime.now(),
-            user_id=str(application.user_id)
-        )
-        send_message(db=db, message=message)
     else:
         # Reject the application
         if application.status == 'REVIEW' or application.status == 'REVIEW':
@@ -186,6 +175,16 @@ def advance_application(db: Session, application: models.Application):
         elif application.status == 'TRIAL':
             application.status = 'REJECTED_TRIAL'
         application.stage_decision = 'NEUTRAL'
+    
+    # Send a message to the user
+    if message_body != '':
+        message = message_schemas.MessageCreate(
+            title="Application Update: " + application.team.name + " " + application.system.name,
+            message=message_body,
+            timestamp=datetime.datetime.now(),
+            user_id=str(application.user_id)
+        )
+        send_message(db=db, message=message)
     db.add(application)
 
 
