@@ -35,11 +35,11 @@ import Profile from './pages/Profile';
 import InterviewAvailability from './pages/InterviewAvailability';
 import Interviews from './pages/Interviews';
 import Messages from './pages/Messages';
-import Unauthorized from './pages/Unauthorized';
 import PageNotFound from './pages/PageNotFound';
 import usersApi from './api/endpoints/users';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import ProtectedPage from './components/ProtectedPage';
 
 const Alert = forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -85,39 +85,67 @@ export default function App() {
     },
     {
       path: "/calendar",
-      element: <Calendar user={user} setSnackbarData={setSnackbarData} />
+      element: (
+        <ProtectedPage user={user} requiredRole="APPLICANT">
+          <Calendar user={user} setSnackbarData={setSnackbarData} />
+        </ProtectedPage>
+      )
     },
     {
       path: "/applications",
-      element: <Applications user={user} setSnackbarData={setSnackbarData} />
+      element: (
+        <ProtectedPage user={user} requiredRole="APPLICANT">
+          <Applications user={user} setSnackbarData={setSnackbarData} />
+        </ProtectedPage>
+      )
     },
     {
       path: "/admin",
-      element: <Admin user={user} setSnackbarData={setSnackbarData} />
+      element: (
+        <ProtectedPage user={user} requiredRole="ADMIN">
+          <Admin user={user} setSnackbarData={setSnackbarData} />
+        </ProtectedPage>
+      )
     },
     {
       path: "/team-management",
-      element: <TeamManagement user={user} setSnackbarData={setSnackbarData} />
+      element: (
+        <ProtectedPage user={user} requiredRole="TEAM_MANAGEMENT">
+          <TeamManagement user={user} setSnackbarData={setSnackbarData} />
+        </ProtectedPage>
+      )
     },
     {
       path: "/profile/:id",
-      element: <Profile user={user} setUser={setUser} setSnackbarData={setSnackbarData} />
+      element: (
+        <ProtectedPage user={user} requiredRole="APPLICANT">
+          <Profile user={user} setUser={setUser} setSnackbarData={setSnackbarData} />
+        </ProtectedPage>
+      )
     },
     {
       path: "/interview-availability",
-      element: <InterviewAvailability user={user} setSnackbarData={setSnackbarData} />
+      element: (
+        <ProtectedPage user={user} requiredRole="APPLICANT">
+          <InterviewAvailability user={user} setSnackbarData={setSnackbarData} />
+        </ProtectedPage>
+      )
     },
     {
       path: "/interviews",
-      element: <Interviews user={user} setSnackbarData={setSnackbarData} />
+      element: (
+        <ProtectedPage user={user} requiredRole="INTERVIEWER">
+          <Interviews user={user} setSnackbarData={setSnackbarData} />
+        </ProtectedPage>
+      )
     },
     {
       path: "/messages",
-      element: <Messages user={user} setSnackbarData={setSnackbarData} />
-    },
-    {
-      path: "/unauthorized",
-      element: <Unauthorized user={user} setSnackbarData={setSnackbarData} />
+      element: (
+        <ProtectedPage user={user} requiredRole="APPLICANT">
+          <Messages user={user} setSnackbarData={setSnackbarData} />
+        </ProtectedPage>
+      )
     },
     {
       path: "*",

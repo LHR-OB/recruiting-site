@@ -17,7 +17,7 @@ export default function Unauthorized({ user }) {
                 }}
             >
                 <Typography variant="h4" mt={2}>
-                    You are not authorized to perform that action
+                    You are not authorized to view this page
                 </Typography>
                 <Typography variant="body1" mt={2}>
                     If you think this is an error, please try logging in again or contact the administrator.

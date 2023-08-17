@@ -4,6 +4,7 @@ const consts = {
         "Team Management",
         "System Lead",
         "Interviewer",
+        "Applicant",
     ],
     MAJORS: [
         "ASE",
