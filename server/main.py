@@ -8,7 +8,7 @@ import threading
 from routes import users, applications, events, teams, availabilities, interviews, messages
 from database.database import Base, engine
 from utils.users import authenticate_user, create_access_token
-from utils.dummy_data import main as create_dummy_data
+from utils.dummy_data import main as create_dummy_data, create_rand_application
 from dependencies import get_db, get_current_user
 from email_send import mail_worker, mail_queue
 
@@ -85,4 +85,11 @@ async def send_email(db: Session = Depends(get_db), curr_user=Depends(get_curren
             timestamp=datetime.now(),
             user_id=str(curr_user.id)
         ))
+    return {'status': 'ok'}
+
+
+@app.post('/flood-applications')
+async def flood_applications(db: Session = Depends(get_db), curr_user=Depends(get_current_user), n: int = 1):
+    for i in range(n):
+        create_rand_application(db=db, user=curr_user)
     return {'status': 'ok'}
