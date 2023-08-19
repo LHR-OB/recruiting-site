@@ -2,10 +2,8 @@ import { React } from 'react';
 import {
   Box,
   Container,
-  Grid,
   Typography,
 } from '@mui/material';
-import DashboardTeamSummary from '../components/DashboardTeamSummary';
 
 export default function Dashboard({ user, setSnackbarData }) {
   return (
@@ -45,17 +43,16 @@ export default function Dashboard({ user, setSnackbarData }) {
           </Typography>
         </Box>
         {/* Team Summaries */}
-        <Grid container spacing={2} sx={{ marginTop: 8 }}>
-          <Grid item xs={4}>
-            <DashboardTeamSummary name="Combustion" />
-          </Grid>
-          <Grid item xs={4}>
-            <DashboardTeamSummary name="Solar" />
-          </Grid>
-          <Grid item xs={4}>
-            <DashboardTeamSummary name="Electric" />
-          </Grid>
-        </Grid>
+        <Box
+          component="img"
+          src="/team-summary.png"
+          sx={{
+            width: '100%',
+            height: 'auto',
+            marginTop: 8,
+            alignItems: 'center',
+          }}
+        />
         {/* Application Timeline */}
         <Box
           component="img"
