@@ -56,7 +56,7 @@ export default function Dashboard({ user, setSnackbarData }) {
         {/* Application Timeline */}
         <Box
           component="img"
-          src="/timeline-placeholder.jpeg"
+          src="/timeline.png"
           sx={{
             width: '100%',
             height: 'auto',
