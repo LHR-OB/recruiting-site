@@ -18,7 +18,6 @@ import CenterModal from './CenterModal';
 import availabilitiesApi from '../api/endpoints/availabilities';
 import eventsApi from '../api/endpoints/events';
 import usersApi from '../api/endpoints/users';
-import { systemsApi } from '../api/endpoints/teams';
 import { applicationsApi, applicationCyclesApi } from '../api/endpoints/applications';
 import ScheduleInterviewForm from './ScheduleInterviewForm';
 
@@ -28,6 +27,7 @@ export default function InterviewAvailabilityList({ user, setSnackbarData }) {
     const [dayAvailabilities, setDayAvailabilities] = useState([]);
     const [highlightedDays, setHighlightedDays] = useState(new Set());
     const [availabilities, setAvailabilities] = useState([]);
+    const [uniqueAvailabilities, setUniqueAvailabilities] = useState([]);
     const [applicationCycle, setApplicationCycle] = useState(null);
     const [systems, setSystems] = useState([]);
     const [selectedSystem, setSelectedSystem] = useState(null);
@@ -73,22 +73,41 @@ export default function InterviewAvailabilityList({ user, setSnackbarData }) {
 
     useEffect(() => {
         if (availabilities) {
-          // Mark days with events
-          const newHighlightedDays = new Set();
-          availabilities.forEach((availability) => {
-            const eventDate = new Date(availability.start_time);
-            newHighlightedDays.add(new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate()).toDateString());
-          });
-          setHighlightedDays(newHighlightedDays);
-          // Sort events
-          availabilities.sort((a, b) => {
-            return new Date(a.start_time) - new Date(b.start_time);
-          });
+            // Mark days with events
+            const newHighlightedDays = new Set();
+            availabilities.forEach((availability) => {
+                const eventDate = new Date(availability.start_time);
+                newHighlightedDays.add(new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate()).toDateString());
+            });
+            setHighlightedDays(newHighlightedDays);
+            // Sort events
+            availabilities.sort((a, b) => {
+                return new Date(a.start_time) - new Date(b.start_time);
+            });
+            // Get unique availabilities
+            const groupedAvailabilities = {};
+            for (let availability of availabilities) {
+                const key = new Date(availability.start_time).getTime();
+                if (!groupedAvailabilities[key]) {
+                    groupedAvailabilities[key] = [availability];
+                } else {
+                    groupedAvailabilities[key].push(availability);
+                }
+            }
+            const newUniqueAvailabilities = [];
+            for (let key in groupedAvailabilities) {
+                const group = groupedAvailabilities[key];
+                // Choose one at random
+                const randomIndex = Math.floor(Math.random() * group.length);
+                newUniqueAvailabilities.push(group[randomIndex]);
+            }
+            setUniqueAvailabilities(newUniqueAvailabilities);
         }
     }, [availabilities]);
 
     useEffect(() => {
-        const newDayAvailabilities = availabilities.filter((availability) => {
+        // Get availabilities for the selected day
+        const newDayAvailabilities = uniqueAvailabilities.filter((availability) => {
             const eventDate = new Date(availability.start_time);
             return (
                 eventDate.getDate() === value.getDate() &&
@@ -97,7 +116,7 @@ export default function InterviewAvailabilityList({ user, setSnackbarData }) {
             );
         });
         setDayAvailabilities(newDayAvailabilities);
-    }, [value, availabilities]);
+    }, [value, uniqueAvailabilities]);
 
     const getNonConflictingTimes = (availability, events, application, interviewer) => {
         const availabilityStart = new Date(availability.start_time).getTime() - availability.offset * 60 * 60 * 1000;
@@ -158,7 +177,6 @@ export default function InterviewAvailabilityList({ user, setSnackbarData }) {
     }
 
     const handleClickAvailability = (availability) => {
-        console.log(selectedSystem.name);
         setSelectedInterview({
             system: selectedSystem?.name,
             start_time: availability.start_time,
