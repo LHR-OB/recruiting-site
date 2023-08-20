@@ -122,7 +122,7 @@ export default function EventView({ user, event, setSnackbarData }) {
                 </Typography>
                 <br />
                 <Typography variant="body1" mt={2}>
-                    {event?.location}
+                    Location: {event?.location}
                 </Typography>
                 <br />
                 <Typography variant="body1" mt={2}>
