@@ -90,6 +90,8 @@ export default function ScheduleInterviewForm({ interview, setSnackbarData, setO
                                 severity: 'error',
                                 message: 'Error scheduling interview. There may be a conflict. Please try a different time',
                             });
+                            // Delete event
+                            eventApi.deleteEvent(event.id);
                         });
                     }
                 }, (error) => {
@@ -98,6 +100,8 @@ export default function ScheduleInterviewForm({ interview, setSnackbarData, setO
                         severity: 'error',
                         message: 'Error scheduling interview. There may be a conflict. Please try a different time',
                     });
+                    // Delete event
+                    eventApi.deleteEvent(event.id);
                 });
             }
         }, (error) => {
