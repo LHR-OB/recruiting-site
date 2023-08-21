@@ -31,7 +31,7 @@ export default function Footer() {
         },
         {
             label: 'Email',
-            link: 'mailto:lhr@utexas.edu',
+            link: 'mailto:lhroutreach@gmail.com',
             icon: <EmailIcon />,
         }
     ]
