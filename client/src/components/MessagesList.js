@@ -24,7 +24,7 @@ export default function MessagesList({ messages, selectedMessage, setSelectedMes
     return (
         <Container>
             <List>
-                {messages.map((message) => (
+                {messages.reverse().map((message) => (
                     <ListItemButton
                         key={message.id}
                         onClick={() => handleClickMessage(message)}
