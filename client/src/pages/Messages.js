@@ -18,7 +18,7 @@ export default function Messages({ user }) {
         if (user) {
             messagesApi.getMessagesCurrentUser().then((res) => {
                 if (res.status === 200) {
-                    setMessages(res.data);
+                    setMessages(res.data.reverse());
                 }
             });
         }
