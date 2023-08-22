@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import os
+import random
 from typing import List, Union
 from sqlalchemy.orm import Session
 from jose import jwt
@@ -30,6 +31,22 @@ def authenticate_user(db: Session, email: str, password: str):
         return None
     if not verify_password(password, user.hashed_password):
         return None
+    return user
+
+
+def create_password_reset_code() -> str:
+    # Generate random 6 digit code
+    return ''.join([str(random.randint(0, 9)) for _ in range(6)])
+
+
+def reset_password(db: Session, user, password: str) -> models.User:
+    hashed_password = hash_password(password)
+    setattr(user, "hashed_password", hashed_password.decode('utf8'))
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    user.team
+    user.systems
     return user
 
 

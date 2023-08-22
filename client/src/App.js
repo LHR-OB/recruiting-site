@@ -25,6 +25,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import MemberSignup from './pages/MemberSignup';
 import ApplicantSignup from './pages/ApplicantSignup';
+import ForgotPassword from './pages/ForgotPassword';
 import Dashboard from './pages/Dashboard';
 import Calendar from './pages/Calendar';
 import Applications from './pages/Applications';
@@ -82,6 +83,10 @@ export default function App() {
     {
       path: "/member-signup",
       element: <MemberSignup user={user} setSnackbarData={setSnackbarData} />
+    },
+    {
+      path: "/forgot-password",
+      element: <ForgotPassword user={user} setSnackbarData={setSnackbarData} />
     },
     {
       path: "/calendar",

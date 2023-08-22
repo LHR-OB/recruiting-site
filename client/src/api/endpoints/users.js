@@ -61,6 +61,14 @@ const usersApi = {
     const url = `/users/${id}`;
     return axiosClient.put(url, data);
   },
+  generatePasswordResetCode: (email) => {
+    const url = `/users/password/reset-code/${email}`;
+    return axiosClient.put(url);
+  },
+  resetPassword: (data) => {
+    const url = "/users/password/reset";
+    return axiosClient.put(url, data);
+  }
 };
 
 export default usersApi;

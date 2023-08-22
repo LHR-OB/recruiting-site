@@ -22,13 +22,7 @@ axiosClient.interceptors.response.use(
   error => {
     // Handle errors
     if (error.response) {
-      switch (error.response.status) {
-        case 401:
-          throw error;
-          break;
-        default:
-          throw error;
-      }
+      throw error;
     }
   }
 );

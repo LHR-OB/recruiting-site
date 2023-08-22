@@ -35,3 +35,9 @@ class User(UserBase):
 
     class Config:
         orm_mode = True
+
+
+class PasswordReset(BaseModel):
+    email: str
+    code: str
+    password: str

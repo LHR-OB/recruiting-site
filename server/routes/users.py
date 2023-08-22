@@ -1,15 +1,21 @@
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from datetime import datetime
 
 from dependencies import get_db, get_current_user, required_team_management, required_member, required_admin
-from database.schemas import users as schemas
+from database.schemas import users as schemas, messages as message_schemas
 from utils import users as utils
+from utils.messages import send_message
 
 router = APIRouter(
     prefix="/users",
     tags=['users']
 )
+
+
+# Code cache for password resets
+password_reset_cache = {}
 
 
 @router.post('/applicant')
@@ -110,6 +116,37 @@ async def update_user(id: str, user: schemas.MemberUpdate, curr_user=Depends(req
             if (utils.user_is_at_least(user=db_user, type="ADMIN") or db_user.team != curr_user.team) and curr_user.type != "ADMIN":
                 raise unauthorized_exception
     return utils.update_user(db=db, user_id=id, user=user)
+
+
+@router.put('/password/reset-code/{email}')
+async def create_password_reset_code(email: str, db: Session = Depends(get_db)):
+    db_user = utils.get_user(db=db, email=email)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    password_reset_cache[email] = utils.create_password_reset_code()
+    # Send email with code
+    send_message(db=db, message=message_schemas.MessageCreate(
+        title="Password Reset Code",
+        message=f"Your password reset code is {password_reset_cache[email]}",
+        user_id=str(db_user.id),
+        timestamp=datetime.now()
+    ))
+    return {"msg": "Password reset code created"}
+
+
+@router.put('/password/reset')
+async def reset_password(reset_data: schemas.PasswordReset, db: Session = Depends(get_db)):
+    db_user = utils.get_user(db=db, email=reset_data.email)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    if reset_data.email not in password_reset_cache:
+        raise HTTPException(status_code=404, detail="Password reset code not found")
+    if password_reset_cache[reset_data.email] != reset_data.code:
+        raise HTTPException(status_code=404, detail="Password reset code incorrect")
+    # Remove from cache
+    del password_reset_cache[reset_data.email]
+    return utils.reset_password(db=db, user=db_user, password=reset_data.password)
+
 
 @router.delete('/{id}')
 async def delete_user(id: str, db: Session = Depends(get_db)):

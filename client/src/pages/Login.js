@@ -77,6 +77,9 @@ export default function Login({ user, setSnackbarData }) {
         <Link href="/member-signup" variant="body2">
           Existing LHR Member? Sign Up
         </Link>
+        <Link href="/forgot-password" variant="body2">
+          Forgot Password?
+        </Link>
       </Box>
     </Container>
   );
