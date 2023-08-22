@@ -19,8 +19,8 @@ from datetime import datetime
 
 # Main app configuration
 Base.metadata.create_all(bind=engine)
-disable_docs = os.environ.get('DISABLE_DOCS', False)
-app = FastAPI(docs_url=None if disable_docs else '/docs', redoc_url=None if disable_docs else '/redoc')
+env_prod = os.environ.get('ENV_PROD', False)
+app = FastAPI(docs_url=None if env_prod else '/docs', redoc_url=None if env_prod else '/redoc')
 
 # Lifespan tasks
 worker = threading.Thread(target=mail_worker, daemon=True)
@@ -71,27 +71,27 @@ async def token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
     access_token = create_access_token(data={'sub': str(user.id)})
     return {'access_token': access_token, 'token_type': 'bearer'}
 
-
-@app.post('/dummy-data')
-async def dummy_data(db: Session = Depends(get_db)):
-    create_dummy_data(db)
-    return {'status': 'ok'}
-
-
-@app.post('/send-email')
-async def send_email(db: Session = Depends(get_db), curr_user=Depends(get_current_user), n: int = 1):
-    for i in range(n):
-        send_message(db=db, message=MessageCreate(
-            title='Test',
-            message=f'This is test message {i}',
-            timestamp=datetime.now(),
-            user_id=str(curr_user.id)
-        ))
-    return {'status': 'ok'}
+if not env_prod:
+    @app.post('/dummy-data')
+    async def dummy_data(db: Session = Depends(get_db)):
+        create_dummy_data(db)
+        return {'status': 'ok'}
 
 
-@app.post('/flood-applications')
-async def flood_applications(db: Session = Depends(get_db), curr_user=Depends(get_current_user), n: int = 1):
-    for i in range(n):
-        create_rand_application(db=db, user=curr_user)
-    return {'status': 'ok'}
+    @app.post('/send-email')
+    async def send_email(db: Session = Depends(get_db), curr_user=Depends(get_current_user), n: int = 1):
+        for i in range(n):
+            send_message(db=db, message=MessageCreate(
+                title='Test',
+                message=f'This is test message {i}',
+                timestamp=datetime.now(),
+                user_id=str(curr_user.id)
+            ))
+        return {'status': 'ok'}
+
+
+    @app.post('/flood-applications')
+    async def flood_applications(db: Session = Depends(get_db), curr_user=Depends(get_current_user), n: int = 1):
+        for i in range(n):
+            create_rand_application(db=db, user=curr_user)
+        return {'status': 'ok'}
