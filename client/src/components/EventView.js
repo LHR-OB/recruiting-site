@@ -22,7 +22,6 @@ export default function EventView({ user, event, setSnackbarData }) {
 
     useEffect(() => {
         if (event) {
-            console.log(event);
             usersApi.getUsersByEvent(event.id).then((res) => {
                 if (res.status === 200) {
                     setInvitees(res.data);
@@ -35,7 +34,6 @@ export default function EventView({ user, event, setSnackbarData }) {
         eventsApi.deleteEvent(event.id).then((res) => {
             if (res.status === 200) {
                 interviewsApi.getInterview(event.interview_id).then((res) => {
-                    console.log(res.data);
                     if (res.status === 200) {
                         applicationsApi.updateApplication(res.data.application.id, {
                             status: 'INTERVIEW'

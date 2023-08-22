@@ -55,7 +55,6 @@ export default function ForgotPassword({ setSnackbarData }) {
                 });
             }
         }, (error) => {
-            console.log(error.response);
             setSnackbarData({
                 open: true,
                 message: 'Error: ' + error.response?.data?.detail,
