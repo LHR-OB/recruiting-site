@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from contextlib import asynccontextmanager
 import threading
+import os
 
 from routes import users, applications, events, teams, availabilities, interviews, messages
 from database.database import Base, engine
@@ -18,7 +19,8 @@ from datetime import datetime
 
 # Main app configuration
 Base.metadata.create_all(bind=engine)
-app = FastAPI()
+disable_docs = os.environ.get('DISABLE_DOCS', False)
+app = FastAPI(docs_url=None if disable_docs else '/docs', redoc_url=None if disable_docs else '/redoc')
 
 # Lifespan tasks
 worker = threading.Thread(target=mail_worker, daemon=True)
