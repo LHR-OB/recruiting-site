@@ -18,6 +18,7 @@ import {
   Typography,
   Switch,
 } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 import { applicationsApi, applicationCyclesApi } from '../api/endpoints/applications';
 import SelectOffer from './SelectOffer';
 
@@ -211,6 +212,12 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
       'compare': (a, b) => (a.status > b.status) ? 1 : -1,
     },
   ];
+
+  if (!applications) return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <CircularProgress />
+    </div>
+  );
 
   return (
     <Container>
