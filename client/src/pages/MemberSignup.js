@@ -110,7 +110,7 @@ export default function MemberSignup({ setSnackbarData }) {
             value={role}
             onChange={(e) => setRole(e.target.value)}
           >
-            {consts.USER_ROLES.map((r, i) => (
+            {consts.USER_ROLES.filter(role => role !== "Applicant").map((r, i) => (
               <MenuItem
                 value={r}
                 key={i}
