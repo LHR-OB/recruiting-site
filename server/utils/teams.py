@@ -14,7 +14,7 @@ def create_team(db: Session, team: schemas.TeamCreate) -> models.Team:
     return db_team
 
 
-def get_teams(db: Session, limit: int = 100) -> List[models.Team]:
+def get_teams(db: Session, limit: int = 1000) -> List[models.Team]:
     teams = db.query(models.Team).limit(limit).all()
     for team in teams:
         team.trial_workday_event
@@ -61,7 +61,7 @@ def create_system(db: Session, system: schemas.SystemCreate) -> models.System:
     return db_system
 
 
-def get_systems(db: Session, limit: int = 100) -> List[models.System]:
+def get_systems(db: Session, limit: int = 1000) -> List[models.System]:
     return db.query(models.System).limit(limit).all()
 
 

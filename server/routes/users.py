@@ -35,17 +35,17 @@ async def create_user_member(user: schemas.MemberCreate, db: Session = Depends(g
 
 
 @router.get('')
-async def get_users(limit: int = 100, user=Depends(required_admin), db: Session = Depends(get_db)):
+async def get_users(limit: int = 1000, user=Depends(required_admin), db: Session = Depends(get_db)):
     return utils.get_users(db=db, limit=limit)
 
 
 @router.get('/team/{id}')
-async def get_users_by_team(id: str, limit: int = 100, db: Session = Depends(get_db)):
+async def get_users_by_team(id: str, limit: int = 1000, db: Session = Depends(get_db)):
     return utils.get_users(db=db, team_id=id, limit=limit)
 
 
 @router.get('/members')
-async def get_users_members(limit: int = 100, db: Session = Depends(get_db)):
+async def get_users_members(limit: int = 1000, db: Session = Depends(get_db)):
     return utils.get_users(db=db, limit=limit, members=True)
 
 
@@ -71,7 +71,7 @@ async def get_current_user(curr_user=Depends(get_current_user)):
 
 
 @router.get('/event/{id}')
-async def get_users_by_event(id: str, limit: int = 100, db: Session = Depends(get_db)):
+async def get_users_by_event(id: str, limit: int = 1000, db: Session = Depends(get_db)):
     return utils.get_users(db=db, event_id=id, limit=limit)
 
 

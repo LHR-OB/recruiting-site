@@ -129,7 +129,7 @@ def create_user(db: Session, user: schemas.UserCreate) -> models.User:
     return db_user
 
 
-def get_users(db: Session, limit: int = 100, members: bool = False, team_id: str = None, event_id: str = None) -> List[models.User]:
+def get_users(db: Session, limit: int = 1000, members: bool = False, team_id: str = None, event_id: str = None) -> List[models.User]:
     query = db.query(models.User)
     if members:
         query = query.filter(models.User.type != "APPLICANT")

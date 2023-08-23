@@ -16,7 +16,7 @@ def create_interview(db: Session, interview: schemas.InterviewCreate) -> models.
     return db_interview
 
 
-def get_interviews(db: Session, limit: int = 100) -> List[models.Interview]:
+def get_interviews(db: Session, limit: int = 1000) -> List[models.Interview]:
     interviews = db.query(models.Interview).limit(limit).all()
     for interview in interviews:
         interview.event
@@ -74,7 +74,7 @@ def create_interview_note(db: Session, interview_note: schemas.InterviewNoteCrea
     return db_interview_note
 
 
-def get_interview_notes(db: Session, interview_id: str = None, limit: int = 100) -> List[models.InterviewNote]:
+def get_interview_notes(db: Session, interview_id: str = None, limit: int = 1000) -> List[models.InterviewNote]:
     query = db.query(models.InterviewNote)
     if interview_id is not None:
         query = query.filter(models.InterviewNote.interview_id == interview_id)

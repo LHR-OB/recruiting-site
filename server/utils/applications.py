@@ -18,7 +18,7 @@ def create_application_cycle(db: Session, application_cycle: schemas.Application
     return db_application_cycle
 
 
-def get_application_cycles(db: Session, limit: int = 100) -> List[models.ApplicationCycle]:
+def get_application_cycles(db: Session, limit: int = 1000) -> List[models.ApplicationCycle]:
     return db.query(models.ApplicationCycle).limit(limit).all()
 
 

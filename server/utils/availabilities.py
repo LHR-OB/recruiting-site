@@ -17,7 +17,7 @@ def create_availability(db: Session, availability: schemas.AvailabilityCreate, u
     return db_availability
 
 
-def get_availabilities(db: Session, limit: int = 100) -> List[models.Availability]:
+def get_availabilities(db: Session, limit: int = 1000) -> List[models.Availability]:
     return db.query(models.Availability).limit(limit).all()
 
 

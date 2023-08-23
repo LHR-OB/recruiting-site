@@ -29,7 +29,7 @@ def create_event(db: Session, event: schemas.EventCreate) -> models.Event:
     return db_event
 
 
-def get_events(db: Session, limit: int = 100) -> List[models.Event]:
+def get_events(db: Session, limit: int = 1000) -> List[models.Event]:
     return db.query(models.Event).limit(limit).all()
 
 
