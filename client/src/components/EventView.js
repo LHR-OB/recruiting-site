@@ -102,6 +102,27 @@ export default function EventView({ user, event, setSnackbarData }) {
         });
     }
 
+    const handleLeaveEvent = () => {
+        eventsApi.leaveEvent(event.id).then((res) => {
+            if (res.status === 200) {
+                setSnackbarData({
+                    open: true,
+                    message: 'Left event',
+                    severity: 'success',
+                });
+                setInvitees((curr) => {
+                    return curr.filter((invitee) => invitee.id !== user.id);
+                });
+            } else {
+                setSnackbarData({
+                    open: true,
+                    message: 'Error leaving event',
+                    severity: 'error',
+                });
+            }
+        });
+    }
+
     return (
         <Container>
             <Box
@@ -175,6 +196,19 @@ export default function EventView({ user, event, setSnackbarData }) {
                             sx={{ marginTop: 2 }}
                         >
                             Add Invitee
+                        </Button>
+                    </Container>
+                }
+                {
+                    user?.type !== "APPLICANT" && !event?.is_global && invitees.some((invitee) => invitee.id === user?.id) &&
+                    <Container>
+                        <Button
+                            variant="outlined"
+                            color="error"
+                            onClick={handleLeaveEvent}
+                            sx={{ marginTop: 2 }}
+                        >
+                            Leave Event
                         </Button>
                     </Container>
                 }
