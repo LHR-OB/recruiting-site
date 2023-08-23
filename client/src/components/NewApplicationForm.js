@@ -228,6 +228,7 @@ export default function NewApplicationForm({ setApplications, setSnackbarData, s
                 <Grid
                   container
                   direction="row"
+                  alignItems="center"
                 >
                   {question.options.map(option => (
                     <Grid item key={option} xs>
