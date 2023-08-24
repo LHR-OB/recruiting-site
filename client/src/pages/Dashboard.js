@@ -12,7 +12,7 @@ export default function Dashboard({ user, setSnackbarData }) {
         {/* Collage */}
         <Box
           component="img"
-          src="/homepage-collage.png"
+          src="/homepage-collage.webp"
           sx={{
             width: '100%',
             height: 'auto',
