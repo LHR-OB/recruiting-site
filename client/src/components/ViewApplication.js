@@ -13,7 +13,7 @@ export default function ViewApplication({ user, application, setApplication, set
   // States
   const [interviewNotes, setInterviewNotes] = useState([]);
   const [qWraps, setQWraps] = useState([false, false, false, false]);
-  const [shortAnswers, setShortAnswers] = useState(['', '', '', '']); // [shortAnswer1, shortAnswer2, shortAnswer3, shortAnswer4
+  const [shortAnswers, setShortAnswers] = useState(['', '', '', '']); // [shortAnswer1, shortAnswer2, shortAnswer3, shortAnswer4]
 
   useEffect(() => {
     if (application && application.interview_id && user?.type !== 'APPLICANT') {
@@ -30,8 +30,8 @@ export default function ViewApplication({ user, application, setApplication, set
       setShortAnswers([
         application.short_answer1,
         application.short_answer2,
-        application.short_answer3,
         application.short_answer4,
+        application.short_answer3,
       ]);
     }
   }, [application]);
@@ -109,6 +109,14 @@ export default function ViewApplication({ user, application, setApplication, set
         severity: 'error',
       });
     });
+  }
+
+  const getFullLink = (link) => {
+    if (link.includes('http')) {
+      return link;
+    } else {
+      return `//${link}`;
+    }
   }
 
   return (
@@ -194,13 +202,13 @@ export default function ViewApplication({ user, application, setApplication, set
           ))}
           {/* Resume */}
           <Typography variant="subtitle1" mt={2}>
-            <a href={`//${application?.resume_link}`} target='_blank' rel='noreferrer'>Resume</a>
+            <a href={getFullLink(application?.resume_link)} target='_blank' rel='noreferrer'>Resume</a>
           </Typography>
           {/* Portfolio */}
           {
             application?.portfolio_link &&
             <Typography variant="subtitle1" mt={2}>
-              <a href={`//${application?.portfolio_link}`} target='_blank' rel='noreferrer'>Portfolio</a>
+              <a href={getFullLink(application?.portfolio_link)} target='_blank' rel='noreferrer'>Portfolio</a>
             </Typography>
           }
         </Grid>

@@ -175,6 +175,14 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
     }
   }
 
+  const getFullLink = (link) => {
+    if (link.includes('http')) {
+      return link;
+    } else {
+      return `//${link}`;
+    }
+  }
+
   const TABLE_HEADERS = [
     {
       'id': 'application_id',
@@ -305,7 +313,7 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
                   </Typography>
                 </TableCell>
                 <TableCell align="right">
-                  <a href={`//${application?.resume_link}`} target="_blank" rel="noreferrer">
+                  <a href={getFullLink(application?.resume_link)} target="_blank" rel="noreferrer">
                     Resume
                   </a>
                 </TableCell>
