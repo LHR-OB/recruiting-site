@@ -132,6 +132,12 @@ def get_applications(db: Session, application_cycle_id: str = None, team_id: str
         application.team
         application.user
         application.system
+        # Check that system's team matches the application's team (frontend bug introduced this in the database, so this should fix on read)
+        if application.system.team_id != application.team_id:
+            application.team = application.system.team
+            db.add(application)
+            db.commit()
+            db.refresh(application)
     return applications
 
 
