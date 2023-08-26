@@ -97,6 +97,7 @@ export default function NewApplicationForm({ setApplications, setSnackbarData, s
       systemsApi.getSystemsByTeam(team.id).then(res => {
         if (res.status === 200) {
           setSystems(res.data);
+          setSelectedSystems([]);
         }
       });
     }
