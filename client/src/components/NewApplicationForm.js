@@ -141,7 +141,7 @@ export default function NewApplicationForm({ setApplications, setSnackbarData, s
             <Grid item key={system.id} xs>
               <FormControlLabel
                 control={<Checkbox
-                  checked={selectedSystems.includes(system)}
+                  checked={selectedSystems?.includes(system)}
                   onChange={(e) => {
                     if (e.target.checked) {
                       setSelectedSystems([...selectedSystems, system]);
