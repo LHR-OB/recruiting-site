@@ -273,7 +273,7 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
             </TableRow>
           </TableHead>
           <TableBody>
-            {applications.filter(application => (!(hideRejected && application.status.includes("REJECTED")))).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((application, index) => (
+            {applications && applications.filter(application => (!(hideRejected && application.status.includes("REJECTED")))).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((application, index) => (
               <TableRow
                 key={index}
                 onClick={() => handleApplicationClick(application)}
