@@ -95,7 +95,7 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
       return;
     }
     const filteredApplications = unfilteredApplications.filter((application) => {
-      const searchString = `${application.user.first_name} ${application.user.last_name} ${application.team.name} ${application.system.name} ${application.major} ${application.status}`;
+      const searchString = `${application.id} ${application.user.first_name} ${application.user.last_name} ${application.team.name} ${application.system.name} ${application.major} ${application.status}`;
       return search.split(' ').every((word) => (searchString.toLowerCase().includes(word.toLowerCase())));
     });
     setApplications(filteredApplications);
