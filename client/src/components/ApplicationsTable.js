@@ -158,7 +158,7 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
   }
 
   const getBackgroundColor = (application) => {
-    if (user.type !== 'APPLICANT' && !application.status.includes("REJECTED")) {
+    if (user.type !== 'APPLICANT' && !application?.status?.includes("REJECTED")) {
       switch (application.stage_decision) {
         case 'ACCEPT':
           return 'green';
@@ -173,10 +173,10 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
   }
 
   const getApplicantStatus = (application) => {
-    if (application.status.includes("REJECTED") && application.status !== "SUBMITTED") {
+    if (application?.status?.includes("REJECTED") && application.status !== "SUBMITTED") {
       return "REVIEW";
     } else {
-      return application.status;
+      return application?.status;
     }
   }
 
@@ -336,7 +336,7 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
       <TablePagination
         rowsPerPageOptions={[10, 25, 50]}
         component="div"
-        count={applications?.filter(application => (!(hideRejected && application.status.includes("REJECTED")))).length}
+        count={applications?.filter(application => (!(hideRejected && application?.status?.includes("REJECTED")))).length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
