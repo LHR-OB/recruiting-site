@@ -32,22 +32,36 @@ export default function ApplicationInfo({ team, setTeam, setTeams, setSnackbarDa
     }
   }, [team]);
 
+  const getUniqueApplicationsLength = (applications) => {
+    const uniqueApplications = [];
+    applications.forEach((application) => {
+      if (!uniqueApplications.some((uniqueApplication) => uniqueApplication.user_id === application.user_id)) {
+        uniqueApplications.push(application);
+      }
+    });
+    return uniqueApplications.length;
+  }
+
   return (
     <Container>
       <Typography variant="h6" mt={2}>
         Application Info
       </Typography>
       <Typography variant="body1" mt={2}>
-        Applications: {applications.length}
+        Applications: {applications.length} {' '}
+        ({getUniqueApplicationsLength(applications)} unique)
       </Typography>
       <Typography variant="body1" mt={2}>
-        Stage Accepted: {applications.filter((application) => application.stage_decision === 'ACCEPT').length}
+        Stage Accepted: {applications.filter((application) => application.stage_decision === 'ACCEPT').length} {' '}
+        ({getUniqueApplicationsLength(applications.filter((application) => application.stage_decision === 'ACCEPT'))} unique)
       </Typography>
       <Typography variant="body1" mt={2}>
-        Stage Rejected: {applications.filter((application) => application.stage_decision === 'REJECT').length}
+        Stage Rejected: {applications.filter((application) => application.stage_decision === 'REJECT').length} {' '}
+        ({getUniqueApplicationsLength(applications.filter((application) => application.stage_decision === 'REJECT'))} unique)
       </Typography>
       <Typography variant="body1" mt={2}>
-        Stage Neutral: {applications.filter((application) => application.stage_decision === 'NEUTRAL').length}
+        Stage Neutral: {applications.filter((application) => application.stage_decision === 'NEUTRAL').length} {' '}
+        ({getUniqueApplicationsLength(applications.filter((application) => application.stage_decision === 'NEUTRAL'))} unique)
       </Typography>
       <Button
         variant="outlined"
