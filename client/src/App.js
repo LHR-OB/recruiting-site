@@ -20,6 +20,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import DescriptionIcon from '@mui/icons-material/Description';
 import GroupIcon from '@mui/icons-material/Group';
+import GroupsIcon from '@mui/icons-material/Groups';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
@@ -32,6 +33,7 @@ import Applications from './pages/Applications';
 import Login from './pages/Login';
 import Admin from './pages/Admin';
 import TeamManagement from './pages/TeamManagement';
+import SystemManagement from './pages/SystemManagement';
 import Profile from './pages/Profile';
 import InterviewAvailability from './pages/InterviewAvailability';
 import Interviews from './pages/Interviews';
@@ -121,6 +123,14 @@ export default function App() {
       )
     },
     {
+      path: "/system-management",
+      element: (
+        <ProtectedPage user={user} requiredRole="SYSTEM_LEAD">
+          <SystemManagement user={user} setSnackbarData={setSnackbarData} />
+        </ProtectedPage>
+      )
+    },
+    {
       path: "/profile/:id",
       element: (
         <ProtectedPage user={user} requiredRole="APPLICANT">
@@ -190,6 +200,11 @@ export default function App() {
   ]
 
   const leadDrawerItems = [
+    {
+      name: "System Management",
+      path: "/system-management",
+      icon: <GroupIcon />
+    },
     ...interviewerDrawerItems,
   ]
 
@@ -197,7 +212,7 @@ export default function App() {
     {
       name: "Team Management",
       path: "/team-management",
-      icon: <GroupIcon />
+      icon: <GroupsIcon />
     },
     ...leadDrawerItems,
   ]

@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { systemsApi } from '../api/endpoints/teams';
 
-export default function NewSystemForm({ team, system, setSystems, setSnackbarData, setOpen }) {
+export default function EditSystemForm({ system, setSystem, setSystems, setSnackbarData, setOpen }) {
   // States
   const [name, setName] = useState(system?.name);
   const [interviewDefaultLocation, setInterviewDefaultLocation] = useState(system?.interview_default_location);
@@ -17,7 +17,6 @@ export default function NewSystemForm({ team, system, setSystems, setSnackbarDat
     systemsApi.updateSystem(system.id, {
       name,
       interview_default_location: interviewDefaultLocation,
-      team_id: team.id,
     }).then((res) => {
       if (res.status === 200) {
         setSystems((curr) => {
@@ -25,6 +24,7 @@ export default function NewSystemForm({ team, system, setSystems, setSnackbarDat
           curr[index] = res.data;
           return curr;
         });
+        if (setSystem) setSystem(res.data);
         setSnackbarData({
           severity: 'success',
           message: 'System updated successfully',

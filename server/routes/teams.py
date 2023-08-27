@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from dependencies import get_db, required_admin, required_team_management, required_applicant
+from dependencies import get_db, required_admin, required_team_management, required_system_lead, required_applicant
 from database.schemas import teams as schemas
 from utils import teams as utils
 
@@ -86,7 +86,7 @@ async def get_system(id: str, user=Depends(required_applicant), db: Session = De
 
 
 @systems_router.put('/{id}')
-async def update_system(id: str, system: schemas.SystemUpdate, user=Depends(required_team_management), db: Session = Depends(get_db)):
+async def update_system(id: str, system: schemas.SystemUpdate, user=Depends(required_system_lead), db: Session = Depends(get_db)):
     db_system = utils.update_system(
         db=db, system_id=id, system=system)
     if db_system is None:

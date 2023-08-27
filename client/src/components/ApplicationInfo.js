@@ -9,7 +9,7 @@ import CenterModal from './CenterModal';
 import EditApplicationInfoForm from './EditApplicationInfoForm';
 import { applicationsApi, applicationCyclesApi } from '../api/endpoints/applications';
 
-export default function ApplicationInfo({ team, setTeam, setTeams, setSnackbarData }) {
+export default function ApplicationInfo({ system, team, setTeam, setTeams, setSnackbarData }) {
   // States
   const [open, setOpen] = useState(false);
   const [applications, setApplications] = useState([]);
@@ -19,18 +19,27 @@ export default function ApplicationInfo({ team, setTeam, setTeams, setSnackbarDa
   }
 
   useEffect(() => {
-    if (team) {
+    if (team || system) {
       applicationCyclesApi.getApplicationCycleActive().then((res) => {
         if (res.status === 200) {
-          applicationsApi.getApplicationsByTeam(res.data.id, team.id).then((res) => {
-            if (res.status === 200) {
-              setApplications(res.data);
-            }
-          })
+          if (team) {
+            applicationsApi.getApplicationsByTeam(res.data.id, team.id).then((res) => {
+              if (res.status === 200) {
+                setApplications(res.data);
+              }
+            });
+          } else if (system) {
+            console.log(system);
+            applicationsApi.getApplicationsBySystem(res.data.id, system.team_id, system.id).then((res) => {
+              if (res.status === 200) {
+                setApplications(res.data);
+              }
+            });
+          }
         }
       })
     }
-  }, [team]);
+  }, [team, system]);
 
   const getUniqueApplicationsLength = (applications) => {
     const uniqueApplications = [];
@@ -67,19 +76,24 @@ export default function ApplicationInfo({ team, setTeam, setTeams, setSnackbarDa
         Stage Neutral: {applications.filter((application) => application.stage_decision === 'NEUTRAL').length} {' '}
         ({getUniqueApplicationsLength(applications.filter((application) => application.stage_decision === 'NEUTRAL'))} unique)
       </Typography>
-      <Button
-        variant="outlined"
-        onClick={handleEditApplicationInfo}
-        sx={{ mt: 2 }}
-      >
-        Edit Application Info
-      </Button>
-      <CenterModal
-        open={open}
-        handleClose={() => {setOpen(false)}}
-      >
-        <EditApplicationInfoForm team={team} setTeam={setTeam} setTeams={setTeams} setSnackbarData={setSnackbarData} setOpen={setOpen} />
-      </CenterModal>
+      {
+        team &&
+        <>
+          <Button
+            variant="outlined"
+            onClick={handleEditApplicationInfo}
+            sx={{ mt: 2 }}
+          >
+            Edit Application Info
+          </Button>
+          <CenterModal
+            open={open}
+            handleClose={() => {setOpen(false)}}
+          >
+            <EditApplicationInfoForm team={team} setTeam={setTeam} setTeams={setTeams} setSnackbarData={setSnackbarData} setOpen={setOpen} />
+          </CenterModal>
+        </>
+      }
     </Container>
   );
 }

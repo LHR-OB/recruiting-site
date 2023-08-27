@@ -73,7 +73,7 @@ export default function SystemsAdmin({ team, setSnackbarData }) {
         {
           modalMode === 'NEW' ?
           <NewSystemForm team={team} setSystems={setSystems} setSnackbarData={setSnackbarData} setOpen={setOpen} /> 
-          : <EditSystemForm team={team} system={editSystem} setSystems={setSystems} setSnackbarData={setSnackbarData} setOpen={setOpen} />
+          : <EditSystemForm system={editSystem} setSystems={setSystems} setSnackbarData={setSnackbarData} setOpen={setOpen} />
         }
       </CenterModal>
     </Container>

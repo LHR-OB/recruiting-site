@@ -11,7 +11,7 @@ import usersApi from '../api/endpoints/users';
 import CenterModal from './CenterModal';
 import PersonSummary from './PersonSummary';
 
-export default function PeopleList({ team, setSnackbarData }) {
+export default function PeopleList({ team, system, setSnackbarData }) {
   // States
   const [people, setPeople] = useState([]);
   const [open, setOpen] = useState(false);
@@ -24,6 +24,12 @@ export default function PeopleList({ team, setSnackbarData }) {
           setPeople(res.data);
         }
       });
+    } else if (system) {
+      usersApi.getUsersBySystem(system.id).then((res) => {
+        if (res.status === 200) {
+          setPeople(res.data);
+        }
+      });
     } else {
       usersApi.getUsersMembers().then((res) => {
         if (res.status === 200) {
@@ -31,7 +37,7 @@ export default function PeopleList({ team, setSnackbarData }) {
         }
       });
     }
-  }, [team]);
+  }, [team, system]);
 
   const handleClickPerson = (person) => {
     setOpen(true);
