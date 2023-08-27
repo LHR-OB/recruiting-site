@@ -15,6 +15,7 @@ export default function ViewApplication({ user, application, setApplication, set
   const [qWraps, setQWraps] = useState([false, false, false, false]);
   const [shortAnswers, setShortAnswers] = useState(['', '', '', '']); // [shortAnswer1, shortAnswer2, shortAnswer3, shortAnswer4]
   const [otherApplications, setOtherApplications] = useState([]);
+  const [showOtherApplications, setShowOtherApplications] = useState(false);
 
   useEffect(() => {
     if (application && application.interview_id && user?.type !== 'APPLICANT') {
@@ -247,11 +248,16 @@ export default function ViewApplication({ user, application, setApplication, set
               ))
             }
             {/* Other Applications */}
-            <Typography variant="h4" mt={2}>
-              Other Applications
+            <Typography
+              variant="h6"
+              mt={2}
+              onClick={() => setShowOtherApplications(!showOtherApplications)}
+              sx={{ cursor: 'pointer' }}
+            >
+              Other Applications (click to show)
             </Typography>
             {
-              otherApplications.map((app, index) => (
+              showOtherApplications && otherApplications.map((app, index) => (
                 <Typography variant="body1" mt={2} key={index}>
                   {app.team.name} {' '} {app.system.name}: {app.status} ({app.stage_decision})
                 </Typography>
