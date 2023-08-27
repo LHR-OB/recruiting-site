@@ -52,6 +52,10 @@ export default function ApplicationInfo({ team, setTeam, setTeams, setSnackbarDa
         ({getUniqueApplicationsLength(applications)} unique)
       </Typography>
       <Typography variant="body1" mt={2}>
+        Applications in Current Phase: {applications.filter((application) => (!application.status.includes("REJECT"))).length} {' '}
+        ({getUniqueApplicationsLength(applications.filter((application) => (!application.status.includes("REJECT"))))} unique)
+      </Typography>
+      <Typography variant="body1" mt={2}>
         Stage Accepted: {applications.filter((application) => application.stage_decision === 'ACCEPT').length} {' '}
         ({getUniqueApplicationsLength(applications.filter((application) => application.stage_decision === 'ACCEPT'))} unique)
       </Typography>
