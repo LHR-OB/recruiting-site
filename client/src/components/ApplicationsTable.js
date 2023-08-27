@@ -144,9 +144,10 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
       row.push(application.resume_link);
       row.push(application.portfolio_link || '');
       row.push(application.status);
+      row.push(application.stage_decision);
       return row.join(',');
     });
-    csv.unshift('Application Id,Name,Email,Phone Number,Major,Year Entering,Team,System,Short Answer 1,Short Answer 2,Short Answer 3,Short Answer 4,Resume,Portfolio,Status');
+    csv.unshift('Application Id,Name,Email,Phone Number,Major,Year Entering,Team,System,Short Answer 1,Short Answer 2,Short Answer 3,Short Answer 4,Resume,Portfolio,Status,Stage Decision');
     const csvString = csv.join('\n');
     const csvData = new Blob([csvString], {type: 'text/csv;charset=utf-8;'});
     const csvURL =  window.URL.createObjectURL(csvData);
