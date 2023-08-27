@@ -262,11 +262,11 @@ export default function ViewApplication({ user, application, setApplication, set
         <Grid item xs>
           <Button
             variant="outlined"
-            onClick={() => handleMarkStageDecision('POSITIVE')}
+            onClick={() => handleMarkStageDecision('NEGATIVE')}
             sx={{
               marginTop: 2,
-              backgroundColor: application.stage_decision === 'POSITIVE' ? 'orange' : 'white',
-              color: application.stage_decision === 'POSITIVE' ? 'white' : 'orange',
+              backgroundColor: application.stage_decision === 'NEGATIVE' ? 'orange' : 'white',
+              color: application.stage_decision === 'NEGATIVE' ? 'white' : 'orange',
             }}
           >
             Mark Negative

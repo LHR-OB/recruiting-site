@@ -162,6 +162,10 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
       switch (application.stage_decision) {
         case 'ACCEPT':
           return 'green';
+        case 'POSITIVE':
+          return 'lightgreen';
+        case 'NEGATIVE':
+          return 'orange';
         case 'REJECT':
           return 'red';
         default:
