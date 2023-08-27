@@ -38,7 +38,7 @@ class Application(Base):
     resume_link = Column(String)
     portfolio_link = Column(String)
     status = Column(Enum("SUBMITTED", "REVIEW", "REJECTED_REVIEW", "INTERVIEW", "INTERVIEW_SCHEDULED", "INTERVIEW_COMPLETE", "REJECTED_INTERVIEW", "TRIAL", "REJECTED_TRIAL", "OFFER", "ACCEPTED", "REJECTED", name="application_status_enum"), index=True)
-    stage_decision = Column(Enum("ACCEPT", "REJECT", "NEUTRAL", name="application_stage_decision_enum"), index=True)
+    stage_decision = Column(Enum("ACCEPT", "POSITIVE", "NEUTRAL", "NEGATIVE", "REJECT", name="application_stage_decision_enum"), index=True)
 
     # Relationships
     application_cycle_id = Column(UUID(as_uuid=True), ForeignKey("application_cycles.id"))

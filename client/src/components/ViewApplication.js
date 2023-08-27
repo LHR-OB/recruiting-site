@@ -50,8 +50,8 @@ export default function ViewApplication({ user, application, setApplication, set
     }
   }, [application]);
 
-  const handleAccept = () => {
-    applicationsApi.updateApplication(application.id, { stage_decision: 'ACCEPT' }).then(res => {
+  const handleMarkStageDecision = (decision) => {
+    applicationsApi.updateApplication(application.id, { stage_decision: decision }).then(res => {
       if (res.status === 200) {
         setApplication(res.data);
         setApplications((curr) => {
@@ -61,7 +61,7 @@ export default function ViewApplication({ user, application, setApplication, set
         });
         setSnackbarData({
           open: true,
-          message: 'Application marked accepted',
+          message: 'Application marked ' + decision,
           severity: 'success',
         });
         setOpen(false);
@@ -69,57 +69,7 @@ export default function ViewApplication({ user, application, setApplication, set
     }, (error) => {
       setSnackbarData({
         open: true,
-        message: 'Error marking application accepted',
-        severity: 'error',
-      });
-    });
-  }
-
-  const handleNeutral = () => {
-    applicationsApi.updateApplication(application.id, { stage_decision: 'NEUTRAL' }).then(res => {
-      if (res.status === 200) {
-        setApplication(res.data);
-        setApplications((curr) => {
-          const index = curr.findIndex(a => a.id === res.data.id);
-          curr[index] = res.data;
-          return curr;
-        });
-        setSnackbarData({
-          open: true,
-          message: 'Application marked neutral',
-          severity: 'success',
-        });
-        setOpen(false);
-      }
-    }, (error) => {
-      setSnackbarData({
-        open: true,
-        message: 'Error marking application neutral',
-        severity: 'error',
-      });
-    });
-  }
-
-  const handleReject = () => {
-    applicationsApi.updateApplication(application.id, { stage_decision: 'REJECT' }).then(res => {
-      if (res.status === 200) {
-        setApplication(res.data);
-        setApplications((curr) => {
-          const index = curr.findIndex(a => a.id === res.data.id);
-          curr[index] = res.data;
-          return curr;
-        });
-        setSnackbarData({
-          open: true,
-          message: 'Application marked rejected',
-          severity: 'success',
-        });
-        setOpen(false);
-      }
-    }, (error) => {
-      setSnackbarData({
-        open: true,
-        message: 'Error marking application rejected',
+        message: 'Error marking application ' + decision,
         severity: 'error',
       });
     });
@@ -272,7 +222,7 @@ export default function ViewApplication({ user, application, setApplication, set
           <Button
             variant="outlined"
             color="success"
-            onClick={handleAccept}
+            onClick={() => handleMarkStageDecision('ACCEPT')}
             sx={{
               marginTop: 2,
               backgroundColor: application.stage_decision === 'ACCEPT' ? 'green' : 'white',
@@ -285,8 +235,21 @@ export default function ViewApplication({ user, application, setApplication, set
         <Grid item xs>
           <Button
             variant="outlined"
+            onClick={() => handleMarkStageDecision('POSITIVE')}
+            sx={{
+              marginTop: 2,
+              backgroundColor: application.stage_decision === 'POSITIVE' ? 'lightgreen' : 'white',
+              color: application.stage_decision === 'POSITIVE' ? 'white' : 'lightgreen',
+            }}
+          >
+            Mark Positive
+          </Button>
+        </Grid>
+        <Grid item xs>
+          <Button
+            variant="outlined"
             color="primary"
-            onClick={handleNeutral}
+            onClick={() => handleMarkStageDecision('NEUTRAL')}
             sx={{
               marginTop: 2,
               backgroundColor: application.stage_decision === 'NEUTRAL' ? 'primary.main' : 'white',
@@ -299,8 +262,21 @@ export default function ViewApplication({ user, application, setApplication, set
         <Grid item xs>
           <Button
             variant="outlined"
+            onClick={() => handleMarkStageDecision('POSITIVE')}
+            sx={{
+              marginTop: 2,
+              backgroundColor: application.stage_decision === 'POSITIVE' ? 'orange' : 'white',
+              color: application.stage_decision === 'POSITIVE' ? 'white' : 'orange',
+            }}
+          >
+            Mark Negative
+          </Button>
+        </Grid>
+        <Grid item xs>
+          <Button
+            variant="outlined"
             color="error"
-            onClick={handleReject}
+            onClick={() => handleMarkStageDecision('REJECT')}
             sx={{
               marginTop: 2,
               backgroundColor: application.stage_decision === 'REJECT' ? 'red' : 'white',
