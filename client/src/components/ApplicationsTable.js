@@ -122,6 +122,10 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
     setPage(0);
   };
 
+  const cleanForCSV = (str) => {
+    return `"${str.replace(/"/g, '""')}"`;
+  }
+
   const handleDownload = () => {
     const csv = applications.map((application) => {
       const row = [];
@@ -129,14 +133,14 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
       row.push(`${application.user.first_name} ${application.user.last_name}`);
       row.push(application.user.email);
       row.push(application.phone_number);
-      row.push(`"${application.major}"`);
+      row.push(cleanForCSV(application.major));
       row.push(application.year_entering);
       row.push(application.team.name);
       row.push(application.system.name);
-      row.push(`"${application.short_answer1}"`);
-      row.push(`"${application.short_answer2}"`);
-      row.push(`"${application.short_answer3}"`);
-      row.push(`"${application.short_answer4}"`);
+      row.push(cleanForCSV(application.short_answer1));
+      row.push(cleanForCSV(application.short_answer2));
+      row.push(cleanForCSV(application.short_answer3));
+      row.push(cleanForCSV(application.short_answer4));
       row.push(application.resume_link);
       row.push(application.portfolio_link || '');
       row.push(application.status);
