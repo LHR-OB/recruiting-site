@@ -5,7 +5,7 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
-import { applicationsApi } from '../api/endpoints/applications';
+import { applicationsApi, applicationCyclesApi } from '../api/endpoints/applications';
 import { interviewNotesApi } from '../api/endpoints/interviews';
 import consts from '../config/consts';
 
@@ -14,6 +14,7 @@ export default function ViewApplication({ user, application, setApplication, set
   const [interviewNotes, setInterviewNotes] = useState([]);
   const [qWraps, setQWraps] = useState([false, false, false, false]);
   const [shortAnswers, setShortAnswers] = useState(['', '', '', '']); // [shortAnswer1, shortAnswer2, shortAnswer3, shortAnswer4]
+  const [otherApplications, setOtherApplications] = useState([]);
 
   useEffect(() => {
     if (application && application.interview_id && user?.type !== 'APPLICANT') {
@@ -22,6 +23,18 @@ export default function ViewApplication({ user, application, setApplication, set
           setInterviewNotes(res.data);
         }
       });
+    }
+    // Other applications
+    if (application && user?.type !== 'APPLICANT') {
+      applicationCyclesApi.getApplicationCycleActive().then(res => {
+        if (res.status === 200) {
+          applicationsApi.getApplicationsByUser(res.data.id, application.user.id).then(res => {
+            if (res.status === 200) {
+              setOtherApplications(res.data.filter(app => app.id !== application.id));
+            }
+          });
+        }
+      })
     }
   }, [application, user]);
 
@@ -230,6 +243,17 @@ export default function ViewApplication({ user, application, setApplication, set
                   {note.note.split('\n').map((item, i) => (
                       <p key={i}>{item}<br /></p>
                   ))}
+                </Typography>
+              ))
+            }
+            {/* Other Applications */}
+            <Typography variant="h4" mt={2}>
+              Other Applications
+            </Typography>
+            {
+              otherApplications.map((app, index) => (
+                <Typography variant="body1" mt={2} key={index}>
+                  {app.team.name} {' '} {app.system.name}: {app.status} ({app.stage_decision})
                 </Typography>
               ))
             }
