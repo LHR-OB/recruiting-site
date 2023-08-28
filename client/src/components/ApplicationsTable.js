@@ -90,6 +90,7 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
 
   const handleSearch = (event) => {
     const search = event.target.value;
+    setPage(0);
     if (search === '') {
       setApplications(unfilteredApplications);
       return;
