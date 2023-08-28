@@ -67,7 +67,7 @@ const consts = {
             ]
         },
     ],
-    INTERVIEW_SCHEDULE_BUFFER: 24, // Hours
+    INTERVIEW_SCHEDULE_BUFFER: 6, // Hours
 }
 
 export default consts;
