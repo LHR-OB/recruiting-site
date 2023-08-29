@@ -92,6 +92,9 @@ export default function Calendar({ user, setSnackbarData }) {
         <Typography variant="h4" mt={2}>
           Calendar
         </Typography>
+        <Typography variant="body1" mt={2}>
+          All times are in Central Time (CT)
+        </Typography>
         <br />
         <ReactCalendar 
           value={value}
