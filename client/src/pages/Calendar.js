@@ -51,7 +51,7 @@ export default function Calendar({ user, setSnackbarData }) {
       // Mark days with events
       const newHighlightedDays = new Set();
       events.forEach((event) => {
-        const eventDate = new Date(event.start_time);
+        const eventDate = new Date(new Date(event.start_time).getTime() - (event.offset * 60 * 60 * 1000));
         newHighlightedDays.add(new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate()).toDateString());
       });
       setHighlightedDays(newHighlightedDays);
@@ -64,7 +64,7 @@ export default function Calendar({ user, setSnackbarData }) {
 
   useEffect(() => {
     const dayEvents = events.filter((event) => {
-      const eventDate = new Date(event.start_time);
+      const eventDate = new Date(new Date(event.start_time).getTime() - (event.offset * 60 * 60 * 1000));
       return (
         eventDate.getDate() === value.getDate() &&
         eventDate.getMonth() === value.getMonth() &&
