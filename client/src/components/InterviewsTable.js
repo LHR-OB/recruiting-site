@@ -113,7 +113,7 @@ export default function InterviewsTable({ user, setOpen, setInterview, interview
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {interviews.filter((interview) => (!(showMine && !interview.event.users.some((u) => (u.id === user.id))))).map((interview, index) => (
+                        {interviews.filter((interview) => (interview.event)).filter((interview) => (!(showMine && !interview.event.users.some((u) => (u.id === user.id))))).map((interview, index) => (
                             <TableRow
                                 key={index}
                                 onClick={() => handleInterviewClick(interview)}
