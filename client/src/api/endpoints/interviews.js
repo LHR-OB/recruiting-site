@@ -13,7 +13,15 @@ const interviewsApi = {
         const url = `/interviews/user/${id}`;
         return axiosClient.get(url);
     },
-    getInterviewsCurrentuser: () => {
+    getInterviewsByTeam: (id) => {
+        const url = `/interviews/team/${id}`;
+        return axiosClient.get(url);
+    },
+    getInterviewsBySystem: (id) => {
+        const url = `/interviews/system/${id}`;
+        return axiosClient.get(url);
+    },
+    getInterviewsCurrentUser: () => {
         const url = `/interviews/user`;
         return axiosClient.get(url);
     },

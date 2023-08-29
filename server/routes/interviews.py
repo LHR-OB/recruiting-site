@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from dependencies import get_db, required_admin, required_interviewer, required_applicant, get_current_user
+from dependencies import get_db, required_admin, required_interviewer, required_applicant, get_current_user, required_team_management, required_system_lead
 from database.schemas import interviews as schemas
 from utils import interviews as utils
 
@@ -29,6 +29,16 @@ async def get_interview(id: str, user=Depends(required_applicant), db: Session =
         raise HTTPException(
             status_code=404, detail="Interview not found")
     return db_interview
+
+
+@interview_router.get('/team/{id}')
+async def get_interviews_by_team(id: str, user=Depends(required_team_management), db: Session = Depends(get_db)):
+    return utils.get_interviews_by_team(db, team_id=id)
+
+
+@interview_router.get('/system/{id}')
+async def get_interviews_by_system(id: str, user=Depends(required_system_lead), db: Session = Depends(get_db)):
+    return utils.get_interviews_by_system(db, system_id=id)
 
 
 @interview_router.get('/user/{id}')

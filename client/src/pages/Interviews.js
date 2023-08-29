@@ -45,7 +45,8 @@ export default function Interviews({ user, setSnackbarData })  {
                 <Typography variant="h4" mt={2}>
                     Interviews
                 </Typography>
-                <InterviewsTable 
+                <InterviewsTable
+                    user={user}
                     setOpen={setOpen}
                     setInterview={setInterview}
                     interviews={interviews}

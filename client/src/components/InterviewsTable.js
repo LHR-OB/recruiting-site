@@ -1,6 +1,10 @@
-import { React, useEffect } from 'react';
+import { React, useEffect, useState } from 'react';
 import {
     Container,
+    FormControl,
+    FormGroup,
+    FormControlLabel,
+    Switch,
     Paper,
     TableContainer,
     Table,
@@ -11,20 +15,66 @@ import {
 } from '@mui/material';
 import { interviewsApi } from '../api/endpoints/interviews';
 
-export default function InterviewsTable({ setOpen, setInterview, interviews, setInterviews }) {
+export default function InterviewsTable({ user, setOpen, setInterview, interviews, setInterviews }) {
+    // States
+    const [showMine, setShowMine] = useState(false);
+
     useEffect(() => {
-        if (setInterviews) {
-            interviewsApi.getInterviewsCurrentuser().then((res) => {
-                if (res.status === 200) {
-                    const newInterviews = res.data;
-                    newInterviews.sort((a, b) => {
-                        return new Date(a.event.start_time) - new Date(b.event.start_time);
+        if (setInterviews && user) {
+            switch (user?.type) {
+                case 'ADMIN':
+                    interviewsApi.getInterviews().then((res) => {
+                        if (res.status === 200) {
+                            const newInterviews = res.data;
+                            newInterviews.sort((a, b) => {
+                                return new Date(a.event.start_time) - new Date(b.event.start_time);
+                            });
+                            setInterviews(newInterviews);
+                        }
                     });
-                    setInterviews(newInterviews);
-                }
-            });
+                    break;
+                case 'TEAM_MANAGEMENT':
+                    interviewsApi.getInterviewsByTeam(user?.team?.id).then((res) => {
+                        if (res.status === 200) {
+                            const newInterviews = res.data;
+                            console.log(newInterviews);
+                            newInterviews.sort((a, b) => {
+                                return new Date(a.event.start_time) - new Date(b.event.start_time);
+                            });
+                            setInterviews(newInterviews);
+                        }
+                    });
+                    break;
+                case 'SYSTEM_LEAD':
+                    for (let system of user?.systems) {
+                        interviewsApi.getInterviewsBySystem(system.id).then((res) => {
+                            if (res.status === 200) {
+                                const newInterviews = res.data;
+                                console.log(newInterviews);
+                                newInterviews.sort((a, b) => {
+                                    return new Date(a.event.start_time) - new Date(b.event.start_time);
+                                });
+                                setInterviews((prev) => [...prev, ...newInterviews].filter((interview, index, self) => index === self.findIndex((t) => (t.id === interview.id))));
+                            }
+                        });
+                    }
+                    break;
+                case 'INTERVIEWER':
+                    interviewsApi.getInterviewsCurrentUser().then((res) => {
+                        if (res.status === 200) {
+                            const newInterviews = res.data;
+                            newInterviews.sort((a, b) => {
+                                return new Date(a.event.start_time) - new Date(b.event.start_time);
+                            });
+                            setInterviews(newInterviews);
+                        }
+                    });
+                    break;
+                default:
+                    break;
+            }
         }
-    }, [setInterviews]);
+    }, [setInterviews, user]);
     
     const handleInterviewClick = (interview) => {
         setOpen(true);
@@ -43,6 +93,14 @@ export default function InterviewsTable({ setOpen, setInterview, interviews, set
 
     return (
         <Container>
+            <FormControl>
+                <FormGroup>
+                    <FormControlLabel
+                        control={<Switch checked={showMine} onChange={() => setShowMine(!showMine)} />}
+                        label="Show Only My Interviews"
+                    />
+                </FormGroup>
+            </FormControl>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple-table">
                     <TableHead>
@@ -55,7 +113,7 @@ export default function InterviewsTable({ setOpen, setInterview, interviews, set
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {interviews.map((interview, index) => (
+                        {interviews.filter((interview) => (!(showMine && !interview.event.users.some((u) => (u.id === user.id))))).map((interview, index) => (
                             <TableRow
                                 key={index}
                                 onClick={() => handleInterviewClick(interview)}
