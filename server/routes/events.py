@@ -96,7 +96,9 @@ async def add_user_to_event(id: str, user_id: str, user=Depends(required_applica
         db=db,
         message=MessageCreate(
             title="You have been added to an event",
-            message=f"You have been added to the event {db_event.title} by {user.first_name} {user.last_name}",
+            message=f"""You have been added to the event {db_event.title} by {user.first_name} {user.last_name}
+Location: {db_event.location}
+Time: {db_event.start_time} - {db_event.end_time}""",
             timestamp=datetime.now(),
             user_id=user_id
         )
