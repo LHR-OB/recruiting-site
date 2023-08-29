@@ -10,14 +10,19 @@ import {
     Table,
     TableHead,
     TableRow,
+    TablePagination,
     TableCell,
     TableBody,
+    TextField,
 } from '@mui/material';
 import { interviewsApi } from '../api/endpoints/interviews';
 
 export default function InterviewsTable({ user, setOpen, setInterview, interviews, setInterviews }) {
     // States
     const [showMine, setShowMine] = useState(false);
+    const [filteredInterviews, setFilteredInterviews] = useState([]);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
 
     useEffect(() => {
         if (setInterviews && user) {
@@ -30,6 +35,7 @@ export default function InterviewsTable({ user, setOpen, setInterview, interview
                                 return new Date(a.event.start_time) - new Date(b.event.start_time);
                             });
                             setInterviews(newInterviews);
+                            setFilteredInterviews(newInterviews);
                         }
                     });
                     break;
@@ -41,6 +47,7 @@ export default function InterviewsTable({ user, setOpen, setInterview, interview
                                 return new Date(a.event.start_time) - new Date(b.event.start_time);
                             });
                             setInterviews(newInterviews);
+                            setFilteredInterviews(newInterviews);
                         }
                     });
                     break;
@@ -53,6 +60,7 @@ export default function InterviewsTable({ user, setOpen, setInterview, interview
                                     return new Date(a.event.start_time) - new Date(b.event.start_time);
                                 });
                                 setInterviews((prev) => [...prev, ...newInterviews].filter((interview, index, self) => index === self.findIndex((t) => (t.id === interview.id))));
+                                setFilteredInterviews((prev) => [...prev, ...newInterviews].filter((interview, index, self) => index === self.findIndex((t) => (t.id === interview.id))));
                             }
                         });
                     }
@@ -65,6 +73,7 @@ export default function InterviewsTable({ user, setOpen, setInterview, interview
                                 return new Date(a.event.start_time) - new Date(b.event.start_time);
                             });
                             setInterviews(newInterviews);
+                            setFilteredInterviews(newInterviews);
                         }
                     });
                     break;
@@ -79,6 +88,15 @@ export default function InterviewsTable({ user, setOpen, setInterview, interview
         setInterview(interview);
     }
 
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+    
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
     const getApplicantName = (interview) => {
         const invitees = interview?.event?.users;
         for (let user of invitees) {
@@ -89,8 +107,28 @@ export default function InterviewsTable({ user, setOpen, setInterview, interview
         return "";
     }
 
+    const handleSearch = (e) => {
+        const search = e.target.value;
+        setPage(0);
+        if (search === '') {
+            setFilteredInterviews(interviews);
+            return;
+        }
+        const filtered = interviews.filter((interview) => {
+            const searchString = `${getApplicantName(interview).toLowerCase()} ${interview?.event?.title.toLowerCase()} ${interview?.event?.location.toLowerCase()} ${interview?.application?.status.toLowerCase()}`;
+            return search.split(' ').every((word) => searchString.includes(word.toLowerCase()));
+        });
+        setFilteredInterviews(filtered);
+    }
+
     return (
         <Container>
+            <TextField
+                sx={{ width: '100%', marginBottom: 2, marginTop: 2 }}
+                label="Search"
+                variant="outlined"
+                onChange={handleSearch}
+            />
             <FormControl>
                 <FormGroup>
                     <FormControlLabel
@@ -111,7 +149,7 @@ export default function InterviewsTable({ user, setOpen, setInterview, interview
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {interviews.filter((interview) => (!(showMine && !interview.event.users.some((u) => (u.id === user.id))))).map((interview, index) => (
+                        {filteredInterviews.filter((interview) => (!(showMine && !interview.event.users.some((u) => (u.id === user.id))))).map((interview, index) => (
                             <TableRow
                                 key={index}
                                 onClick={() => handleInterviewClick(interview)}
@@ -131,6 +169,15 @@ export default function InterviewsTable({ user, setOpen, setInterview, interview
                     </TableBody>
                 </Table>
             </TableContainer>
+            <TablePagination
+                rowsPerPageOptions={[10, 25, 50, 100, 250]}
+                component="div"
+                count={filteredInterviews.filter((interview) => (!(showMine && !interview.event.users.some((u) => (u.id === user.id))))).length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+            />
         </Container>
     );
 }

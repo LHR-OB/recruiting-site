@@ -339,7 +339,7 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[10, 25, 50]}
+        rowsPerPageOptions={[10, 25, 50, 100, 250]}
         component="div"
         count={applications?.filter(application => (!(hideRejected && application?.status?.includes("REJECTED")))).length}
         rowsPerPage={rowsPerPage}
