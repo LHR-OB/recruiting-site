@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from typing import List
-from datetime import datetime
+import datetime
 
 from database.models import events as models
 from database.models.users import User
@@ -97,8 +97,8 @@ def delete_event(db: Session, event_id: str) -> bool:
     for user in db_event.users:
         send_message(db=db, message=message_schemas.MessageCreate(
             title="You have been removed from an event",
-            message=f"You have been removed from the event {db_event.title}. If you think this is a mistake, please contact a system administrator.",
-            timestamp=datetime.now(),
+            message=f"You have been removed from the event {db_event.title} {db_event.title} at {db_event.location} from {db_event.start_time - datetime.timedelta(hours=db_event.offset)} to {db_event.end_time - datetime.timedelta(hours=db_event.offset)}. If you think this is a mistake, please contact a system administrator.",
+            timestamp=datetime.datetime.now(),
             user_id=str(user.id)
         ))
     db.delete(db_event)
