@@ -46,7 +46,7 @@ export default function InterviewAvailability({ user, setSnackbarData }) {
           user?.type === 'APPLICANT' ?
           <>
             <Typography variant="body1" mt={2}>
-              If you are invited to interview for a system, you will see options below. Please select one interview time slot for each system. If you do not see any options below and believe this is a mistake, please contact a system administrator.
+              If you are invited to interview for a system, you will see options below. Please follow the team's instructions for scheduling interviews. If you do not see any options below and believe this is a mistake, please contact a system administrator.
             </Typography>
             <Typography variant="body1" mt={2}>
               If you want to see a demonstration on how to properly schedule an interview, please watch <a href='https://drive.google.com/file/d/1BPtX8ZTIkoYX-j6owPhdl6nCtgaFMUVT/view?usp=sharing' target='_blank' rel='noopener noreferrer'>this video</a>.
