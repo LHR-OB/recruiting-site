@@ -15,10 +15,11 @@ import eventsApi from '../api/endpoints/events';
 import { interviewsApi } from '../api/endpoints/interviews';
 import { applicationsApi } from '../api/endpoints/applications';
 
-export default function EventView({ user, event, setSnackbarData }) {
+export default function EventView({ user, event, setEvent, setSnackbarData }) {
     // States
     const [invitees, setInvitees] = useState([]);
     const [addInvitee, setAddInvitee] = useState("");
+    const [newLocation, setNewLocation] = useState("");
 
     useEffect(() => {
         if (event) {
@@ -64,6 +65,32 @@ export default function EventView({ user, event, setSnackbarData }) {
                 setSnackbarData({
                     open: true,
                     message: 'Error cancelling interview',
+                    severity: 'error',
+                });
+            }
+        });
+    }
+
+    const handleChangeLocation = () => {
+        eventsApi.updateEvent(event.id, {
+            location: newLocation,
+        }).then((res) => {
+            if (res.status === 200) {
+                setSnackbarData({
+                    open: true,
+                    message: 'Location changed',
+                    severity: 'success',
+                });
+                setEvent((curr) => {
+                    return {
+                        ...curr,
+                        location: newLocation,
+                    };
+                });
+            } else {
+                setSnackbarData({
+                    open: true,
+                    message: 'Error changing location',
                     severity: 'error',
                 });
             }
@@ -143,6 +170,26 @@ export default function EventView({ user, event, setSnackbarData }) {
                 <Typography variant="body1" mt={2}>
                     Location: {event?.location}
                 </Typography>
+                {/* Edit Location */}
+                {
+                    user?.type !== "APPLICANT" && !event?.is_global &&
+                    <Container>
+                        <TextField
+                            label="Change Location"
+                            variant="standard"
+                            value={newLocation}
+                            onChange={(e) => setNewLocation(e.target.value)}
+                            sx={{ width: '100%' }}
+                        />
+                        <Button
+                            variant="outlined"
+                            onClick={handleChangeLocation}
+                            sx={{ marginTop: 2 }}
+                        >
+                            Change Location
+                        </Button>
+                    </Container>
+                }
                 <br />
                 <Typography variant="body1" mt={2}>
                     {new Date(new Date(event?.start_time).getTime() - (event.offset * 60 * 60 * 1000)).toLocaleTimeString() + " - " + new Date(new Date(event?.end_time).getTime() - (event.offset * 60 * 60 * 1000)).toLocaleTimeString()}

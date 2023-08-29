@@ -50,11 +50,27 @@ def update_event(db: Session, event_id: str, event: schemas.EventUpdate) -> mode
     if db_event is None:
         return None
     event_data = event.dict(exclude_unset=True)
+    old_event_data = {
+        "location": db_event.location,
+        "start_time": db_event.start_time,
+        "end_time": db_event.end_time,
+        "offset": db_event.offset
+    }
     for key, value in event_data.items():
         setattr(db_event, key, value)
     db.add(db_event)
     db.commit()
     db.refresh(db_event)
+    # Notify all users
+    if not (old_event_data["location"] == db_event.location and old_event_data["start_time"] == db_event.start_time and old_event_data["end_time"] == db_event.end_time):
+        for user in db_event.users:
+            message = message_schemas.MessageCreate(
+                title="An event you are attending has been updated",
+                message=f"The event {db_event.title} has been updated.\nIt was previously at {old_event_data['location']} from {old_event_data['start_time'] - datetime.timedelta(hours=old_event_data['offset'])} to {old_event_data['end_time'] - datetime.timedelta(hours=old_event_data['offset'])}.\nIt is now at {db_event.location} from {db_event.start_time - datetime.timedelta(hours=db_event.offset)} to {db_event.end_time - datetime.timedelta(hours=db_event.offset)}. If you believe this is a mistake, please contact a system administrator.",
+                timestamp=datetime.datetime.now(),
+                user_id=str(user.id)
+            )
+            send_message(db=db, message=message)
     return db_event
 
 

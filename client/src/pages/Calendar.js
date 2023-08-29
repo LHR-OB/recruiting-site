@@ -133,7 +133,7 @@ export default function Calendar({ user, setSnackbarData }) {
         open={open}
         handleClose={() => setOpen(false)}
       >
-        <EventView user={user} event={selectedEvent} setSnackbarData={setSnackbarData} />
+        <EventView user={user} event={selectedEvent} setEvent={setSelectedEvent} setSnackbarData={setSnackbarData} />
       </CenterModal>
     </Container>
   );
