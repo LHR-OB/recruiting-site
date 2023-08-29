@@ -51,6 +51,9 @@ export default function InterviewAvailability({ user, setSnackbarData }) {
             <Typography variant="body1" mt={2}>
               If you want to see a demonstration on how to properly schedule an interview, please watch <a href='https://drive.google.com/file/d/1BPtX8ZTIkoYX-j6owPhdl6nCtgaFMUVT/view?usp=sharing' target='_blank' rel='noopener noreferrer'>this video</a>.
             </Typography>
+            <Typography variant="body1" mt={2}>
+              All times are in Central Time (CT).
+            </Typography>
             <InterviewAvailabilityList user={user} setSnackbarData={setSnackbarData} />
           </>
             :

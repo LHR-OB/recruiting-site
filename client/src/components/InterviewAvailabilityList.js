@@ -138,7 +138,7 @@ export default function InterviewAvailabilityList({ user, setSnackbarData }) {
                 interviewTimes.push({
                     start_time: new Date(start_time),
                     end_time: new Date(end_time),
-                    offset: availability.offset,
+                    offset: new Date().getTimezoneOffset() / 60,
                     interviewer_id: availability.user_id,
                     application_id: application.id,
                     location: interviewer.interview_location || application.system.interview_default_location,
