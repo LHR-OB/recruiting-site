@@ -11,6 +11,7 @@ import JoinSystemForm from '../components/JoinSystemForm';
 import LeaveSystemForm from '../components/LeaveSystemForm';
 import EditProfileForm from '../components/EditProfileForm';
 import usersApi from '../api/endpoints/users';
+import { applicationCyclesApi, applicationsApi } from '../api/endpoints/applications';
 
 
 export default function Profile({ user, setUser, setSnackbarData }) {
@@ -18,6 +19,7 @@ export default function Profile({ user, setUser, setSnackbarData }) {
   const [open, setOpen] = useState(false);
   const [modalMode, setModalMode] = useState(false);
   const [profileUser, setProfileUser] = useState(null);
+  const [userPhoneNumber, setUserPhoneNumber] = useState("");
 
   const { id } = useParams();
 
@@ -26,6 +28,17 @@ export default function Profile({ user, setUser, setSnackbarData }) {
       usersApi.getUserById(id).then((res) => {
         if (res.status === 200) {
           setProfileUser(res.data);
+          if (res.data.type === "APPLICANT") {
+            applicationCyclesApi.getApplicationCycleActive().then((res) => {
+              if (res.status === 200) {
+                applicationsApi.getApplicationsByUser(res.data.id, id).then((res) => {
+                  if (res.status === 200) {
+                    setUserPhoneNumber(res.data[0].phone_number || "");
+                  }
+                });
+              }
+            })
+          }
         }
       });
     } else {
@@ -74,6 +87,12 @@ export default function Profile({ user, setUser, setSnackbarData }) {
         <Typography variant="h6" mt={2}>
           Email: {profileUser?.email}
         </Typography>
+        {
+          userPhoneNumber &&
+          <Typography variant="h6" mt={2}>
+            Phone Number: {userPhoneNumber}
+          </Typography>
+        }
         <Typography variant="h6" mt={2}>
           Role: {profileUser?.type?.replace('_', ' ')}
         </Typography>
