@@ -26,7 +26,7 @@ export default function InterviewsTable({ user, setOpen, setInterview, interview
                     interviewsApi.getInterviews().then((res) => {
                         if (res.status === 200) {
                             const newInterviews = res.data;
-                            newInterviews.sort((a, b) => {
+                            newInterviews.filter((interview) => (interview.event)).sort((a, b) => {
                                 return new Date(a.event.start_time) - new Date(b.event.start_time);
                             });
                             setInterviews(newInterviews);
@@ -38,7 +38,7 @@ export default function InterviewsTable({ user, setOpen, setInterview, interview
                         if (res.status === 200) {
                             const newInterviews = res.data;
                             console.log(newInterviews);
-                            newInterviews.sort((a, b) => {
+                            newInterviews.filter((interview) => (interview.event)).sort((a, b) => {
                                 return new Date(a.event.start_time) - new Date(b.event.start_time);
                             });
                             setInterviews(newInterviews);
@@ -51,7 +51,7 @@ export default function InterviewsTable({ user, setOpen, setInterview, interview
                             if (res.status === 200) {
                                 const newInterviews = res.data;
                                 console.log(newInterviews);
-                                newInterviews.sort((a, b) => {
+                                newInterviews.filter((interview) => (interview.event)).sort((a, b) => {
                                     return new Date(a.event.start_time) - new Date(b.event.start_time);
                                 });
                                 setInterviews((prev) => [...prev, ...newInterviews].filter((interview, index, self) => index === self.findIndex((t) => (t.id === interview.id))));
@@ -63,7 +63,7 @@ export default function InterviewsTable({ user, setOpen, setInterview, interview
                     interviewsApi.getInterviewsCurrentUser().then((res) => {
                         if (res.status === 200) {
                             const newInterviews = res.data;
-                            newInterviews.sort((a, b) => {
+                            newInterviews.filter((interview) => (interview.event)).sort((a, b) => {
                                 return new Date(a.event.start_time) - new Date(b.event.start_time);
                             });
                             setInterviews(newInterviews);
@@ -113,7 +113,7 @@ export default function InterviewsTable({ user, setOpen, setInterview, interview
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {interviews.filter((interview) => (interview.event)).filter((interview) => (!(showMine && !interview.event.users.some((u) => (u.id === user.id))))).map((interview, index) => (
+                        {interviews.filter((interview) => (!(showMine && !interview.event.users.some((u) => (u.id === user.id))))).map((interview, index) => (
                             <TableRow
                                 key={index}
                                 onClick={() => handleInterviewClick(interview)}
