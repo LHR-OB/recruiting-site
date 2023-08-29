@@ -27,7 +27,14 @@ export default function Calendar({ user, setSnackbarData }) {
   useEffect(() => {
     if (user) {
       eventsApi.getEventsCurrentUser().then((res) => {
-        const events = res.data;
+        const events = res.data.map((event) => (
+          // Fix timezone offset
+          {
+            ...event,
+            start_time: new Date(new Date(event.start_time).getTime() - (event.offset * 60 * 60 * 1000)),
+            end_time: new Date(new Date(event.end_time).getTime() - (event.offset * 60 * 60 * 1000)),
+          }
+        ));
         if (user.type === 'ADMIN') {
           interviewsApi.getInterviews().then((res) => {
             events.push(...res.data.map((interview) => (interview.event)));
@@ -117,9 +124,8 @@ export default function Calendar({ user, setSnackbarData }) {
               >
                 <ListItemText
                   primary={event.title}
-                  // I have no idea why dates are this weird. There's probably a better way but I couldn't figure it out. Basically this applies offset and displays the time in the user's timezone
-                  secondary={new Date(new Date(event.start_time).getTime() - (event.offset * 60 * 60 * 1000)).toLocaleTimeString() + " - " + 
-                            new Date(new Date(event.end_time).getTime() - (event.offset * 60 * 60 * 1000)).toLocaleTimeString()}
+                  secondary={new Date(event.start_time).toLocaleTimeString() + " - " + 
+                            new Date(event.end_time).toLocaleTimeString()}
                 />
               </ListItemButton>
             </ListItem>
