@@ -25,8 +25,8 @@ export default function InterviewsTable({ user, setOpen, setInterview, interview
                 case 'ADMIN':
                     interviewsApi.getInterviews().then((res) => {
                         if (res.status === 200) {
-                            const newInterviews = res.data;
-                            newInterviews.filter((interview) => (interview.event)).sort((a, b) => {
+                            let newInterviews = res.data;
+                            newInterviews = newInterviews.filter((interview) => (interview.event)).sort((a, b) => {
                                 return new Date(a.event.start_time) - new Date(b.event.start_time);
                             });
                             setInterviews(newInterviews);
@@ -36,9 +36,8 @@ export default function InterviewsTable({ user, setOpen, setInterview, interview
                 case 'TEAM_MANAGEMENT':
                     interviewsApi.getInterviewsByTeam(user?.team?.id).then((res) => {
                         if (res.status === 200) {
-                            const newInterviews = res.data;
-                            console.log(newInterviews);
-                            newInterviews.filter((interview) => (interview.event)).sort((a, b) => {
+                            let newInterviews = res.data;
+                            newInterviews = newInterviews.filter((interview) => (interview.event)).sort((a, b) => {
                                 return new Date(a.event.start_time) - new Date(b.event.start_time);
                             });
                             setInterviews(newInterviews);
@@ -49,9 +48,8 @@ export default function InterviewsTable({ user, setOpen, setInterview, interview
                     for (let system of user?.systems) {
                         interviewsApi.getInterviewsBySystem(system.id).then((res) => {
                             if (res.status === 200) {
-                                const newInterviews = res.data;
-                                console.log(newInterviews);
-                                newInterviews.filter((interview) => (interview.event)).sort((a, b) => {
+                                let newInterviews = res.data;
+                                newInterviews = newInterviews.filter((interview) => (interview.event)).sort((a, b) => {
                                     return new Date(a.event.start_time) - new Date(b.event.start_time);
                                 });
                                 setInterviews((prev) => [...prev, ...newInterviews].filter((interview, index, self) => index === self.findIndex((t) => (t.id === interview.id))));
