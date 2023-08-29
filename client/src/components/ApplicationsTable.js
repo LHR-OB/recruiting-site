@@ -197,7 +197,7 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
     {
       'id': 'application_id',
       'label': 'Application Id',
-      'compare': (a, b) => (a.id > b.id) ? 1 : -1,
+      'compare': (a, b) => (a.stage_decision > b.stage_decision) ? 1 : -1,
     },
     {
       'id': 'name',

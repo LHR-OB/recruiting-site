@@ -149,7 +149,7 @@ export default function InterviewsTable({ user, setOpen, setInterview, interview
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {filteredInterviews.filter((interview) => (!(showMine && !interview.event.users.some((u) => (u.id === user.id))))).map((interview, index) => (
+                        {filteredInterviews.filter((interview) => (!(showMine && !interview.event.users.some((u) => (u.id === user.id))))).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((interview, index) => (
                             <TableRow
                                 key={index}
                                 onClick={() => handleInterviewClick(interview)}
