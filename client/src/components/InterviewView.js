@@ -3,6 +3,10 @@ import {
     Box,
     Button,
     Container,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemText,
     TextField,
     Typography,
 } from '@mui/material';
@@ -133,6 +137,22 @@ export default function InterviewView({ interview, setInterview, setInterviews, 
                 <Typography variant="h4" mt={2}>
                     {interview?.event?.title} with {getApplicantName(interview)}
                 </Typography>
+                <Typography variant="h6" mt={2}>
+                    Invitees
+                </Typography>
+                <List>
+                    {interview?.event?.users.map((invitee, index) => (
+                        <ListItem key={index}>
+                            <ListItemButton
+                                onClick={() => {window.location.href = `/profile/${invitee.id}`}}
+                            >
+                                <ListItemText
+                                    primary={invitee.first_name + ' ' + invitee.last_name}
+                                />
+                            </ListItemButton>
+                        </ListItem>
+                    ))}
+                </List>
                 <Typography variant="h6" mt={2}>
                     Notes
                 </Typography>
