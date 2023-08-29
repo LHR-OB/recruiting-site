@@ -21,7 +21,8 @@ def get_interviews(db: Session, limit: int = 1000) -> List[models.Interview]:
     interviews = db.query(models.Interview).limit(limit).all()
     for interview in interviews:
         interview.event
-        interview.event.users
+        if interview.event is not None:
+            interview.event.users
         interview.notes
         interview.application
     return interviews
@@ -31,7 +32,8 @@ def get_interviews_by_user(db: Session, user_id: str) -> List[models.Interview]:
     interviews = db.query(models.Interview).join(Event).filter(Event.users.any(User.id == user_id)).all()
     for interview in interviews:
         interview.event
-        interview.event.users
+        if interview.event is not None:
+            interview.event.users
         interview.notes
         interview.application
     return interviews
@@ -41,7 +43,8 @@ def get_interviews_by_team(db: Session, team_id: str) -> List[models.Interview]:
     interviews = db.query(models.Interview).join(Application).filter(Application.team_id == team_id).all()
     for interview in interviews:
         interview.event
-        interview.event.users
+        if interview.event is not None:
+            interview.event.users
         interview.notes
         interview.application
     return interviews
@@ -51,7 +54,8 @@ def get_interviews_by_system(db: Session, system_id: str) -> List[models.Intervi
     interviews = db.query(models.Interview).join(Application).filter(Application.system_id == system_id).all()
     for interview in interviews:
         interview.event
-        interview.event.users
+        if interview.event is not None:
+            interview.event.users
         interview.notes
         interview.application
     return interviews
@@ -61,7 +65,8 @@ def get_interview(db: Session, interview_id: str) -> models.Interview:
     interview = db.query(models.Interview).filter(models.Interview.id == interview_id).first()
     if interview is not None:
         interview.event
-        interview.event.users
+        if interview.event is not None:
+            interview.event.users
         interview.notes
         interview.application
     return interview
