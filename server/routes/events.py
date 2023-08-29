@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from datetime import datetime
+import datetime
 
 from dependencies import get_db, required_admin, required_interviewer, required_applicant, get_current_user
 from database.schemas import events as schemas
@@ -96,10 +96,8 @@ async def add_user_to_event(id: str, user_id: str, user=Depends(required_applica
         db=db,
         message=MessageCreate(
             title="You have been added to an event",
-            message=f"""You have been added to the event {db_event.title} by {user.first_name} {user.last_name}
-Location: {db_event.location}
-Time: {db_event.start_time} - {db_event.end_time}""",
-            timestamp=datetime.now(),
+            message=f"You have been added to the event {db_event.title} by {user.first_name} {user.last_name} at {db_event.location} from {db_event.start_time - datetime.timedelta(db_event.offset)} to {db_event.end_time - datetime.timedelta(db_event.offset)}",
+            timestamp=datetime.datetime.now(),
             user_id=user_id
         )
     )
