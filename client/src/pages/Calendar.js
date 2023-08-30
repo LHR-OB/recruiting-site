@@ -2,6 +2,10 @@ import { React, useState, useEffect } from 'react';
 import {
   Box,
   Container,
+  FormControl,
+  FormGroup,
+  FormControlLabel,
+  Switch,
   Typography,
   List,
   ListItem,
@@ -19,51 +23,93 @@ export default function Calendar({ user, setSnackbarData }) {
   // States
   const [value, onChange] = useState(new Date());
   const [events, setEvents] = useState([]);
+  const [userEvents, setUserEvents] = useState([]);
   const [dayEvents, setDayEvents] = useState([]);
   const [open, setOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [highlightedDays, setHighlightedDays] = useState(new Set());
+  const [showMine, setShowMine] = useState(false);
 
   useEffect(() => {
     if (user) {
       eventsApi.getEventsCurrentUser().then((res) => {
-        const events = res.data;
-        if (user.type === 'ADMIN') {
-          interviewsApi.getInterviews().then((res) => {
-            events.push(...res.data.map((interview) => (interview.event)));
-            // Remove duplicates
-            const uniqueEvents = events.filter((event, index, self) => (
+        const newEvents = res.data;
+        setUserEvents(newEvents.filter((event, index, self) => (
+          index === self.findIndex((e) => (
+            e && event && e.id === event.id
+          ))
+        )));
+        switch (user.type) {
+          case 'ADMIN':
+            interviewsApi.getInterviews().then((res) => {
+              if (res.status === 200) {
+                newEvents.push(...res.data.map((interview) => (interview.event)));
+                // Remove duplicates
+                const uniqueEvents = newEvents.filter((event, index, self) => (
+                  index === self.findIndex((e) => (
+                    e && event && e.id === event.id
+                  ))
+                ));
+                setEvents(uniqueEvents);
+              }
+            });
+            break;
+          case 'TEAM_MANAGEMENT':
+            interviewsApi.getInterviewsByTeam(user.team.id).then((res) => {
+              newEvents.push(...res.data.map((interview) => (interview.event)));
+              // Remove duplicates
+              const uniqueEvents = newEvents.filter((event, index, self) => (
+                index === self.findIndex((e) => (
+                  e && event && e.id === event.id
+                ))
+              ));
+              setEvents(uniqueEvents);
+            });
+            break;
+          case 'SYSTEM_LEAD':
+            for (let system of user.systems) {
+              interviewsApi.getInterviewsBySystem(system.id).then((res) => {
+                newEvents.push(...res.data.map((interview) => (interview.event)));
+                setEvents((prev) => [...prev, ...newEvents].filter((event, index, self) => (
+                  index === self.findIndex((e) => (
+                    e && event && e.id === event.id
+                  ))
+                )));
+              });
+            }
+            break;
+          default:
+            setEvents(newEvents.filter((event, index, self) => (
               index === self.findIndex((e) => (
                 e && event && e.id === event.id
               ))
-            ));
-            setEvents(uniqueEvents);
-          });
-        } else {
-          setEvents(events);
+            )));
+            break;
         }
       });
     }
   }, [user]);
 
   useEffect(() => {
-    if (events) {
+    if (events && userEvents) {
       // Mark days with events
       const newHighlightedDays = new Set();
-      events.forEach((event) => {
+      const eventsToUse = showMine ? userEvents : events;
+      eventsToUse.forEach((event) => {
         const eventDate = new Date(new Date(event.start_time).getTime() - (event.offset * 60 * 60 * 1000));
         newHighlightedDays.add(new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate()).toDateString());
       });
       setHighlightedDays(newHighlightedDays);
       // Sort events
-      events.sort((a, b) => {
+      eventsToUse.sort((a, b) => {
         return new Date(a.start_time) - new Date(b.start_time);
       });
     }
-  }, [events]);
+  }, [events, userEvents, showMine]);
 
   useEffect(() => {
-    const dayEvents = events.filter((event) => {
+    const eventsToUse = showMine ? userEvents : events;
+    const dayEvents = eventsToUse.filter((event) => {
       const eventDate = new Date(new Date(event.start_time).getTime() - (event.offset * 60 * 60 * 1000));
       return (
         eventDate.getDate() === value.getDate() &&
@@ -72,7 +118,7 @@ export default function Calendar({ user, setSnackbarData }) {
       );
     });
     setDayEvents(dayEvents);
-  }, [value, events]);
+  }, [value, events, userEvents, showMine]);
 
   const handleClickEvent = (selectedEvent) => {
     setOpen(true);
@@ -96,6 +142,17 @@ export default function Calendar({ user, setSnackbarData }) {
           All times are in Central Time (CT)
         </Typography>
         <br />
+        {
+          user && user.type !== 'APPLICANT' &&
+          <FormControl>
+              <FormGroup>
+                  <FormControlLabel
+                      control={<Switch checked={showMine} onChange={() => setShowMine(!showMine)} />}
+                      label="Show Only My Events"
+                  />
+              </FormGroup>
+          </FormControl>
+        }
         <ReactCalendar 
           value={value}
           onChange={onChange}
