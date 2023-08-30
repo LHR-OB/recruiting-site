@@ -165,7 +165,7 @@ def advance_application(db: Session, application: models.Application):
         if application.status == 'REVIEW':
             application.status = 'INTERVIEW'
             message_body = application_team.interview_message
-        elif application.status == 'INTERVIEW_COMPLETE':
+        elif 'INTERVIEW' in application.status:
             application.status = 'TRIAL'
             message_body = application_team.trial_workday_message
         elif application.status == 'TRIAL':
