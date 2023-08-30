@@ -13,6 +13,7 @@ import {
     TablePagination,
     TableCell,
     TableBody,
+    TableSortLabel,
     TextField,
 } from '@mui/material';
 import { interviewsApi } from '../api/endpoints/interviews';
@@ -23,6 +24,8 @@ export default function InterviewsTable({ user, setOpen, setInterview, interview
     const [filteredInterviews, setFilteredInterviews] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [orderBy, setOrderBy] = useState('time');
+    const [sortOrder, setSortOrder] = useState('asc');
 
     useEffect(() => {
         if (setInterviews && user) {
@@ -121,6 +124,46 @@ export default function InterviewsTable({ user, setOpen, setInterview, interview
         setFilteredInterviews(filtered);
     }
 
+    const handleSort = (id, compare) => {
+        const newOrderBy = id;
+        const newSortOrder = (orderBy === id && sortOrder === 'asc') ? 'desc' : 'asc';
+        const sortedInterviews = [...interviews].sort(compare);
+        if (newSortOrder === 'desc') {
+            sortedInterviews.reverse();
+        }
+        setFilteredInterviews(sortedInterviews);
+        setOrderBy(newOrderBy);
+        setSortOrder(newSortOrder);
+    }
+
+    const TABLE_HEADERS = [
+        {
+            'id': 'name',
+            'label': 'Name',
+            'compare': (a, b) => (getApplicantName(a).localeCompare(getApplicantName(b))),
+        },
+        {
+            'id': 'event',
+            'label': 'Event',
+            'compare': (a, b) => (a.event?.title.localeCompare(b.event?.title)),
+        },
+        {
+            'id': 'time',
+            'label': 'Time',
+            'compare': (a, b) => (new Date(a.event?.start_time).getTime() - new Date(b.event?.start_time).getTime()),
+        },
+        {
+            'id': 'location',
+            'label': 'Location',
+            'compare': (a, b) => (a.event?.location.localeCompare(b.event?.location)),
+        },
+        {
+            'id': 'status',
+            'label': 'Status',
+            'compare': (a, b) => (a.application?.status.localeCompare(b.application?.status)),
+        }
+    ];
+
     return (
         <Container>
             <TextField
@@ -141,11 +184,17 @@ export default function InterviewsTable({ user, setOpen, setInterview, interview
                 <Table sx={{ minWidth: 650 }} aria-label="simple-table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Name</TableCell>
-                            <TableCell align="right">Event</TableCell>
-                            <TableCell align="right">Time</TableCell>
-                            <TableCell align="right">Location</TableCell>
-                            <TableCell align="right">Status</TableCell>
+                            {TABLE_HEADERS.map((header) => (
+                                <TableCell key={header.id} align="right">
+                                    <TableSortLabel
+                                        active={orderBy === header.id}
+                                        direction={orderBy === header.id ? sortOrder : 'asc'}
+                                        onClick={() => handleSort(header.id, header['compare'])}
+                                    >
+                                        {header.label}
+                                    </TableSortLabel>
+                                </TableCell>
+                            ))}
                         </TableRow>
                     </TableHead>
                     <TableBody>
