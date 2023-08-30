@@ -221,7 +221,7 @@ export default function InterviewAvailabilityList({ user, setSnackbarData }) {
                                 value={system}
                                 disabled={system.scheduled}
                             >
-                                {system.name} {system.scheduled ? "(Scheduled)" : ""}
+                                {system.name} {system.scheduled ? "(Scheduled. Check Calendar)" : ""}
                             </MenuItem>
                         ))}
                     </Select>
