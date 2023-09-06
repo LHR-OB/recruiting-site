@@ -168,7 +168,7 @@ def advance_application(db: Session, application: models.Application):
         elif 'INTERVIEW' in application.status:
             application.status = 'TRIAL'
             message_body = application_team.trial_workday_message
-        elif application.status == 'TRIAL':
+        elif 'TRIAL' in application.status:
             application.status = 'OFFER'
             message_body = application_team.offer_message
         application.stage_decision = 'NEUTRAL'
@@ -178,7 +178,7 @@ def advance_application(db: Session, application: models.Application):
             application.status = 'REJECTED_REVIEW'
         elif 'INTERVIEW' in application.status:
             application.status = 'REJECTED_INTERVIEW'
-        elif application.status == 'TRIAL':
+        elif 'TRIAL' in application.status:
             application.status = 'REJECTED_TRIAL'
         application.stage_decision = 'NEUTRAL'
     

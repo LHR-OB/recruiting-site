@@ -37,7 +37,7 @@ class Application(Base):
     short_answer4 = Column(String)  # What specific engineering and/or operations experience would you like to gain?
     resume_link = Column(String)
     portfolio_link = Column(String)
-    status = Column(Enum("SUBMITTED", "REVIEW", "REJECTED_REVIEW", "INTERVIEW", "INTERVIEW_SCHEDULED", "INTERVIEW_COMPLETE", "REJECTED_INTERVIEW", "TRIAL", "REJECTED_TRIAL", "OFFER", "ACCEPTED", "REJECTED", name="application_status_enum"), index=True)
+    status = Column(Enum("SUBMITTED", "REVIEW", "REJECTED_REVIEW", "INTERVIEW", "INTERVIEW_SCHEDULED", "INTERVIEW_COMPLETE", "REJECTED_INTERVIEW", "TRIAL", "TRIAL_CONFIRMED", "REJECTED_TRIAL", "OFFER", "ACCEPTED", "REJECTED", name="application_status_enum"), index=True)
     stage_decision = Column(Enum("ACCEPT", "POSITIVE", "NEUTRAL", "NEGATIVE", "REJECT", name="application_stage_decision_enum"), index=True)
 
     # Relationships

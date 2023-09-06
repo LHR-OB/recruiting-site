@@ -75,6 +75,25 @@ export default function ViewApplication({ user, application, setApplication, set
     });
   }
 
+  const handleConfirmTrialAttendance = () => {
+    applicationsApi.updateApplication(application.id, { status: 'TRIAL_CONFIRMED'} ).then(res => {
+      if (res.status === 200) {
+        setApplication(res.data);
+        setApplications((curr) => {
+          const index = curr.findIndex(a => a.id === res.data.id);
+          curr[index] = res.data;
+          return curr;
+        });
+        setSnackbarData({
+          open: true,
+          message: 'Trial attendance confirmed',
+          severity: 'success',
+        });
+        setOpen(false);
+      }
+    });
+  }
+
   const getFullLink = (link) => {
     if (link.includes('http')) {
       return link;
@@ -216,6 +235,21 @@ export default function ViewApplication({ user, application, setApplication, set
           </Grid>
         }
       </Grid>
+
+      {
+        user.type === 'APPLICANT' && application?.status === 'TRIAL' &&
+        <Grid item xs>
+          <Button
+            variant="outlined"
+            onClick={handleConfirmTrialAttendance}
+            sx={{
+              marginTop: 2,
+            }}
+          >
+            Confirm Trial Workday Attendance
+          </Button>
+        </Grid>
+      }
 
       {user.type !== 'APPLICANT' && application?.status !== 'OFFER' && application?.status !== 'ACCEPTED' && !application?.status.includes("REJECTED") && <Grid container spacing={1}>
         <Grid item xs>
