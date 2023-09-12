@@ -245,14 +245,19 @@ export default function ApplicationsTable({ user, setOpen, setModalMode, setAppl
         variant="outlined"
         onChange={handleSearch}
       />
-      <Button
-        sx={{ marginBottom: 2 }}
-        variant="outlined"
-        onClick={handleDownload}
-      >
-        Export to CSV
-      </Button>
-      <br />
+      {
+        user?.type !== 'APPLICANT' &&
+        <>
+          <Button
+            sx={{ marginBottom: 2 }}
+            variant="outlined"
+            onClick={handleDownload}
+          >
+            Export to CSV
+          </Button>
+          <br />
+        </>
+      }
       {/* Hide Rejected */}
       {
         user?.type !== 'APPLICANT' &&
