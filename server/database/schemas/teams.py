@@ -19,6 +19,7 @@ class Team(TeamBase):
     interview_message: str
     trial_workday_message: str
     offer_message: str
+    waitlist_message = str
     rejection_message: str
     trial_workday_event_id: str
 
@@ -29,6 +30,7 @@ class TeamUpdate(BaseModel):
     interview_message: Optional[str] = None
     trial_workday_message: Optional[str] = None
     offer_message: Optional[str] = None
+    waitlist_message: Optional[str] = None
     rejection_message: Optional[str] = None
     trial_workday_event_id: Optional[str] = None
 

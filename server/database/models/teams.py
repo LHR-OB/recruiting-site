@@ -16,6 +16,7 @@ class Team(Base):
     trial_workday_message = Column(String)
     offer_message = Column(String)
     rejection_message = Column(String)
+    waitlist_message = Column(String)
 
     # Relationships
     users = relationship("User", back_populates="team")
@@ -37,4 +38,3 @@ class System(Base):
 
     applications = relationship("Application", back_populates="system")
     users = relationship("User", secondary="user_system_links", back_populates="systems")
-

@@ -64,7 +64,7 @@ def advance_application_cycle(db: Session, application_cycle_id: str) -> models.
         db_application_cycle.stage = 'COMPLETE'
         db_application_cycle.is_active = False
     
-    # If the application cycle now COMPLETE, send rejection messages
+    # If the application cycle now COMPLETE, send waitlist messages
     if db_application_cycle.stage == 'COMPLETE':
         applications = get_applications(db=db, application_cycle_id=application_cycle_id)
         for application in applications:
@@ -72,7 +72,7 @@ def advance_application_cycle(db: Session, application_cycle_id: str) -> models.
                 # Send a message to the user
                 message = message_schemas.MessageCreate(
                     title="Application Update: " + application.team.name + " " + application.system.name,
-                    message=application.team.rejection_message,
+                    message=application.team.waitlist_message,
                     timestamp=datetime.datetime.now(),
                     user_id=str(application.user_id)
                 )
