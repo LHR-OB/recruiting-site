@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from datetime import datetime
 
-from dependencies import get_db, get_current_user, required_team_management, required_member, required_admin
+from dependencies import get_db, get_current_user, required_team_management, required_member, required_admin, required_applicant
 from database.schemas import users as schemas, messages as message_schemas
 from utils import users as utils
 from utils.messages import send_message
@@ -110,7 +110,7 @@ async def leave_system(id: str, system_id: str, db: Session = Depends(get_db)):
 
 
 @router.put('/{id}')
-async def update_user(id: str, user: schemas.MemberUpdate, curr_user=Depends(required_member), db: Session = Depends(get_db)):
+async def update_user(id: str, user: schemas.MemberUpdate, curr_user=Depends(required_applicant), db: Session = Depends(get_db)):
     db_user = utils.get_user(db=db, user_id=id)
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")

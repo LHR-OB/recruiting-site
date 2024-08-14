@@ -36,13 +36,14 @@ export default function EditProfileForm({ user, setUser, setSnackbarData, setOpe
     }, [user]);
 
     const handleUpdateUser = () => {
+        console.log("HERE");
         usersApi.updateUser(user.id, {
             first_name: firstName,
             last_name: lastName,
             email: email,
             interview_location: interviewLocation,
             type: type.toUpperCase().replace(' ', '_'),
-            team_id: team.id,
+            team_id: team?.id,
         }).then((res) => {
             if (res.status === 200) {
                 setUser(res.data);

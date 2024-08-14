@@ -10,6 +10,7 @@ import CenterModal from '../components/CenterModal';
 import JoinSystemForm from '../components/JoinSystemForm';
 import LeaveSystemForm from '../components/LeaveSystemForm';
 import EditProfileForm from '../components/EditProfileForm';
+import ConvertToMemberForm from '../components/ConvertToMemberForm';
 import usersApi from '../api/endpoints/users';
 import { applicationCyclesApi, applicationsApi } from '../api/endpoints/applications';
 
@@ -61,6 +62,10 @@ export default function Profile({ user, setUser, setSnackbarData }) {
     setModalMode("UPDATE");
   }
 
+  const handleConvertToMember = () => {
+    setOpen(true);
+    setModalMode("CONVERT_MEMBER");
+  }
 
   return (
     <Container>
@@ -133,6 +138,21 @@ export default function Profile({ user, setUser, setSnackbarData }) {
             >
               Update Profile
             </Button>
+            {
+              profileUser?.type === "APPLICANT" ?
+              <Button
+                variant="outlined"
+                onClick={handleConvertToMember}
+                sx={{
+                  marginTop: 2,
+                  width: "25%",
+                }}
+              >
+                Convert to Member
+              </Button>
+              :
+              <></>
+            }
           </Box>
         }
         {
@@ -175,6 +195,8 @@ export default function Profile({ user, setUser, setSnackbarData }) {
           <EditProfileForm user={user} setUser={setUser} setSnackbarData={setSnackbarData} setOpen={setOpen} /> :
           modalMode === "JOIN" ?
           <JoinSystemForm user={user} setUser={setUser} setSnackbarData={setSnackbarData} setOpen={setOpen} /> :
+          modalMode === "CONVERT_MEMBER" ?
+          <ConvertToMemberForm user={user} setUser={setUser} setSnackbarData={setSnackbarData} setOpen={setOpen} /> :
           <LeaveSystemForm user={user} setUser={setUser} setSnackbarData={setSnackbarData} setOpen={setOpen} />
         }
       </CenterModal>
